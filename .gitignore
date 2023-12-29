@@ -23,3 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# electron
+electron/*
+!electron/main.js
+!electron/README.md
+!electron/package.json
+!electron/package-lock.json
+!electron/yarn.lock
+!electron/icon512.png

@@ -1,0 +1,35 @@
+{
+  "name": "com.hhd-dev.hhd-ui",
+  "author": {
+    "name": "Aarron L"
+  },
+  "homepage": "https://github.com/hhd-dev/hhd-ui",
+  "description": "HHD Frontend",
+  "license": "",
+  "version": "0.0.1",
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "electron-packager": "^17.1.2"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
+    "start": "./node_modules/.bin/electron .",
+    "build": "./node_modules/.bin/electron-builder build --linux"
+  },
+  "build": {
+    "appId": "com.hhd-dev.hhd-ui",
+    "productName": "HHD UI",
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "files": [
+    "static/**/*",
+    "!**/node_modules/*",
+    "!**/dist/*",
+    "!**/src/*",
+    "index.html"
+  ]
+}
