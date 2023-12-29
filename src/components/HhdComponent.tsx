@@ -5,6 +5,7 @@ import { get } from "lodash";
 // import HhdDropdown from "./HhdDropdown";
 // import HhdModesDropdown from "./HhdModesDropdown";
 import { useUpdateControllerStateIsLoading } from "../hooks/controller";
+import HhdOptions from "./HhdOptions";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -107,40 +108,25 @@ const HhdComponent: FC<HhdComponentType> = ({
     );
   }
 
-  if (type === "discrete" && options) {
-    // slider component
-    // const value = get(state, `${statePath}`, defaultValue);
-    // const handleSliderChange = (value: any) => {
-    //   return updateState(`${statePath}`, value);
-    // };
-    // return (
-    //   <HhdSlider
-    //     value={value}
-    //     defaultValue={defaultValue}
-    //     options={options}
-    //     title={title}
-    //     handleSliderChange={handleSliderChange}
-    //     disabled={updating}
-    //   />
-    // );
-  }
-
-  if (type === "multiple" && options) {
+  if ((type === "discrete" || type === "multiple") && options) {
     // dropdown component
-    // const onChange = ({ value }: { value: number }) => {
-    //   return updateState(`${statePath}`, value);
-    // };
-    // return (
-    //   <HhdDropdown
-    //     title={title}
-    //     options={options}
-    //     defaultValue={defaultValue}
-    //     hint={hint}
-    //     selectedValue={get(state, `${statePath}`, defaultValue)}
-    //     onChange={onChange}
-    //     disabled={updating}
-    //   />
-    // );
+    const value = get(state, `${statePath}`, defaultValue);
+
+    return (
+      <div>
+        <label htmlFor={`${statePath}`}>{title}</label>
+        <select
+          id={`${statePath}`}
+          disabled={updating}
+          onChange={(e) => {
+            return updateState(`${statePath}`, e.target.value);
+          }}
+          value={value}
+        >
+          <HhdOptions type={type} options={options} />
+        </select>
+      </div>
+    );
   }
 
   return null;
