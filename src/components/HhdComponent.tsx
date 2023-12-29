@@ -1,11 +1,9 @@
 import { FC } from "react";
 import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
-// import HhdSlider from "./HhdSlider";
 import { get } from "lodash";
-// import HhdDropdown from "./HhdDropdown";
-// import HhdModesDropdown from "./HhdModesDropdown";
 import { useUpdateControllerStateIsLoading } from "../hooks/controller";
 import HhdOptions from "./HhdOptions";
+import HhdModesDropdown from "./HhdModesDropdown";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -14,8 +12,8 @@ interface HhdComponentType extends SettingsType {
   parentType?: SettingType;
   state: any;
   updateState: any;
-  // e.g. path in state to set/get the currently set value,
-  // such as lodash.get(state, 'xinput.ds5e.led_support')
+  // statePath is the path to set/get the currently set value from state
+  // e.g.such as lodash.get(state, 'xinput.ds5e.led_support')
   statePath?: string;
 }
 
@@ -67,26 +65,22 @@ const HhdComponent: FC<HhdComponentType> = ({
   }
   if (type === "mode" && childName === "xinput" && modes && statePath) {
     // specially handle xinput child
-    // const value = get(state, `${statePath}.mode`, defaultValue);
-    // const onChange = ({ value }: { value: number }) => {
-    //   return updateState(`${statePath}.mode`, value);
-    // };
-    // return (
-    //   <HhdModesDropdown
-    //     modes={modes}
-    //     defaultValue={defaultValue}
-    //     selectedValue={value}
-    //     title={title}
-    //     depth={depth}
-    //     state={state}
-    //     statePath={statePath}
-    //     updateState={updateState}
-    //     onChange={onChange}
-    //     hint={hint}
-    //     renderChild={renderChild}
-    //     disabled={updating}
-    //   />
-    // );
+    const value = get(state, `${statePath}.mode`, defaultValue);
+    return (
+      <HhdModesDropdown
+        modes={modes}
+        defaultValue={defaultValue}
+        selectedValue={value}
+        title={title}
+        depth={depth}
+        state={state}
+        statePath={statePath}
+        updateState={updateState}
+        hint={hint}
+        renderChild={renderChild}
+        disabled={updating}
+      />
+    );
   }
 
   if (type === "bool") {

@@ -18,7 +18,6 @@ const App = memo(() => {
   const loading = useSelector(selectAllHhdSettingsLoading);
   const state = useSelector(selectAllHhdSettings);
   const updateState = useSetControllerInfo();
-  // const settings = useSelector(selectHhdSettings);
 
   useEffect(() => {
     dispatch(fetchHhdSettings());
