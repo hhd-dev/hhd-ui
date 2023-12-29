@@ -30,11 +30,19 @@ const App = memo(() => {
 
   if (!loading && !state?.controller?.state) {
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <p>
           If you're seeing this message, you most likely set an invalid HHD
-          token. Or your hhd installation does not have it's web server enabled.
+          token.
         </p>
+        <p>Or your hhd installation does not have it's web server enabled.</p>
         <a href="#/token">Go Here</a>
       </div>
     );
