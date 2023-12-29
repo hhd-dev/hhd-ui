@@ -25,6 +25,10 @@ const App = memo(() => {
   }, []);
 
   if (loading) {
+    return <div>Loading!</div>;
+  }
+
+  if (!loading && !state?.controller?.state) {
     return (
       <div>
         <p>
