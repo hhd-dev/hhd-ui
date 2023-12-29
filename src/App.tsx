@@ -33,7 +33,7 @@ const App = memo(() => {
       <div>
         <p>
           If you're seeing this message, you most likely set an invalid HHD
-          token
+          token. Or your hhd installation does not have it's web server enabled.
         </p>
         <a href="#/">Go Back</a>
       </div>
