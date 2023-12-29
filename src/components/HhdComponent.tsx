@@ -113,6 +113,10 @@ const HhdComponent: FC<HhdComponentType> = ({
           id={`${statePath}`}
           disabled={updating}
           onChange={(e) => {
+            if (type === "discrete") {
+              // discrete is always numeric
+              return updateState(`${statePath}`, Number(e.target.value));
+            }
             return updateState(`${statePath}`, e.target.value);
           }}
           value={value}
