@@ -37,14 +37,14 @@ const TokenPrompt = () => {
       <button
         onClick={() => {
           window.localStorage.setItem("hhdToken", token);
-          navigate("/app");
+          navigate("/");
         }}
       >
         Save Token
       </button>
 
       <p>
-        Already saved the token? Go to the app <a href="#/app">Here</a>
+        Already saved the token? Go to the app <a href="#/">Here</a>
       </p>
     </div>
   );

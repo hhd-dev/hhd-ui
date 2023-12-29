@@ -11,8 +11,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <HashRouter>
         <Routes>
-          <Route path="/app" Component={App} />
-          <Route path="/" Component={TokenPrompt} />
+          <Route path="/token" Component={TokenPrompt} />
+          <Route path="/" Component={App} />
         </Routes>
       </HashRouter>
     </Provider>
