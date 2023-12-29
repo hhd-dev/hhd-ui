@@ -1,6 +1,6 @@
 import { memo, useEffect } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { AppDispatch, store } from "./redux-modules/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "./redux-modules/store";
 import {
   fetchHhdSettings,
   fetchHhdSettingsState,
@@ -25,12 +25,27 @@ const App = memo(() => {
   }, []);
 
   if (loading) {
-    return <div>Loading!</div>;
+    return (
+      <div>
+        <p>
+          If you're seeing this message, you most likely set an invalid HHD
+          token
+        </p>
+        <a href="#/">Go Back</a>
+      </div>
+    );
   }
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <HhdComponent
           {...state.controller.settings}
           state={state.controller.state}
@@ -43,12 +58,4 @@ const App = memo(() => {
   );
 });
 
-function AppContainer() {
-  return (
-    <Provider store={store}>
-      <App />
-    </Provider>
-  );
-}
-
-export default AppContainer;
+export default App;

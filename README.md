@@ -8,10 +8,6 @@
 cd hhd-ui
 npm install
 
-cp .env.local.example .env.local
-
-# add auth token to .env.local
-
 # run dev server, should be on localhost:5173
 npm run dev
 ```

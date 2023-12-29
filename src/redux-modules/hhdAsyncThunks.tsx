@@ -3,7 +3,7 @@ import { set } from "lodash";
 
 const fetchFn = async (url: string, options?: { [s: string]: any }) => {
   const authHeaders = {
-    Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
+    Authorization: `Bearer ${window.localStorage.getItem("hhdToken")}`,
   };
   if (!options) {
     options = {
