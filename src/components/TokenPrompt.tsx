@@ -23,17 +23,16 @@ const TokenPrompt = () => {
 
       <p>
         Example token:
-        b21da0899ef4f33a81756cb21b4cb01177e59699f00040e7413d794d0ea6e118
+	2f7abbc42dc7
       </p>
 
       <p>Save the token into the text input and save it</p>
-      <textarea
+      <input
+        type="text"
         id="token-input"
         onChange={(e) => setToken(e.target.value)}
         value={token}
-        cols={50}
-        rows={3}
-      ></textarea>
+      ></input>
       <button
         onClick={() => {
           window.localStorage.setItem("hhdToken", token);
