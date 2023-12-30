@@ -7,17 +7,14 @@ import {
 } from "./redux-modules/hhdAsyncThunks";
 import {
   selectAllHhdSettingsLoading,
-  selectAllHhdSettings,
+  selectHhdSettingsState,
 } from "./redux-modules/hhdSlice";
-import HhdComponent, { renderChild } from "./components/HhdComponent";
-// import AdvancedOptions from "./components/AdvancedOptions";
-import { useSetControllerInfo } from "./hooks/controller";
+import HhdState from "./components/HhdState";
 
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
   const loading = useSelector(selectAllHhdSettingsLoading);
-  const state = useSelector(selectAllHhdSettings);
-  const updateState = useSetControllerInfo();
+  const state = useSelector(selectHhdSettingsState);
 
   useEffect(() => {
     dispatch(fetchHhdSettings());
@@ -28,7 +25,7 @@ const App = memo(() => {
     return <div>Loading!</div>;
   }
 
-  if (!loading && !state?.controller?.state) {
+  if (!loading && !state?.hhd?.http) {
     return (
       <div
         style={{
@@ -58,13 +55,7 @@ const App = memo(() => {
           justifyContent: "center",
         }}
       >
-        <HhdComponent
-          {...state.controller.settings}
-          state={state.controller.state}
-          renderChild={renderChild}
-          updateState={updateState}
-        />
-        {/* <AdvancedOptions updateState={updateState} /> */}
+        <HhdState />
       </div>
     </>
   );

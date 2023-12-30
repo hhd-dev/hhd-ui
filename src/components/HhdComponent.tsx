@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
 import { get } from "lodash";
-import { useUpdateControllerStateIsLoading } from "../hooks/controller";
+import { useUpdateHhdStatePending } from "../hooks/controller";
 import HhdOptions from "./HhdOptions";
 import HhdModesDropdown from "./HhdModesDropdown";
 
@@ -33,7 +33,7 @@ const HhdComponent: FC<HhdComponentType> = ({
   updateState,
   default: defaultValue,
 }) => {
-  const updating = useUpdateControllerStateIsLoading();
+  const updating = useUpdateHhdStatePending();
 
   const renderChildren = () => {
     if (children)
@@ -52,7 +52,7 @@ const HhdComponent: FC<HhdComponentType> = ({
     return;
   };
 
-  if (depth === 0 && type === "container") {
+  if (type === "container") {
     // root container type
     return (
       <>
