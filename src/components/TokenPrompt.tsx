@@ -21,10 +21,7 @@ const TokenPrompt = () => {
 
       <pre>cat $HOME/.config/hhd/token</pre>
 
-      <p>
-        Example token:
-	2f7abbc42dc7
-      </p>
+      <p>Example token: 2f7abbc42dc7</p>
 
       <p>Save the token into the text input and save it</p>
       <input

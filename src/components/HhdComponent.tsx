@@ -30,6 +30,8 @@ const HhdComponent: FC<HhdComponentType> = ({
   modes,
   depth = 0,
   state,
+  min,
+  max,
   updateState,
   default: defaultValue,
 }) => {
@@ -63,7 +65,7 @@ const HhdComponent: FC<HhdComponentType> = ({
       </>
     );
   }
-  if (type === "mode"  && modes && statePath) {
+  if (type === "mode" && modes && statePath) {
     // specially handle xinput child
     const value = get(state, `${statePath}.mode`, defaultValue);
     return (
@@ -80,6 +82,32 @@ const HhdComponent: FC<HhdComponentType> = ({
         renderChild={renderChild}
         disabled={updating}
       />
+    );
+  }
+
+  if (
+    type === "int" &&
+    typeof min === "number" &&
+    typeof max === "number" &&
+    min < max
+  ) {
+    const value = get(state, `${statePath}`, defaultValue);
+
+    return (
+      <div>
+        <label htmlFor={`${statePath}`}>{title}</label>
+        <input
+          id={`${statePath}`}
+          type="number"
+          value={value}
+          onChange={(e) => {
+            return updateState(`${statePath}`, Number(e.target.value));
+          }}
+          min={min}
+          max={max}
+          disabled={updating}
+        />
+      </div>
     );
   }
 
