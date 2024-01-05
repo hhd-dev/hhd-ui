@@ -13,7 +13,9 @@ export type SettingType =
   | "mode"
   | "discrete"
   | "multiple"
-  | "int";
+  | "int"
+  | "display"
+  | "action";
 
 export type SettingsType = {
   type: SettingType;
@@ -23,6 +25,7 @@ export type SettingsType = {
   options?: any;
   modes?: any;
   min?: number;
+  tags?: string[];
   max?: number;
   children?: { [childName: string]: SettingsType };
 };

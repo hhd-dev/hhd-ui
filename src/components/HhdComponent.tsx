@@ -32,10 +32,15 @@ const HhdComponent: FC<HhdComponentType> = ({
   state,
   min,
   max,
+  tags,
   updateState,
   default: defaultValue,
 }) => {
   const updating = useUpdateHhdStatePending();
+
+  if (tags && tags.indexOf("advanced") >= 0) {
+    return null;
+  }
 
   const renderChildren = () => {
     if (children)
@@ -48,6 +53,7 @@ const HhdComponent: FC<HhdComponentType> = ({
           parentType: type,
           state,
           updateState,
+          tags,
           statePath: statePath ? `${statePath}.${childName}` : `${childName}`,
         });
       });
@@ -155,6 +161,29 @@ const HhdComponent: FC<HhdComponentType> = ({
     );
   }
 
+  if (type === "display" && title) {
+    // show info, shouldn't be interactive
+    const value = get(state, `${statePath}`);
+
+    if (!value) {
+      return null;
+    }
+
+    return (
+      <span>
+        {title} - {value}
+      </span>
+    );
+  }
+
+  if (type === "action" && title) {
+    return (
+      <button type="button" onClick={() => updateState(`${statePath}`, true)}>
+        {title}
+      </button>
+    );
+  }
+
   return null;
 };
 
@@ -170,6 +199,7 @@ export const renderChild = ({
   parentType,
   statePath,
   state,
+  tags,
   updateState,
   depth,
 }: HhdChildComponentType) => {
@@ -182,6 +212,7 @@ export const renderChild = ({
       parentType={parentType}
       statePath={statePath}
       state={state}
+      tags={tags}
       updateState={updateState}
       {...child}
     />
