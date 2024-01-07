@@ -12,12 +12,7 @@ import {
 } from "./redux-modules/hhdSlice";
 import HhdState from "./components/HhdState";
 import { clearLoggedIn } from "./local";
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,16 +26,17 @@ const App = memo(() => {
     dispatch(fetchHhdSettingsState());
   }, []);
 
-  if (!state || loading) {
-    return <div>Loading!</div>;
-  }
-
   setTimeout(() => {
     if (!loading && !state) {
       clearLoggedIn();
+      forceUpdate();
       navigate("/");
     }
-  }, 2000);
+  }, 1000);
+
+  if (!state || loading) {
+    return <div>Loading!</div>;
+  }
 
   return (
     <Flex w="100%" flexDirection="column" alignItems="center">

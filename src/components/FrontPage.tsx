@@ -12,6 +12,7 @@ import {
   CardBody,
   Stack,
   StackDivider,
+  Code,
 } from "@chakra-ui/react";
 
 import {
@@ -55,9 +56,13 @@ export default function FrontPage() {
                 enter a security token. This token can be found below. Have fun!
               </Text>
 
-              <Text textAlign="center">cat $HOME/.config/hhd/token</Text>
+              <Code textAlign="center" padding="1rem" lang="bash">
+                cat $HOME/.config/hhd/token
+              </Code>
 
-              <Text>Example token: 2f7abbc42dc7</Text>
+              <Text>
+                Example token: <b>2f7abbc42dc7</b>
+              </Text>
 
               <Stack spacing="2">
                 <Flex>
