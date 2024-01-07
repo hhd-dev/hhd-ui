@@ -4,7 +4,20 @@ import { get } from "lodash";
 import { useUpdateHhdStatePending } from "../hooks/controller";
 import HhdOptions from "./HhdOptions";
 import HhdModesDropdown from "./HhdModesDropdown";
-import { Button, Checkbox, FormLabel, Input, Select } from "@chakra-ui/react";
+import {
+  Button,
+  CardBody,
+  CardHeader,
+  Checkbox,
+  FormLabel,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Select,
+} from "@chakra-ui/react";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -61,10 +74,10 @@ const HhdComponent: FC<HhdComponentType> = ({
     // root container type
     return (
       <>
-        <h1>{title}</h1>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <CardHeader>{title}</CardHeader>
+        <CardBody>
           {renderChild && typeof renderChild === "function" && renderChildren()}
-        </div>
+        </CardBody>
       </>
     );
   }
@@ -98,18 +111,22 @@ const HhdComponent: FC<HhdComponentType> = ({
 
     return (
       <div>
-        <label htmlFor={`${statePath}`}>{title}</label>
-        <Input
+        <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+        <NumberInput
           id={`${statePath}`}
-          type="number"
           value={value}
-          onChange={(e) => {
-            return updateState(`${statePath}`, Number(e.target.value));
+          onChange={(value) => {
+            return updateState(`${statePath}`, Number(value));
           }}
           min={min}
           max={max}
-          disabled={updating}
-        />
+        >
+          <NumberInputField disabled={updating} />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
       </div>
     );
   }

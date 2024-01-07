@@ -6,6 +6,7 @@ import {
 } from "../redux-modules/hhdSlice";
 import HhdComponent, { renderChild } from "./HhdComponent";
 import { useSetHhdState } from "../hooks/controller";
+import { Card } from "@chakra-ui/react";
 
 const HhdState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -15,7 +16,13 @@ const HhdState = () => {
   const setState = useSetHhdState();
 
   return (
-    <div>
+    <Card
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}
+    >
       {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
         return (
           <div key={topIdx}>
@@ -37,7 +44,7 @@ const HhdState = () => {
           </div>
         );
       })}
-    </div>
+    </Card>
   );
 };
 
