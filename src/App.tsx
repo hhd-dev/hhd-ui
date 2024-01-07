@@ -15,9 +15,6 @@ import { clearLoggedIn } from "./local";
 import {
   Box,
   Button,
-  Card,
-  CardBody,
-  Container,
   Flex,
   Heading,
 } from "@chakra-ui/react";

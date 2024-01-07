@@ -5,10 +5,13 @@ import { useUpdateHhdStatePending } from "../hooks/controller";
 import HhdOptions from "./HhdOptions";
 import HhdModesDropdown from "./HhdModesDropdown";
 import {
+  Box,
   Button,
   CardBody,
   CardHeader,
   Checkbox,
+  Code,
+  Flex,
   FormLabel,
   Heading,
   NumberDecrementStepper,
@@ -17,6 +20,9 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
+  Stack,
+  StackDivider,
+  Text,
 } from "@chakra-ui/react";
 
 interface HhdComponentType extends SettingsType {
@@ -74,13 +80,15 @@ const HhdComponent: FC<HhdComponentType> = ({
     // root container type
     return (
       <>
-        <CardHeader>
-          <Heading as="h1" fontSize="xl">
+        <CardBody style={{ display: "flex", flexDirection: "column" }}>
+          <Heading as="h1" fontSize="xl" marginBottom="1rem">
             {title}
           </Heading>
-        </CardHeader>
-        <CardBody style={{ display: "flex", flexDirection: "column" }}>
-          {renderChild && typeof renderChild === "function" && renderChildren()}
+          <Stack spacing="3">
+            {renderChild &&
+              typeof renderChild === "function" &&
+              renderChildren()}
+          </Stack>
         </CardBody>
       </>
     );
@@ -142,8 +150,9 @@ const HhdComponent: FC<HhdComponentType> = ({
     // checkbox component
     const checked = get(state, `${statePath}`, defaultValue);
     return (
-      <div>
+      <Flex flexDirection="row">
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+        <Box flexGrow="1"></Box>
         <Checkbox
           id={`${statePath}`}
           isChecked={Boolean(checked)}
@@ -154,7 +163,7 @@ const HhdComponent: FC<HhdComponentType> = ({
             return updateState(`${statePath}`, e.target.checked);
           }}
         />
-      </div>
+      </Flex>
     );
   }
 
@@ -163,7 +172,7 @@ const HhdComponent: FC<HhdComponentType> = ({
     const value = get(state, `${statePath}`, defaultValue);
 
     return (
-      <div>
+      <Flex flexDirection="column">
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
         <Select
           id={`${statePath}`}
@@ -181,7 +190,7 @@ const HhdComponent: FC<HhdComponentType> = ({
         >
           <HhdOptions type={type} options={options} />
         </Select>
-      </div>
+      </Flex>
     );
   }
 
@@ -194,20 +203,15 @@ const HhdComponent: FC<HhdComponentType> = ({
     }
 
     return (
-      <span>
+      <Code padding="1rem">
         {title} - {value}
-      </span>
+      </Code>
     );
   }
 
   if (type === "action" && title) {
     return (
-      <Button
-        style={{ margin: "1rem 0px" }}
-        onClick={() => updateState(`${statePath}`, true)}
-      >
-        {title}
-      </Button>
+      <Button onClick={() => updateState(`${statePath}`, true)}>{title}</Button>
     );
   }
 
