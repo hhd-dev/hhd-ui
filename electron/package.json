@@ -4,7 +4,7 @@
     "name": "Aarron L"
   },
   "homepage": "https://github.com/hhd-dev/hhd-ui",
-  "description": "HHD Frontend",
+  "description": "Handhend Daemon UI",
   "license": "",
   "version": "0.0.1",
   "main": "main.js",
@@ -20,7 +20,7 @@
   },
   "build": {
     "appId": "com.hhd-dev.hhd-ui",
-    "productName": "HHD UI",
+    "productName": "Handheld Daemon",
     "linux": {
       "target": "AppImage"
     }
