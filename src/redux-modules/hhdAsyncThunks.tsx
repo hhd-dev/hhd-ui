@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { set } from "lodash";
+import { getToken, getUrl } from "../local";
 
 const fetchFn = async (url: string, options?: { [s: string]: any }) => {
   const authHeaders = {
-    Authorization: `Bearer ${window.localStorage.getItem("hhdToken")}`,
+    Authorization: `Bearer ${getToken()}`,
   };
   if (!options) {
     options = {
@@ -13,7 +14,7 @@ const fetchFn = async (url: string, options?: { [s: string]: any }) => {
 
   options.headers = { ...options?.headers, ...authHeaders };
 
-  return fetch(`http://localhost:5335/api/v1/${url}`, options)
+  return fetch(`${getUrl()}/api/v1/${url}`, options)
     .then((r) => {
       if (r.ok) {
         return r.json();
