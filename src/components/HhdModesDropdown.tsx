@@ -1,3 +1,4 @@
+import { FormLabel, Select } from "@chakra-ui/react";
 import { FC } from "react";
 
 type DropdownProps = {
@@ -35,8 +36,8 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   return (
     <>
       <div>
-        <label htmlFor={`${statePath}`}>{title}</label>
-        <select
+        <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+        <Select
           id={`${statePath}`}
           disabled={disabled}
           onChange={(e) => {
@@ -53,7 +54,7 @@ const HhdModesDropdown: FC<DropdownProps> = ({
               );
             }
           )}
-        </select>
+        </Select>
       </div>
       {children &&
         children.length > 0 &&

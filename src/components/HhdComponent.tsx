@@ -4,6 +4,7 @@ import { get } from "lodash";
 import { useUpdateHhdStatePending } from "../hooks/controller";
 import HhdOptions from "./HhdOptions";
 import HhdModesDropdown from "./HhdModesDropdown";
+import { Button, Checkbox, FormLabel, Input, Select } from "@chakra-ui/react";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -98,7 +99,7 @@ const HhdComponent: FC<HhdComponentType> = ({
     return (
       <div>
         <label htmlFor={`${statePath}`}>{title}</label>
-        <input
+        <Input
           id={`${statePath}`}
           type="number"
           value={value}
@@ -118,11 +119,10 @@ const HhdComponent: FC<HhdComponentType> = ({
     const checked = get(state, `${statePath}`, defaultValue);
     return (
       <div>
-        <label htmlFor={`${statePath}`}>{title}</label>
-        <input
+        <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+        <Checkbox
           id={`${statePath}`}
-          type="checkbox"
-          checked={Boolean(checked)}
+          isChecked={Boolean(checked)}
           onChange={(e) => {
             return updateState(`${statePath}`, e.target.checked);
           }}
@@ -138,8 +138,8 @@ const HhdComponent: FC<HhdComponentType> = ({
 
     return (
       <div>
-        <label htmlFor={`${statePath}`}>{title}</label>
-        <select
+        <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+        <Select
           id={`${statePath}`}
           disabled={updating}
           onChange={(e) => {
@@ -152,7 +152,7 @@ const HhdComponent: FC<HhdComponentType> = ({
           value={value}
         >
           <HhdOptions type={type} options={options} />
-        </select>
+        </Select>
       </div>
     );
   }
@@ -174,9 +174,7 @@ const HhdComponent: FC<HhdComponentType> = ({
 
   if (type === "action" && title) {
     return (
-      <button type="button" onClick={() => updateState(`${statePath}`, true)}>
-        {title}
-      </button>
+      <Button onClick={() => updateState(`${statePath}`, true)}>{title}</Button>
     );
   }
 
