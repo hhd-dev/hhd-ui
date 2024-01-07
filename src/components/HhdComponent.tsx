@@ -1,14 +1,7 @@
-import { FC } from "react";
-import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
-import { get } from "lodash";
-import { useUpdateHhdStatePending } from "../hooks/controller";
-import HhdOptions from "./HhdOptions";
-import HhdModesDropdown from "./HhdModesDropdown";
 import {
   Box,
   Button,
   CardBody,
-  CardHeader,
   Checkbox,
   Code,
   Flex,
@@ -21,9 +14,13 @@ import {
   NumberInputStepper,
   Select,
   Stack,
-  StackDivider,
-  Text,
 } from "@chakra-ui/react";
+import { get } from "lodash";
+import { FC } from "react";
+import { useUpdateHhdStatePending } from "../hooks/controller";
+import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
+import HhdModesDropdown from "./HhdModesDropdown";
+import HhdOptions from "./HhdOptions";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
