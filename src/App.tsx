@@ -31,7 +31,7 @@ const App = memo(() => {
   useVerifyTokenRedirect(stateLoading, settingsLoading, state);
 
   if (!state || stateLoading == "pending" || settingsLoading == "pending") {
-    return <div>Loading</div>;
+    return null;
   }
 
   return (
