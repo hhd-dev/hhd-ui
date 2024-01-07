@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button, Card, Input, Text } from "@chakra-ui/react";
 
 const TokenPrompt = () => {
   const [token, setToken] = useState(
@@ -16,7 +17,7 @@ const TokenPrompt = () => {
         justifyContent: "center",
       }}
     >
-      <h1>Input HHD Token</h1>
+      <Text fontSize="2xl">Input HHD Token</Text>
       <p>You can get the token by running the following in terminal:</p>
 
       <pre>cat $HOME/.config/hhd/token</pre>
@@ -24,20 +25,22 @@ const TokenPrompt = () => {
       <p>Example token: 2f7abbc42dc7</p>
 
       <p>Save the token into the text input and save it</p>
-      <input
+      <Input
         type="text"
         id="token-input"
+        width="20rem"
         onChange={(e) => setToken(e.target.value)}
         value={token}
-      ></input>
-      <button
+      ></Input>
+      <Button
+        style={{ margin: "1rem" }}
         onClick={() => {
           window.localStorage.setItem("hhdToken", token);
           navigate("/");
         }}
       >
         Save Token
-      </button>
+      </Button>
 
       <p>
         Already saved the token? Go to the app <a href="#/">Here</a>
