@@ -7,8 +7,8 @@ import {
   fetchHhdSettingsState,
 } from "./redux-modules/hhdAsyncThunks";
 import {
-  selectAllHhdSettingsLoading,
   selectHhdSettingsState,
+  selectHhdStateLoadingStatuses,
 } from "./redux-modules/hhdSlice";
 import HhdState from "./components/HhdState";
 import { clearLoggedIn } from "./local";
@@ -16,9 +16,10 @@ import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector(selectAllHhdSettingsLoading);
+  const { stateLoading, settingsLoading } = useSelector(
+    selectHhdStateLoadingStatuses
+  );
   const state = useSelector(selectHhdSettingsState);
-  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,16 +27,19 @@ const App = memo(() => {
     dispatch(fetchHhdSettingsState());
   }, []);
 
-  setTimeout(() => {
-    if (!loading && !state) {
+  useEffect(() => {
+    if (
+      stateLoading === "succeeded" &&
+      settingsLoading === "succeeded" &&
+      !state?.hhd?.http
+    ) {
       clearLoggedIn();
-      forceUpdate();
       navigate("/");
     }
-  }, 1000);
+  }, [stateLoading, settingsLoading, state]);
 
-  if (!state || loading) {
-    return <div>Loading!</div>;
+  if (!state || stateLoading == "pending" || settingsLoading == "pending") {
+    return <div>Loading</div>;
   }
 
   return (
@@ -52,7 +56,6 @@ const App = memo(() => {
           <Button
             onClick={() => {
               clearLoggedIn();
-              forceUpdate();
               navigate("/");
             }}
           >

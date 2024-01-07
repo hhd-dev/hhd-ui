@@ -111,4 +111,11 @@ export const selectAllHhdSettingsLoading = (state: RootState) => {
   );
 };
 
+export const selectHhdStateLoadingStatuses = (state: RootState) => {
+  return {
+    stateLoading: selectHhdSettingsStateLoading(state),
+    settingsLoading: selectHhdSettingsLoading(state),
+  };
+};
+
 export default hhdSlice;

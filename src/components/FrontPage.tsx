@@ -23,11 +23,12 @@ import {
   setToken,
   setUrl,
 } from "../local";
-import { useEffect, useReducer } from "react";
+import { useEffect, useState } from "react";
 
 export default function FrontPage() {
   const navigate = useNavigate();
-  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [url, setUrlState] = useState(getUrl());
+  const [token, setTokenState] = useState(getToken());
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -69,10 +70,10 @@ export default function FrontPage() {
                   <Input
                     type="text"
                     id="token-input"
-                    value={getUrl()}
+                    value={url}
                     onChange={(e) => {
                       setUrl(e.target.value);
-                      forceUpdate();
+                      setUrlState(e.target.value);
                     }}
                     borderRightRadius="0"
                     placeholder="URL"
@@ -80,7 +81,7 @@ export default function FrontPage() {
                   <Button
                     onClick={() => {
                       setUrl("");
-                      forceUpdate();
+                      setUrlState("");
                     }}
                     borderLeftRadius="0"
                   >
@@ -94,9 +95,10 @@ export default function FrontPage() {
                     display="Token"
                     id="token-input"
                     onChange={(e) => {
-                      setToken(e.target.value), forceUpdate();
+                      setToken(e.target.value);
+                      setTokenState(e.target.value);
                     }}
-                    value={getToken()}
+                    value={token}
                     borderRightRadius="0"
                     placeholder="Token (empty if disabled)"
                   ></Input>

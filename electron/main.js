@@ -12,6 +12,7 @@ const createMainWindow = () => {
       webSecurity: false,
     },
   });
+  mainWindow.setMenu(null);
   const startURL = `file://${path.join(
     __dirname,
     "./static/build/index.html"
