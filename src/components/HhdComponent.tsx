@@ -96,7 +96,7 @@ const HhdComponent: FC<HhdComponentType> = ({
         updateState={updateState}
         hint={hint}
         renderChild={renderChild}
-        disabled={updating}
+        updating={updating}
       />
     );
   }
@@ -116,12 +116,15 @@ const HhdComponent: FC<HhdComponentType> = ({
           id={`${statePath}`}
           value={value}
           onChange={(value) => {
+            if (updating) {
+              return;
+            }
             return updateState(`${statePath}`, Number(value));
           }}
           min={min}
           max={max}
         >
-          <NumberInputField disabled={updating} />
+          <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />
             <NumberDecrementStepper />
@@ -141,9 +144,11 @@ const HhdComponent: FC<HhdComponentType> = ({
           id={`${statePath}`}
           isChecked={Boolean(checked)}
           onChange={(e) => {
+            if (updating) {
+              return;
+            }
             return updateState(`${statePath}`, e.target.checked);
           }}
-          disabled={updating}
         />
       </div>
     );
@@ -158,8 +163,10 @@ const HhdComponent: FC<HhdComponentType> = ({
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
         <Select
           id={`${statePath}`}
-          disabled={updating}
           onChange={(e) => {
+            if (updating) {
+              return;
+            }
             if (type === "discrete") {
               // discrete is always numeric
               return updateState(`${statePath}`, Number(e.target.value));

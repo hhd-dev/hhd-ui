@@ -12,7 +12,7 @@ type DropdownProps = {
   updateState: any;
   hint?: string;
   renderChild: any;
-  disabled: boolean;
+  updating: boolean;
 };
 
 const HhdModesDropdown: FC<DropdownProps> = ({
@@ -26,7 +26,7 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   statePath,
   updateState,
   renderChild,
-  disabled,
+  updating,
 }) => {
   const currentMode = modes[selectedValue];
   const { type } = currentMode;
@@ -39,8 +39,10 @@ const HhdModesDropdown: FC<DropdownProps> = ({
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
         <Select
           id={`${statePath}`}
-          disabled={disabled}
           onChange={(e) => {
+            if (updating) {
+              return;
+            }
             return updateState(`${statePath}.mode`, e.target.value);
           }}
           value={selectedValue}
