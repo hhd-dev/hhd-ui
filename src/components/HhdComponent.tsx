@@ -10,13 +10,13 @@ import {
   CardHeader,
   Checkbox,
   FormLabel,
-  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   Select,
+  Text,
 } from "@chakra-ui/react";
 
 interface HhdComponentType extends SettingsType {
@@ -74,8 +74,10 @@ const HhdComponent: FC<HhdComponentType> = ({
     // root container type
     return (
       <>
-        <CardHeader>{title}</CardHeader>
-        <CardBody>
+        <CardHeader>
+          <Text fontSize="xl">{title}</Text>
+        </CardHeader>
+        <CardBody style={{ display: "flex", flexDirection: "column" }}>
           {renderChild && typeof renderChild === "function" && renderChildren()}
         </CardBody>
       </>
@@ -198,7 +200,12 @@ const HhdComponent: FC<HhdComponentType> = ({
 
   if (type === "action" && title) {
     return (
-      <Button onClick={() => updateState(`${statePath}`, true)}>{title}</Button>
+      <Button
+        style={{ margin: "1rem 0px" }}
+        onClick={() => updateState(`${statePath}`, true)}
+      >
+        {title}
+      </Button>
     );
   }
 
