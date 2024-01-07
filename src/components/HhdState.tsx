@@ -22,6 +22,7 @@ const HhdState = () => {
         flexDirection: "row",
         justifyContent: "space-between",
       }}
+      backgroundColor={"white.50"}
     >
       {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
         return (
