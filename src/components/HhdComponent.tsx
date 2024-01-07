@@ -38,10 +38,6 @@ const HhdComponent: FC<HhdComponentType> = ({
 }) => {
   const updating = useUpdateHhdStatePending();
 
-  if (tags && tags.indexOf("advanced") >= 0) {
-    return null;
-  }
-
   const renderChildren = () => {
     if (children)
       return Object.entries(children).map(([childName, child], idx) => {
