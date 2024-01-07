@@ -13,22 +13,19 @@ import {
   Stack,
   StackDivider,
   Code,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 
-import {
-  getToken,
-  getUrl,
-  isLoggedIn,
-  setLoggedIn,
-  setToken,
-  setUrl,
-} from "../local";
+import { getToken, getUrl, isLoggedIn, setToken, setUrl } from "../local";
 import { useEffect, useState } from "react";
+import { useLogin } from "../hooks/auth";
 
 export default function FrontPage() {
   const navigate = useNavigate();
   const [url, setUrlState] = useState(getUrl());
   const [token, setTokenState] = useState(getToken());
+  const { login, errorMessage } = useLogin();
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -104,14 +101,19 @@ export default function FrontPage() {
                   ></Input>
                   <Button
                     onClick={() => {
-                      setLoggedIn();
-                      navigate("/ui");
+                      login();
                     }}
                     borderLeftRadius="0"
                   >
                     Login
                   </Button>
                 </Flex>
+                {errorMessage && (
+                  <Alert status="error">
+                    <AlertIcon />
+                    {errorMessage}
+                  </Alert>
+                )}
               </Stack>
             </Stack>
           </CardBody>

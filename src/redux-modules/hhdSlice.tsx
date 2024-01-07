@@ -7,6 +7,10 @@ import {
 } from "./hhdAsyncThunks";
 import { RootState } from "./store";
 
+export enum ErrorStates {
+  LoginFailed = "LoginFailed",
+}
+
 export type SettingType =
   | "bool"
   | "container"
@@ -30,10 +34,13 @@ export type SettingsType = {
   children?: { [childName: string]: SettingsType };
 };
 
+export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
+
 interface HhdState {
   settingsState?: any;
   settings?: any;
-  loading: { [loadState: string]: "idle" | "pending" | "succeeded" | "failed" };
+  loading: { [loadState: string]: LoadingStatusType };
+  error: { [key: string]: string };
 }
 
 const initialState = {
@@ -44,6 +51,7 @@ const initialState = {
     settingsState: "idle",
     updateHhdState: "idle",
   },
+  error: {},
 } as HhdState;
 
 const hhdSlice = createSlice({
@@ -56,6 +64,24 @@ const hhdSlice = createSlice({
     ) => {
       const { path, value } = action.payload;
       set(store.settingsState, path, value);
+    },
+    resetHhdState: (store, action: PayloadAction<void>) => {
+      store.loading = initialState.loading;
+      store.settings = initialState.settings;
+      store.settingsState = initialState.settingsState;
+    },
+    setError: (
+      store,
+      action: PayloadAction<{ errorName: string; errorMessage: string }>
+    ) => {
+      const { errorName, errorMessage } = action.payload;
+
+      set(store.error, errorName, errorMessage);
+    },
+    clearError: (store, action: PayloadAction<string>) => {
+      const errorName = action.payload;
+
+      delete store.error[errorName];
     },
   },
   extraReducers: (builder) => {
@@ -116,6 +142,10 @@ export const selectHhdStateLoadingStatuses = (state: RootState) => {
     stateLoading: selectHhdSettingsStateLoading(state),
     settingsLoading: selectHhdSettingsLoading(state),
   };
+};
+
+export const selectLoginErrorMessage = (state: RootState) => {
+  return state.hhd.error[ErrorStates.LoginFailed];
 };
 
 export default hhdSlice;
