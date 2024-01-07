@@ -76,7 +76,7 @@ function useVerifyTokenRedirect(
       !state?.hhd?.http
     ) {
       logout(
-        "Error while verifying HHD token. Either your token is incorrect, or the HHD web server is not working"
+        "Error while verifying your token. Either the token is incorrect, or the web server is not working."
       );
     }
   }, [stateLoading, settingsLoading, state]);
