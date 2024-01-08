@@ -8,6 +8,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/react";
+import { InfoIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import HintsAccordion from "./HintsAccordion";
 
@@ -19,7 +20,9 @@ function HintsModal() {
 
   return (
     <>
-      <Button onClick={onOpen}>More Info</Button>
+      <Button backgroundColor="transparent" onClick={onOpen}>
+        <InfoIcon />
+      </Button>
 
       <Modal isOpen={open} onClose={onClose}>
         <ModalOverlay />

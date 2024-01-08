@@ -21,6 +21,7 @@ import { useUpdateHhdStatePending } from "../hooks/controller";
 import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
 import HhdModesDropdown from "./HhdModesDropdown";
 import HhdOptions from "./HhdOptions";
+import HintsModal from "./HintsModal";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -79,7 +80,7 @@ const HhdComponent: FC<HhdComponentType> = ({
       <>
         <CardBody style={{ display: "flex", flexDirection: "column" }}>
           <Heading as="h1" fontSize="xl" marginBottom="1rem">
-            {title}
+            {title} <HintsModal />
           </Heading>
           <Stack spacing="3">
             {renderChild &&

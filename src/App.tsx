@@ -46,7 +46,6 @@ const App = memo(() => {
         >
           <Heading>Handheld Daemon</Heading>
           <Box flexGrow="3"></Box>
-          <HintsModal />
           <Button
             onClick={() => {
               logout();
