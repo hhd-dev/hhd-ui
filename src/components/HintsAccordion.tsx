@@ -7,32 +7,35 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { selectHints } from "../redux-modules/hhdSlice";
+import { selectHhdSettings } from "../redux-modules/hhdSlice";
 import { FC } from "react";
 
 type PropType = {
-  hints: { [key: string]: any };
+  settings: { [key: string]: any };
 };
 
-const HintsAccordion: FC<PropType> = ({ hints }) => {
+const SettingsAccordion: FC<PropType> = ({ settings }) => {
   return (
     <Accordion allowToggle allowMultiple>
-      {Object.keys(hints).map((topLevelStr, idx) => {
-        const { hint, children } = hints[topLevelStr];
+      {Object.keys(settings).map((topLevelStr, idx) => {
+        const { title, hint, children } = settings[topLevelStr];
         return (
           <AccordionItem key={idx}>
             <h2>
               <AccordionButton>
                 <Box as="span" flex="1" textAlign="left">
-                  {topLevelStr}
+                  {title}
                 </Box>
                 <AccordionIcon />
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
               {hint}
-              {Object.entries(children).map(([childName, child], idx) => {
-                return renderChild(childName, child, idx);
+              {Object.values(children).map((child, idx) => {
+                if (child) {
+                  return renderChild(child, idx);
+                }
+                return null;
               })}
             </AccordionPanel>
           </AccordionItem>
@@ -42,54 +45,45 @@ const HintsAccordion: FC<PropType> = ({ hints }) => {
   );
 };
 
-function renderChild(childName: string, child: any, key: number) {
-  if (typeof child === "string") {
-    return (
-      <AccordionItem key={key}>
-        <h2>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              {childName}
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-        </h2>
-        <AccordionPanel pb={4}>{child}</AccordionPanel>
-      </AccordionItem>
-    );
-  } else {
-    const { children, modes, hint } = child;
+function renderChild(child: any, key: number) {
+  const { title, hint, children, modes } = child;
 
-    return (
-      <AccordionItem key={key}>
-        <h2>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              {childName}
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-        </h2>
-        <AccordionPanel pb={4}>
-          {hint}
-          {children &&
-            Object.entries(children).map(([childName, child], idx) => {
-              return renderChild(childName, child, idx);
-            })}
-          {modes &&
-            Object.entries(modes).map(([childName, child], idx) => {
-              return renderChild(childName, child, idx);
-            })}
-        </AccordionPanel>
-      </AccordionItem>
-    );
-  }
+  return (
+    <AccordionItem key={key}>
+      <h2>
+        <AccordionButton>
+          <Box as="span" flex="1" textAlign="left">
+            {title}
+          </Box>
+          <AccordionIcon />
+        </AccordionButton>
+      </h2>
+      <AccordionPanel pb={4}>
+        {hint}
+        {children &&
+          Object.values(children).map((child, idx) => {
+            return renderChild(child, idx);
+          })}
+        {modes &&
+          Object.values(modes).map((child, idx) => {
+            return renderChild(child, idx);
+          })}
+      </AccordionPanel>
+    </AccordionItem>
+  );
 }
 
 const HintsAccordionContainer = () => {
-  const hints = useSelector(selectHints);
+  const settings = useSelector(selectHhdSettings);
 
-  return <HintsAccordion hints={hints} />;
+  return (
+    <>
+      {Object.values(settings).map((s, idx) => {
+        //@ts-ignore
+        return <SettingsAccordion settings={s} key={idx} />;
+      })}
+    </>
+  );
 };
 
 export default HintsAccordionContainer;
