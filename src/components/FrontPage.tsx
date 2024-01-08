@@ -13,8 +13,10 @@ import {
   Stack,
   StackDivider,
   Code,
+  FormControl,
   Alert,
   AlertIcon,
+  AbsoluteCenter,
 } from "@chakra-ui/react";
 
 import { getToken, getUrl, isLoggedIn, setToken, setUrl } from "../local";
@@ -34,13 +36,12 @@ export default function FrontPage() {
   }, []);
 
   return (
-    <Center>
+    // TODO: Figure out on small displays why scrolling is weird
+    <Center minW="100vw" minH="100vh">
       <Box>
-        {/* TODO: Find a way to do a proper margin for the top */}
-        <Box height="50px"></Box>
-        <Card maxW="md" marginTop="xl">
+        <Card maxW="md" margin="1rem 0">
           <CardHeader>
-            <Heading textAlign="center" as="h1" size="3xl" noOfLines={2}>
+            <Heading textAlign="center" as="h1" size="4xl" noOfLines={2}>
               Handheld Daemon
             </Heading>
           </CardHeader>
