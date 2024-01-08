@@ -13,6 +13,7 @@ import {
 import HhdState from "./components/HhdState";
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { useLogout } from "./hooks/auth";
+import HintsModal from "./components/HintsModal";
 
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
@@ -45,6 +46,7 @@ const App = memo(() => {
         >
           <Heading>Handheld Daemon</Heading>
           <Box flexGrow="3"></Box>
+          <HintsModal />
           <Button
             onClick={() => {
               logout();
