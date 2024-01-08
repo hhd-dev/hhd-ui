@@ -21,6 +21,7 @@
   "build": {
     "appId": "com.hhd-dev.hhd-ui",
     "productName": "Handheld Daemon",
+    "artifactName": "hhd-ui.${ext}",
     "linux": {
       "target": "AppImage"
     }
