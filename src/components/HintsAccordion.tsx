@@ -46,6 +46,18 @@ const SettingsAccordion: FC<PropType> = ({ settings }) => {
 function renderChild(child: any, key: number) {
   const { title, hint, children, modes } = child;
 
+  if (!children && !modes && !hint) {
+    return (
+      <AccordionItem key={key}>
+        <AccordionButton>
+          <Box as="span" flex="1" textAlign="left">
+            {title}
+          </Box>
+        </AccordionButton>
+      </AccordionItem>
+    );
+  }
+
   return (
     <AccordionItem key={key}>
       <Heading as="h4">
@@ -85,6 +97,10 @@ const HintsAccordion: FC<ContainerProps> = ({ path }) => {
 
   if (!data) {
     return <></>;
+  }
+
+  if (!data.children && !data.hint) {
+    return;
   }
 
   return (
