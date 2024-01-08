@@ -148,4 +148,51 @@ export const selectLoginErrorMessage = (state: RootState) => {
   return state.hhd.error[ErrorStates.LoginFailed];
 };
 
+export const selectHints = (state: RootState) => {
+  const settings = state.hhd.settings as {
+    [key: string]: { [key: string]: SettingsType };
+  };
+
+  const hints: { [k: string]: any } = {};
+
+  Object.entries(settings).forEach(([topLevelStr, plugins], idx) => {
+    Object.keys(plugins).forEach((pluginName, idx) => {
+      const extractHints = (
+        setting: SettingsType,
+        hints: { [k: string]: any }
+      ) => {
+        if (setting.hint && setting.title) {
+          hints[setting.title] = setting.hint;
+        }
+        if (setting.children) {
+          hints[setting.title] = {
+            hint: setting.hint,
+            type: setting.type,
+            children: {},
+          };
+          Object.values(setting.children).forEach((s) =>
+            extractHints(s, hints[setting.title].children)
+          );
+        }
+        if (setting.modes) {
+          hints[setting.title] = {
+            hint: setting.hint,
+            type: setting.type,
+            modes: {},
+          };
+          Object.values(setting.modes).forEach((s) =>
+            //@ts-ignore
+            extractHints(s, hints[setting.title].modes)
+          );
+        }
+      };
+      const topLevelSetting = plugins[pluginName] as SettingsType;
+
+      extractHints(topLevelSetting, hints);
+    });
+  });
+
+  return hints;
+};
+
 export default hhdSlice;
