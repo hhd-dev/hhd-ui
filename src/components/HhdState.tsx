@@ -36,6 +36,7 @@ const HhdState = () => {
                   key={`${statePath}${topIdx}${idx}`}
                   {...plugin}
                   state={state}
+                  childName={pluginName}
                   renderChild={renderChild}
                   statePath={statePath}
                   updateState={setState}

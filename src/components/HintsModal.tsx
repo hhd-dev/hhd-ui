@@ -9,10 +9,14 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { FC, useState } from "react";
 import HintsAccordion from "./HintsAccordion";
 
-function HintsModal() {
+type Props = {
+  pluginName: string;
+};
+
+const HintsModal: FC<Props> = ({ pluginName }) => {
   const [open, setIsOpen] = useState(false);
 
   const onOpen = () => setIsOpen(true);
@@ -30,7 +34,7 @@ function HintsModal() {
           <ModalHeader>More Information</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <HintsAccordion />
+            <HintsAccordion pluginName={pluginName} />
           </ModalBody>
 
           <ModalFooter>
@@ -42,6 +46,6 @@ function HintsModal() {
       </Modal>
     </>
   );
-}
+};
 
 export default HintsModal;

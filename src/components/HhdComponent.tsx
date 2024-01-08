@@ -80,7 +80,7 @@ const HhdComponent: FC<HhdComponentType> = ({
       <>
         <CardBody style={{ display: "flex", flexDirection: "column" }}>
           <Heading as="h1" fontSize="xl" marginBottom="1rem">
-            {title} <HintsModal />
+            {title} <HintsModal pluginName={`${childName}`} />
           </Heading>
           <Stack spacing="3">
             {renderChild &&

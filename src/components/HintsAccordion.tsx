@@ -12,13 +12,17 @@ import { FC } from "react";
 
 type PropType = {
   settings: { [key: string]: any };
+  settingName: string;
 };
 
-const SettingsAccordion: FC<PropType> = ({ settings }) => {
+const SettingsAccordion: FC<PropType> = ({ settings, settingName }) => {
   return (
-    <Accordion allowToggle allowMultiple>
-      {Object.keys(settings).map((topLevelStr, idx) => {
-        const { title, hint, children } = settings[topLevelStr];
+    <Accordion defaultIndex={[0]} allowToggle allowMultiple>
+      {Object.keys(settings).map((pluginName, idx) => {
+        if (pluginName !== settingName) {
+          return null;
+        }
+        const { title, hint, children } = settings[pluginName];
         return (
           <AccordionItem key={idx}>
             <h2>
@@ -73,14 +77,20 @@ function renderChild(child: any, key: number) {
   );
 }
 
-const HintsAccordionContainer = () => {
+type ContainerProps = {
+  pluginName: string;
+};
+
+const HintsAccordionContainer: FC<ContainerProps> = ({ pluginName }) => {
   const settings = useSelector(selectHhdSettings);
 
   return (
     <>
       {Object.values(settings).map((s, idx) => {
-        //@ts-ignore
-        return <SettingsAccordion settings={s} key={idx} />;
+        return (
+          //@ts-ignore
+          <SettingsAccordion settings={s} settingName={pluginName} key={idx} />
+        );
       })}
     </>
   );
