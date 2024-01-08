@@ -79,9 +79,13 @@ const HhdComponent: FC<HhdComponentType> = ({
     return (
       <>
         <CardBody style={{ display: "flex", flexDirection: "column" }}>
-          <Heading as="h1" fontSize="xl" marginBottom="1rem">
-            {title} <HintsModal pluginName={`${childName}`} />
-          </Heading>
+          <Flex direction="row" marginBottom="1rem" alignItems="center">
+            <Heading as="h1" fontSize="xl">
+              {title}
+            </Heading>
+            <Box flexGrow="1" minW="2rem"></Box>
+            <HintsModal pluginName={`${childName}`} />
+          </Flex>
           <Stack spacing="3">
             {renderChild &&
               typeof renderChild === "function" &&
