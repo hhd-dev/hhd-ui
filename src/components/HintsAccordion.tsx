@@ -1,50 +1,44 @@
+import { InfoIcon } from "@chakra-ui/icons";
 import {
   Accordion,
-  AccordionItem,
   AccordionButton,
-  Box,
   AccordionIcon,
+  AccordionItem,
   AccordionPanel,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
+import { get } from "lodash";
+import { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectHhdSettings } from "../redux-modules/hhdSlice";
-import { FC } from "react";
 
 type PropType = {
   settings: { [key: string]: any };
-  settingName: string;
 };
 
-const SettingsAccordion: FC<PropType> = ({ settings, settingName }) => {
+const SettingsAccordion: FC<PropType> = ({ settings }) => {
+  const { hint, children } = settings;
   return (
-    <Accordion defaultIndex={[0]} allowToggle allowMultiple>
-      {Object.keys(settings).map((pluginName, idx) => {
-        if (pluginName !== settingName) {
+    <Accordion defaultIndex={[0]} allowMultiple>
+      <Flex direction="column">
+        <Box paddingBottom="0.5rem">{hint}</Box>
+        {Object.values(children).map((child, idx) => {
+          if (child) {
+            return renderChild(child, idx);
+          }
           return null;
-        }
-        const { title, hint, children } = settings[pluginName];
-        return (
-          <AccordionItem key={idx}>
-            <h2>
-              <AccordionButton>
-                <Box as="span" flex="1" textAlign="left">
-                  {title}
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              {hint}
-              {Object.values(children).map((child, idx) => {
-                if (child) {
-                  return renderChild(child, idx);
-                }
-                return null;
-              })}
-            </AccordionPanel>
-          </AccordionItem>
-        );
-      })}
+        })}
+      </Flex>
     </Accordion>
   );
 };
@@ -54,16 +48,16 @@ function renderChild(child: any, key: number) {
 
   return (
     <AccordionItem key={key}>
-      <h2>
+      <Heading as="h4">
         <AccordionButton>
           <Box as="span" flex="1" textAlign="left">
             {title}
           </Box>
           <AccordionIcon />
         </AccordionButton>
-      </h2>
+      </Heading>
       <AccordionPanel pb={4}>
-        {hint}
+        <Box paddingBottom="0.5rem">{hint}</Box>
         {children &&
           Object.values(children).map((child, idx) => {
             return renderChild(child, idx);
@@ -78,22 +72,44 @@ function renderChild(child: any, key: number) {
 }
 
 type ContainerProps = {
-  pluginName: string;
+  path: string;
 };
 
-const HintsAccordionContainer: FC<ContainerProps> = ({ pluginName }) => {
+const HintsAccordion: FC<ContainerProps> = ({ path }) => {
   const settings = useSelector(selectHhdSettings);
+  const [open, setIsOpen] = useState(false);
+  const onOpen = () => setIsOpen(true);
+  const onClose = () => setIsOpen(false);
+
+  const data = get(settings, path, null);
+
+  if (!data) {
+    return <></>;
+  }
 
   return (
     <>
-      {Object.values(settings).map((s, idx) => {
-        return (
-          //@ts-ignore
-          <SettingsAccordion settings={s} settingName={pluginName} key={idx} />
-        );
-      })}
+      <Button backgroundColor="transparent" onClick={onOpen}>
+        <InfoIcon />
+      </Button>
+      <Modal isOpen={open} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{data.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <SettingsAccordion settings={data} />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
 
-export default HintsAccordionContainer;
+export default HintsAccordion;

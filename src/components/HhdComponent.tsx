@@ -21,7 +21,7 @@ import { useUpdateHhdStatePending } from "../hooks/controller";
 import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
 import HhdModesDropdown from "./HhdModesDropdown";
 import HhdOptions from "./HhdOptions";
-import HintsModal from "./HintsModal";
+import HintsAccordion from "./HintsAccordion";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -84,7 +84,7 @@ const HhdComponent: FC<HhdComponentType> = ({
               {title}
             </Heading>
             <Box flexGrow="1" minW="2rem"></Box>
-            <HintsModal pluginName={`${childName}`} />
+            <HintsAccordion path={`${statePath}`} />
           </Flex>
           <Stack spacing="3">
             {renderChild &&
