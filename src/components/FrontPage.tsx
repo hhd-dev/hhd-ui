@@ -49,9 +49,11 @@ export default function FrontPage() {
               <Text>Welcome to the Handheld Daemon Configurator!</Text>
 
               <Text>
-                You can configure your device from this page. For security
-                reasons, you need to visit this webpage from your device, and
-                enter a security token. This token can be found below. Have fun!
+                This is a static website you can use to configure your device
+                (everything is done locally and there is no server). With the
+                default security settings, you need to visit this webpage from
+                your device and enter a security token. This token can be found
+                below. Have fun!
               </Text>
 
               <Code textAlign="center" padding="1rem" lang="bash">
@@ -76,6 +78,7 @@ export default function FrontPage() {
                     placeholder="URL"
                   ></Input>
                   <Button
+                    w="5rem"
                     onClick={() => {
                       setUrl("");
                       setUrlState("");
@@ -100,14 +103,24 @@ export default function FrontPage() {
                     placeholder="Token (empty if disabled)"
                   ></Input>
                   <Button
+                    w="5rem"
                     onClick={() => {
-                      login();
+                      setToken("");
+                      setTokenState("");
                     }}
                     borderLeftRadius="0"
                   >
-                    Connect
+                    Clear
                   </Button>
                 </Flex>
+                <Button
+                  onClick={() => {
+                    login();
+                  }}
+                  borderLeftRadius="0"
+                >
+                  Connect
+                </Button>
                 {errorMessage && (
                   <Alert status="error">
                     <AlertIcon />
