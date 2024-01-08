@@ -105,7 +105,7 @@ export default function FrontPage() {
                     }}
                     borderLeftRadius="0"
                   >
-                    Login
+                    Connect
                   </Button>
                 </Flex>
                 {errorMessage && (

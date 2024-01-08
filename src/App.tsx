@@ -51,7 +51,7 @@ const App = memo(() => {
               logout();
             }}
           >
-            Logout
+            Disconnect
           </Button>
         </Flex>
       </Flex>
