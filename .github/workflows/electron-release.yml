@@ -61,7 +61,7 @@ jobs:
       - name: publish to github release
         uses: softprops/action-gh-release@v1
         with:
-          files: /tmp/artifacts/hhd-ui/hhd-ui.AppImage
+          files: /tmp/artifacts/hhd-ui-electron/hhd-ui.AppImage
           tag_name: ${{ github.ref_name }}
           body: |
             hhd-ui
