@@ -1,4 +1,4 @@
-import { FormLabel, Select } from "@chakra-ui/react";
+import { Box, Center, Divider, Flex, FormLabel, Select, Stack } from "@chakra-ui/react";
 import { FC } from "react";
 
 type DropdownProps = {
@@ -35,7 +35,7 @@ const HhdModesDropdown: FC<DropdownProps> = ({
 
   return (
     <>
-      <div>
+      <Box>
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
         <Select
           id={`${statePath}`}
@@ -57,21 +57,32 @@ const HhdModesDropdown: FC<DropdownProps> = ({
             }
           )}
         </Select>
-      </div>
-      {children &&
-        children.length > 0 &&
-        children.map(([childName, child], idx) => {
-          return renderChild({
-            childName,
-            child,
-            childOrder: idx,
-            depth: depth + 1,
-            parentType: type,
-            state,
-            updateState,
-            statePath: `${statePath}.${selectedValue}.${childName}`,
-          });
-        })}
+      </Box>
+      <Flex direction="row">
+        <Center>
+          <Divider
+            orientation="vertical"
+            marginRight="0.75rem"
+            alignSelf="stretch"
+          ></Divider>
+        </Center>
+        <Stack flexGrow="1">
+          {children &&
+            children.length > 0 &&
+            children.map(([childName, child], idx) => {
+              return renderChild({
+                childName,
+                child,
+                childOrder: idx,
+                depth: depth + 1,
+                parentType: type,
+                state,
+                updateState,
+                statePath: `${statePath}.${selectedValue}.${childName}`,
+              });
+            })}
+        </Stack>
+      </Flex>
     </>
   );
 };
