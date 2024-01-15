@@ -128,13 +128,15 @@ const HhdComponent: FC<HhdComponentType> = ({
   ) {
     const value = get(state, `${statePath}`, defaultValue);
 
+    const valueProp = value ? { value } : {};
+
     return (
       <div>
         <ErrorBoundary title={title}>
           <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
           <NumberInput
             id={`${statePath}`}
-            value={value}
+            {...valueProp}
             onChange={(value) => {
               if (updating) {
                 return;
