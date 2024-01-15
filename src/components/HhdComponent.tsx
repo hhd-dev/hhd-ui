@@ -22,6 +22,7 @@ import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
 import HhdModesDropdown from "./HhdModesDropdown";
 import HhdOptions from "./HhdOptions";
 import HintsAccordion from "./HintsAccordion";
+import ErrorBoundary from "./ErrorBoundary";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -87,9 +88,11 @@ const HhdComponent: FC<HhdComponentType> = ({
             <HintsAccordion path={`${statePath}`} />
           </Flex>
           <Stack spacing="3">
-            {renderChild &&
-              typeof renderChild === "function" &&
-              renderChildren()}
+            <ErrorBoundary title={title}>
+              {renderChild &&
+                typeof renderChild === "function" &&
+                renderChildren()}
+            </ErrorBoundary>
           </Stack>
         </CardBody>
       </>
@@ -99,19 +102,21 @@ const HhdComponent: FC<HhdComponentType> = ({
     // specially handle xinput child
     const value = get(state, `${statePath}.mode`, defaultValue);
     return (
-      <HhdModesDropdown
-        modes={modes}
-        defaultValue={defaultValue}
-        selectedValue={value}
-        title={title}
-        depth={depth}
-        state={state}
-        statePath={statePath}
-        updateState={updateState}
-        hint={hint}
-        renderChild={renderChild}
-        updating={updating}
-      />
+      <ErrorBoundary title={title}>
+        <HhdModesDropdown
+          modes={modes}
+          defaultValue={defaultValue}
+          selectedValue={value}
+          title={title}
+          depth={depth}
+          state={state}
+          statePath={statePath}
+          updateState={updateState}
+          hint={hint}
+          renderChild={renderChild}
+          updating={updating}
+        />
+      </ErrorBoundary>
     );
   }
 
@@ -125,25 +130,27 @@ const HhdComponent: FC<HhdComponentType> = ({
 
     return (
       <div>
-        <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
-        <NumberInput
-          id={`${statePath}`}
-          value={value}
-          onChange={(value) => {
-            if (updating) {
-              return;
-            }
-            return updateState(`${statePath}`, Number(value));
-          }}
-          min={min}
-          max={max}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+        <ErrorBoundary title={title}>
+          <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+          <NumberInput
+            id={`${statePath}`}
+            value={value}
+            onChange={(value) => {
+              if (updating) {
+                return;
+              }
+              return updateState(`${statePath}`, Number(value));
+            }}
+            min={min}
+            max={max}
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+        </ErrorBoundary>
       </div>
     );
   }
@@ -153,18 +160,20 @@ const HhdComponent: FC<HhdComponentType> = ({
     const checked = get(state, `${statePath}`, defaultValue);
     return (
       <Flex flexDirection="row">
-        <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
-        <Box flexGrow="1"></Box>
-        <Checkbox
-          id={`${statePath}`}
-          isChecked={Boolean(checked)}
-          onChange={(e) => {
-            if (updating) {
-              return;
-            }
-            return updateState(`${statePath}`, e.target.checked);
-          }}
-        />
+        <ErrorBoundary title={title}>
+          <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+          <Box flexGrow="1"></Box>
+          <Checkbox
+            id={`${statePath}`}
+            isChecked={Boolean(checked)}
+            onChange={(e) => {
+              if (updating) {
+                return;
+              }
+              return updateState(`${statePath}`, e.target.checked);
+            }}
+          />
+        </ErrorBoundary>
       </Flex>
     );
   }
@@ -175,23 +184,25 @@ const HhdComponent: FC<HhdComponentType> = ({
 
     return (
       <Flex flexDirection="column">
-        <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
-        <Select
-          id={`${statePath}`}
-          onChange={(e) => {
-            if (updating) {
-              return;
-            }
-            if (type === "discrete") {
-              // discrete is always numeric
-              return updateState(`${statePath}`, Number(e.target.value));
-            }
-            return updateState(`${statePath}`, e.target.value);
-          }}
-          value={value}
-        >
-          <HhdOptions type={type} options={options} />
-        </Select>
+        <ErrorBoundary title={title}>
+          <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
+          <Select
+            id={`${statePath}`}
+            onChange={(e) => {
+              if (updating) {
+                return;
+              }
+              if (type === "discrete") {
+                // discrete is always numeric
+                return updateState(`${statePath}`, Number(e.target.value));
+              }
+              return updateState(`${statePath}`, e.target.value);
+            }}
+            value={value}
+          >
+            <HhdOptions type={type} options={options} />
+          </Select>
+        </ErrorBoundary>
       </Flex>
     );
   }
@@ -205,15 +216,21 @@ const HhdComponent: FC<HhdComponentType> = ({
     }
 
     return (
-      <Code padding="1rem">
-        {title} - {value}
-      </Code>
+      <ErrorBoundary title={title}>
+        <Code padding="1rem">
+          {title} - {value}
+        </Code>
+      </ErrorBoundary>
     );
   }
 
   if (type === "action" && title) {
     return (
-      <Button onClick={() => updateState(`${statePath}`, true)}>{title}</Button>
+      <ErrorBoundary title={title}>
+        <Button onClick={() => updateState(`${statePath}`, true)}>
+          {title}
+        </Button>
+      </ErrorBoundary>
     );
   }
 
