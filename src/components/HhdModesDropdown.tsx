@@ -1,4 +1,12 @@
-import { Box, Center, Divider, Flex, FormLabel, Select, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  FormLabel,
+  Select,
+  Stack,
+} from "@chakra-ui/react";
 import { FC } from "react";
 
 type DropdownProps = {
@@ -29,9 +37,8 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   updating,
 }) => {
   const currentMode = modes[selectedValue];
-  const { type } = currentMode;
-
-  const children = Object.entries(currentMode.children);
+  const type = currentMode ? currentMode.type : null;
+  const children = currentMode ? Object.entries(currentMode.children) : [];
 
   return (
     <>
