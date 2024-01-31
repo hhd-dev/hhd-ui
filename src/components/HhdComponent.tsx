@@ -23,6 +23,7 @@ import HhdModesDropdown from "./HhdModesDropdown";
 import HhdOptions from "./HhdOptions";
 import HintsAccordion from "./HintsAccordion";
 import ErrorBoundary from "./ErrorBoundary";
+import HhdInt from "./HhdInt";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -128,32 +129,23 @@ const HhdComponent: FC<HhdComponentType> = ({
   ) {
     const value = get(state, `${statePath}`, defaultValue);
 
-    const valueProp = value ? { value } : {};
+    const onChange = (value: string) => {
+      if (updating) {
+        return;
+      }
+      return updateState(`${statePath}`, Number(value));
+    };
 
     return (
-      <div>
-        <ErrorBoundary title={title}>
-          <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
-          <NumberInput
-            id={`${statePath}`}
-            {...valueProp}
-            onChange={(value) => {
-              if (updating) {
-                return;
-              }
-              return updateState(`${statePath}`, Number(value));
-            }}
-            min={min}
-            max={max}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </ErrorBoundary>
-      </div>
+      <HhdInt
+        value={value}
+        onChange={onChange}
+        tags={tags || []}
+        title={title}
+        statePath={`${statePath}`}
+        min={min}
+        max={max}
+      />
     );
   }
 
