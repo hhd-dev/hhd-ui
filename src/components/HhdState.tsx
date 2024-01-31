@@ -6,8 +6,16 @@ import {
 } from "../redux-modules/hhdSlice";
 import HhdComponent, { renderChild } from "./HhdComponent";
 import { useSetHhdState } from "../hooks/controller";
-import { Card } from "@chakra-ui/react";
 import ErrorBoundary from "./ErrorBoundary";
+import {
+  Card,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+import { capitalize } from "lodash";
 
 const HhdState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -17,38 +25,49 @@ const HhdState = () => {
   const setState = useSetHhdState();
 
   return (
-    <Card
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-      }}
-      backgroundColor={"white.50"}
-    >
-      <ErrorBoundary>
-        {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
-          return (
-            <div key={topIdx}>
-              {Object.keys(plugins).map((pluginName, idx) => {
-                const plugin = plugins[pluginName] as SettingsType;
-                const statePath = `${topLevelStr}.${pluginName}`;
+    <Card width={"800px"}>
+      <Tabs defaultIndex={0} size="md" orientation="vertical">
+        <TabList>
+          {Object.values(settings).map((plugins) => {
+            return Object.keys(plugins).map((pluginName, idx) => {
+              const label = pluginName
+                .split("_")
+                .map(capitalize)
+                .join("\u00a0");
 
-                return (
-                  <HhdComponent
-                    key={`${statePath}${topIdx}${idx}`}
-                    {...plugin}
-                    state={state}
-                    childName={pluginName}
-                    renderChild={renderChild}
-                    statePath={statePath}
-                    updateState={setState}
-                  />
-                );
-              })}
-            </div>
-          );
-        })}
-      </ErrorBoundary>
+              return <Tab key={idx}>{label}</Tab>;
+            });
+          })}
+        </TabList>
+        <TabPanels>
+          {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
+            return (
+              <div key={topIdx}>
+                {Object.keys(plugins).map((pluginName, idx) => {
+                  const plugin = plugins[pluginName] as SettingsType;
+                  const statePath = `${topLevelStr}.${pluginName}`;
+
+                  return (
+                    <TabPanel>
+                      <ErrorBoundary>
+                        <HhdComponent
+                          key={`${statePath}${topIdx}${idx}`}
+                          {...plugin}
+                          state={state}
+                          childName={pluginName}
+                          renderChild={renderChild}
+                          statePath={statePath}
+                          updateState={setState}
+                        />
+                      </ErrorBoundary>
+                    </TabPanel>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </TabPanels>
+      </Tabs>
     </Card>
   );
 };

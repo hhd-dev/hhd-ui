@@ -80,7 +80,9 @@ const HhdComponent: FC<HhdComponentType> = ({
     // root container type
     return (
       <>
-        <CardBody style={{ display: "flex", flexDirection: "column" }}>
+        <CardBody
+          style={{ display: "flex", flexDirection: "column", padding: 0 }}
+        >
           <Flex direction="row" marginBottom="1rem" alignItems="center">
             <Heading as="h1" fontSize="xl">
               {title}
