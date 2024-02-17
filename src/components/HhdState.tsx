@@ -28,15 +28,10 @@ const HhdState = () => {
     <Card width={"800px"}>
       <Tabs defaultIndex={0} size="md" orientation="vertical">
         <TabList>
-          {Object.values(settings).map((plugins) => {
-            return Object.keys(plugins).map((pluginName, idx) => {
-              const label = pluginName
-                .split("_")
-                .map(capitalize)
-                .join("\u00a0");
+          {Object.keys(settings).map((name, idx) => {
+            const label = name.split("_").map(capitalize).join("\u00a0");
 
-              return <Tab key={idx}>{label}</Tab>;
-            });
+            return <Tab key={idx}>{label}</Tab>;
           })}
         </TabList>
         <TabPanels>
