@@ -1,17 +1,23 @@
-# Handheld Daemon UI
+<h1 align="center">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/hhd-dev/hhd/master/art/logo_dark.svg" width="50%">
+        <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/hhd-dev/hhd/master/art/logo_light.svg" width="50%">
+        <img alt="Handheld Daemon Logo." src="https://raw.githubusercontent.com/hhd-dev/hhd/master/res/art/logo_light.svg" width="50%">
+    </picture>
+</h1>
 
-This prototype UI will be used to manage Handheld Daemon settings.
-It is a static website, so installing will not be necessary soonTM.
+# Handheld Daemon UI
+A UI app that can manage Handheld Daemon settings from Steam, the Desktop, and
+the Web.
 
 ![hhd ui picture](./images/app-picture.png)
 
 # Usage
-
 There are two ways of accessing the app:
 
 1. Go to https://hhd.dev to use the latest version via your browser. 
 2. Install the app locally to your device via a provided AppImage.
-3. NOT YET: go to http://localhost:5335 to use a bundled version.
+3. Use the version bundled with your distribution (coming soon)
 
 # hhd.dev Website
 Go to https://hhd.dev from your device and enter the token you can find under
@@ -25,10 +31,6 @@ without using the token.
 The decky plugin uses the token as well, by reading it with your user priviledges.
 Both of these precautions can be disabled, so you can configure your device
 from outside of it by opening port 5335 and finding its ip (`ip addr`).
-
-> The HTTP API of Handheld Daemon has not been independently audited
-> and it is not run using a production web server. Do not disable limit to localhost
-> outside trusted networks.
 
 You can not use configure your device from outside of it
 using https://hhd.dev due to a security policy called Mixed Content Serving.
