@@ -23,7 +23,9 @@
     "productName": "Handheld Daemon",
     "artifactName": "hhd-ui.${ext}",
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "icon": "icon/android-chrome-512x512.png",
+      "category": "game"
     }
   },
   "files": [
