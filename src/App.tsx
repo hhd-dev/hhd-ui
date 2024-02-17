@@ -47,7 +47,7 @@ const App = memo(() => {
           justifyContent="start"
         >
           <Heading>
-            <HhdLogo width={40} />
+            <HhdLogo width={30} />
           </Heading>
           <Box flexGrow="3"></Box>
           <Button
