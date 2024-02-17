@@ -55,3 +55,12 @@ export const updateHhdState = createAsyncThunk(
     return response;
   }
 );
+
+export const fetchSectionNames = createAsyncThunk(
+  "hhd/fetchSectionNames",
+  async () => {
+    const response = await fetchFn("sections");
+
+    return response;
+  }
+);

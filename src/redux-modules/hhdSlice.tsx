@@ -3,6 +3,7 @@ import { set } from "lodash";
 import {
   fetchHhdSettings,
   fetchHhdSettingsState,
+  fetchSectionNames,
   updateHhdState,
 } from "./hhdAsyncThunks";
 import { RootState } from "./store";
@@ -41,6 +42,7 @@ interface HhdState {
   settings?: any;
   loading: { [loadState: string]: LoadingStatusType };
   error: { [key: string]: string };
+  sectionNames: { [key: string]: string };
 }
 
 const initialState = {
@@ -52,6 +54,7 @@ const initialState = {
     updateHhdState: "idle",
   },
   error: {},
+  sectionNames: {},
 } as HhdState;
 
 const hhdSlice = createSlice({
@@ -106,6 +109,9 @@ const hhdSlice = createSlice({
     builder.addCase(updateHhdState.fulfilled, (state, action) => {
       state.settingsState = action.payload;
       state.loading.updateHhdState = "succeeded";
+    });
+    builder.addCase(fetchSectionNames.fulfilled, (state, action) => {
+      state.sectionNames = action.payload || {};
     });
   },
 });
@@ -194,5 +200,7 @@ export const selectHints = (state: RootState) => {
 
   return hints;
 };
+
+export const selectSectionNames = (state: RootState) => state.hhd.sectionNames;
 
 export default hhdSlice;

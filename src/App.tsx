@@ -4,6 +4,7 @@ import { AppDispatch } from "./redux-modules/store";
 import {
   fetchHhdSettings,
   fetchHhdSettingsState,
+  fetchSectionNames,
 } from "./redux-modules/hhdAsyncThunks";
 import {
   LoadingStatusType,
@@ -26,6 +27,7 @@ const App = memo(() => {
   useEffect(() => {
     dispatch(fetchHhdSettings());
     dispatch(fetchHhdSettingsState());
+    dispatch(fetchSectionNames());
   }, []);
 
   useVerifyTokenRedirect(stateLoading, settingsLoading, state);

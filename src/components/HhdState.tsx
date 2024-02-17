@@ -3,6 +3,7 @@ import {
   SettingsType,
   selectHhdSettingsState,
   selectHhdSettings,
+  selectSectionNames,
 } from "../redux-modules/hhdSlice";
 import HhdComponent, { renderChild } from "./HhdComponent";
 import { useSetHhdState } from "../hooks/controller";
@@ -21,6 +22,7 @@ const HhdState = () => {
   const state = useSelector(selectHhdSettingsState);
   const settings: { [key: string]: { [key: string]: SettingsType } } =
     useSelector(selectHhdSettings);
+  const sectionNames = useSelector(selectSectionNames);
 
   const setState = useSetHhdState();
 
@@ -29,9 +31,12 @@ const HhdState = () => {
       <Tabs defaultIndex={0} size="md" orientation="vertical">
         <TabList style={{ padding: "1rem 0" }}>
           {Object.keys(settings).map((name, idx) => {
-            const label = name.split("_").map(capitalize).join("\u00a0");
+            let label = name.split("_").map(capitalize).join("\u00a0");
+            if (sectionNames && sectionNames[name]) {
+              label = sectionNames[name];
+            }
 
-            return <Tab key={idx}>{label}</Tab>;
+            return <Tab key={`tablist-tab-${idx}`}>{label}</Tab>;
           })}
         </TabList>
         <TabPanels>
@@ -43,10 +48,9 @@ const HhdState = () => {
                   const statePath = `${topLevelStr}.${pluginName}`;
 
                   return (
-                    <TabPanel>
+                    <TabPanel key={`${statePath}${topIdx}${idx}`}>
                       <ErrorBoundary>
                         <HhdComponent
-                          key={`${statePath}${topIdx}${idx}`}
                           {...plugin}
                           state={state}
                           childName={pluginName}
