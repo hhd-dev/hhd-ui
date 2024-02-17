@@ -13,5 +13,5 @@ npm install
 
 npm run build
 
-# output will be in the electron/dist/HHD.AppImage
+# output will be in the electron/dist/hhd-ui.AppImage
 ```
