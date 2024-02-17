@@ -16,7 +16,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { get } from "lodash";
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { useUpdateHhdStatePending } from "../hooks/controller";
 import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
 import HhdModesDropdown from "./HhdModesDropdown";
@@ -57,6 +57,7 @@ const HhdComponent: FC<HhdComponentType> = ({
   default: defaultValue,
 }) => {
   const updating = useUpdateHhdStatePending();
+  const componentRef = useRef<HTMLInputElement>(null);
 
   const renderChildren = () => {
     if (children)
@@ -161,7 +162,19 @@ const HhdComponent: FC<HhdComponentType> = ({
           <Box flexGrow="1"></Box>
           <Checkbox
             id={`${statePath}`}
+            ref={componentRef}
             isChecked={Boolean(checked)}
+            onKeyDown={(e) => {
+              if (e.code === "Enter") {
+                if (updating) {
+                  return;
+                }
+                return updateState(
+                  `${statePath}`,
+                  !Boolean(componentRef.current?.checked)
+                );
+              }
+            }}
             onChange={(e) => {
               if (updating) {
                 return;
