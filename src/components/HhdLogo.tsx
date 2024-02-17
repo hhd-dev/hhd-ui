@@ -10,12 +10,12 @@ const HhdLogo: FC<Props> = ({ width, ...otherProps }) => {
       <picture>
         <source
           media="(prefers-color-scheme: dark)"
-          srcset="src/assets/logo_dark.svg"
+          srcSet="src/assets/logo_dark.svg"
           width={`${width}%`}
         />
         <source
           media="(prefers-color-scheme: light)"
-          srcset="src/assets/logo_light.svg"
+          srcSet="src/assets/logo_light.svg"
           width={`${width}%`}
         />
         <img

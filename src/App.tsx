@@ -15,6 +15,7 @@ import HhdState from "./components/HhdState";
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { useLogout } from "./hooks/auth";
 import HhdLogo from "./components/HhdLogo";
+import { CONTENT_WIDTH } from "./components/theme";
 
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +42,7 @@ const App = memo(() => {
     <Flex w="100%" flexDirection="column" alignItems="center">
       <Flex margin="15px">
         <Flex
-          w="800px"
+          w={CONTENT_WIDTH}
           flexDirection="row"
           alignItems="start"
           justifyContent="start"
@@ -60,7 +61,12 @@ const App = memo(() => {
         </Flex>
       </Flex>
       <Box w="50px"></Box>
-      <Flex flexDirection="column" alignItems="center" justifyContent="center">
+      <Flex
+        w={CONTENT_WIDTH}
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+      >
         <HhdState />
       </Flex>
     </Flex>

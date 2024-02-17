@@ -17,6 +17,7 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
+import { CONTENT_WIDTH } from "./theme";
 
 const HhdState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -27,7 +28,7 @@ const HhdState = () => {
   const setState = useSetHhdState();
 
   return (
-    <Card width={"800px"}>
+    <Card width={CONTENT_WIDTH}>
       <Tabs defaultIndex={0} size="md" orientation="vertical">
         <TabList style={{ padding: "1rem 0" }}>
           {Object.keys(settings).map((name, idx) => {
