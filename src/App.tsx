@@ -14,6 +14,7 @@ import {
 import HhdState from "./components/HhdState";
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { useLogout } from "./hooks/auth";
+import HhdLogo from "./components/HhdLogo";
 
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
@@ -45,7 +46,9 @@ const App = memo(() => {
           alignItems="start"
           justifyContent="start"
         >
-          <Heading>Handheld Daemon</Heading>
+          <Heading>
+            <HhdLogo width={40} />
+          </Heading>
           <Box flexGrow="3"></Box>
           <Button
             onClick={() => {

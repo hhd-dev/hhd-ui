@@ -22,6 +22,7 @@ import {
 import { getToken, getUrl, isLoggedIn, setToken, setUrl } from "../local";
 import { useEffect, useState } from "react";
 import { useLogin } from "../hooks/auth";
+import HhdLogo from "./HhdLogo";
 
 export default function FrontPage() {
   const navigate = useNavigate();
@@ -41,9 +42,7 @@ export default function FrontPage() {
       <Box>
         <Card maxW="md" margin="1rem 0">
           <CardHeader>
-            <Heading textAlign="center" as="h1" size="4xl" noOfLines={2}>
-              Handheld Daemon
-            </Heading>
+            <HhdLogo width={60} style={{ margin: "auto" }} />
           </CardHeader>
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
