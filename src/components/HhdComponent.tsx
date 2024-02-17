@@ -59,6 +59,14 @@ const HhdComponent: FC<HhdComponentType> = ({
   const updating = useUpdateHhdStatePending();
   const componentRef = useRef<HTMLInputElement>(null);
 
+  if (tags)
+    if (
+      tags.indexOf("hhd-update-decky") >= 0 ||
+      tags.indexOf("hhd-version-display-decky") >= 0
+    ) {
+      return null;
+    }
+
   const renderChildren = () => {
     if (children)
       return Object.entries(children).map(([childName, child], idx) => {
