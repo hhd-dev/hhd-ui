@@ -27,7 +27,7 @@ const HhdState = () => {
   return (
     <Card width={"800px"}>
       <Tabs defaultIndex={0} size="md" orientation="vertical">
-        <TabList>
+        <TabList style={{ padding: "1rem 0" }}>
           {Object.keys(settings).map((name, idx) => {
             const label = name.split("_").map(capitalize).join("\u00a0");
 
