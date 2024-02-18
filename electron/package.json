@@ -1,12 +1,12 @@
 {
-  "name": "com.hhd-dev.hhd-ui",
+  "name": "dev.hhd.hhd-ui",
   "author": {
     "name": "Aarron L"
   },
   "homepage": "https://github.com/hhd-dev/hhd-ui",
   "description": "Handhend Daemon UI",
   "license": "",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {
     "electron": "^28.1.0",
@@ -19,7 +19,7 @@
     "build": "./node_modules/.bin/electron-builder build --linux"
   },
   "build": {
-    "appId": "com.hhd-dev.hhd-ui",
+    "appId": "dev.hhd.hhd-ui",
     "productName": "Handheld Daemon",
     "artifactName": "hhd-ui.${ext}",
     "linux": {
