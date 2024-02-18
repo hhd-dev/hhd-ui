@@ -1,6 +1,6 @@
 import { FC } from "react";
-// import LogoLight from "../assets/logo_light.svg"
-// import LogoDark from "../assets/logo_dark.svg";
+import LogoLight from "../assets/logo_light.svg";
+import LogoDark from "../assets/logo_dark.svg";
 
 type Props = {
   width: number;
@@ -10,7 +10,7 @@ const HhdLogo: FC<Props> = ({ width, ...otherProps }) => {
   return (
     <>
       <picture>
-        {/* <source
+        <source
           media="(prefers-color-scheme: dark)"
           srcSet={LogoDark}
           width={`${width}%`}
@@ -25,7 +25,7 @@ const HhdLogo: FC<Props> = ({ width, ...otherProps }) => {
           src={LogoLight}
           width={`${width}%`}
           {...otherProps}
-        /> */}
+        />
       </picture>
     </>
   );
