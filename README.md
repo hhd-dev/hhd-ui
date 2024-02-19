@@ -7,19 +7,22 @@
 </h1>
 
 # Handheld Daemon UI
+
 A UI app that can manage Handheld Daemon settings from Steam, the Desktop, and
 the Web.
 
-![hhd ui picture](./images/app-picture.png)
+![hhd ui picture](./images/app-picture-2.png)
 
 # Usage
+
 There are two ways of accessing the app:
 
-1. Go to https://hhd.dev to use the latest version via your browser. 
+1. Go to https://hhd.dev to use the latest version via your browser.
 2. Install the app locally to your device via a provided AppImage.
 3. Use the version bundled with your distribution (coming soon)
 
 # hhd.dev Website
+
 Go to https://hhd.dev from your device and enter the token you can find under
 `~/.config/hhd/token`.
 You can now configure your device.
@@ -40,14 +43,17 @@ This will be fixed in the future by making the calls using TLS over Javascript.
 
 For now, you can port forward port 5335 to your main computer over ssh if you
 want to use it remotely with [hhd.dev](https://hhd.dev) or use the AppImage.
+
 ```bash
 ssh <your-machine> -L 5335:localhost:5335
 ```
 
 # Local Install
+
 Download the latest AppImage release from the releases github page.
 
 Make it executable via `chmod +x`, or in your file manager by enabling via:
+
 ```
 Right-click > Properties > Permissions > Is Executable
 ```
@@ -57,11 +63,14 @@ Double click the AppImage file for the app to run.
 Note, to have the app show up as a regular app, it's recommended to use an AppImage manager.
 
 Examples of AppImage manager apps:
+
 - Gear Lever - https://flathub.org/apps/it.mijorus.gearlever
 - AppImageLauncher - https://github.com/TheAssassin/AppImageLauncher
 
 # Dev Setup
+
 Run the following commands:
+
 ```bash
 # git clone repo
 
