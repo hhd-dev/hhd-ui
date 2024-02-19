@@ -23,10 +23,11 @@ jobs:
 
       - name: build AppImage
         run: |
-          npm install
+          sed -i "s|"version": "1.0.0"|"version": "$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)"|" "electron/package.json"
+          npm ci
           npm run electron-build
           cd electron
-          npm install
+          npm ci
           npm run build
           chmod +x dist/hhd-ui.AppImage
         continue-on-error: true
