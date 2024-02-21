@@ -20,7 +20,7 @@ const createMainWindow = async () => {
   });
 
   setTimeout(() => {
-    // mainWindow.setMenu(null);
+    mainWindow.setMenu(null);
 
     const startURL = `file://${path.join(
       __dirname,
