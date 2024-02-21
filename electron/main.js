@@ -3,7 +3,7 @@ const path = require("path");
 const homeDir = app.getPath("home");
 const fs = require("fs");
 
-const createMainWindow = () => {
+const createMainWindow = async () => {
   let mainWindow = new BrowserWindow({
     width: 1280,
     height: 720,
@@ -14,33 +14,36 @@ const createMainWindow = () => {
       webSecurity: false,
     },
   });
-  fs.readFile(`${homeDir}/.config/hhd/token`, "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    mainWindow.webContents.executeJavaScript(
-      `localStorage.setItem("hhd_token", "${data}");`,
-      true
-    );
-    mainWindow.webContents.executeJavaScript(
-      `localStorage.setItem("hhd_logged_in", "true");`,
-      true
-    );
+  const data = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
+    encoding: "utf8",
+    flag: "r",
   });
-  mainWindow.setMenu(null);
-  const startURL = `file://${path.join(
-    __dirname,
-    "./static/build/index.html"
-  )}`;
 
-  mainWindow.loadURL(startURL);
+  setTimeout(() => {
+    // mainWindow.setMenu(null);
 
-  mainWindow.once("ready-to-show", () => mainWindow.show());
+    const startURL = `file://${path.join(
+      __dirname,
+      "./static/build/index.html"
+    )}`;
 
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
+    mainWindow.loadURL(startURL);
+
+    mainWindow.once("ready-to-show", () => mainWindow.show());
+
+    mainWindow.on("closed", () => {
+      mainWindow = null;
+    });
+  }, 0);
+
+  await mainWindow.webContents.executeJavaScript(
+    `localStorage.setItem("hhd_token", "${data}");`,
+    true
+  );
+  await mainWindow.webContents.executeJavaScript(
+    `localStorage.setItem("hhd_logged_in", "true");`,
+    true
+  );
 };
 
 app.whenReady().then(() => {
