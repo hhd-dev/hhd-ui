@@ -14,9 +14,9 @@
     "electron-packager": "^17.1.2"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/electron-builder install-app-deps",
-    "start": "./node_modules/.bin/electron .",
-    "build": "./node_modules/.bin/electron-builder build --linux"
+    "postinstall": "npx electron-builder install-app-deps",
+    "start": "npx electron .",
+    "build": "npx electron-builder build --linux"
   },
   "build": {
     "appId": "dev.hhd.hhd-ui",
