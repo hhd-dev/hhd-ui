@@ -34,12 +34,6 @@ export default function FrontPage() {
     if (isLoggedIn()) {
       navigate("/ui");
     }
-    // for electron
-    setTimeout(() => {
-      if (isLoggedIn()) {
-        navigate("/ui");
-      }
-    }, 150);
   }, []);
 
   return (

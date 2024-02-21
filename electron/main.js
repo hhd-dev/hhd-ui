@@ -14,36 +14,39 @@ const createMainWindow = async () => {
       webSecurity: false,
     },
   });
-  const data = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
-    encoding: "utf8",
-    flag: "r",
+
+  mainWindow.setMenu(null);
+  mainWindow.once("ready-to-show", () => mainWindow && mainWindow.show());
+  mainWindow.on("closed", () => {
+    mainWindow = null;
   });
 
-  setTimeout(() => {
-    mainWindow.setMenu(null);
+  // Load a proper webpage so js can run
+  const startURL = `file://${path.join(
+    __dirname,
+    "./static/build/index.html"
+  )}`;
 
-    const startURL = `file://${path.join(
-      __dirname,
-      "./static/build/index.html"
-    )}`;
+  mainWindow.loadURL(startURL);
 
-    mainWindow.loadURL(startURL);
-
-    mainWindow.once("ready-to-show", () => mainWindow.show());
-
-    mainWindow.on("closed", () => {
-      mainWindow = null;
+  // Attempt to autologin with user token
+  try {
+    const data = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
+      encoding: "utf8",
+      flag: "r",
     });
-  }, 0);
 
-  await mainWindow.webContents.executeJavaScript(
-    `localStorage.setItem("hhd_token", "${data}");`,
-    true
-  );
-  await mainWindow.webContents.executeJavaScript(
-    `localStorage.setItem("hhd_logged_in", "true");`,
-    true
-  );
+    const cmd =
+      `localStorage.setItem("hhd_token", "${data}");` +
+      `localStorage.setItem("hhd_logged_in", "true");` +
+      `localStorage.setItem("hhd_electron", "true");`;
+    await mainWindow.webContents.executeJavaScript(cmd);
+
+    // Navigate to login
+    mainWindow.loadURL(startURL + "#/ui");
+  } catch (err) {
+    console.log("Token file not found, skipping autologin.");
+  }
 };
 
 app.whenReady().then(() => {
