@@ -37,4 +37,10 @@ export const hhdPollingInterval = () => {
   } catch (e) {
     console.log(e);
   }
+  return () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = undefined;
+    }
+  };
 };

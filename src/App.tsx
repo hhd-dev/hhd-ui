@@ -18,6 +18,17 @@ import HhdLogo from "./components/HhdLogo";
 import { CONTENT_WIDTH } from "./components/theme";
 import { hhdPollingInterval } from "./redux-modules/polling";
 
+let clearHhdInterval: any;
+
+document.addEventListener("visibilitychange", () => {
+  clearHhdInterval && clearHhdInterval();
+  clearHhdInterval = undefined;
+
+  if (!document.hidden) {
+    clearHhdInterval = hhdPollingInterval();
+  }
+});
+
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
   const logout = useLogout();
@@ -31,6 +42,7 @@ const App = memo(() => {
     dispatch(fetchHhdSettings());
     dispatch(fetchHhdSettingsState());
     dispatch(fetchSectionNames());
+    clearHhdInterval = hhdPollingInterval();
   }, []);
 
   useVerifyTokenRedirect(stateLoading, settingsLoading, state);
@@ -93,7 +105,5 @@ function useVerifyTokenRedirect(
     }
   }, [stateLoading, settingsLoading, state]);
 }
-
-hhdPollingInterval();
 
 export default App;
