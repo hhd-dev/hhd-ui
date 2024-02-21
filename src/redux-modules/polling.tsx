@@ -25,8 +25,12 @@ export const hhdPollingInterval = () => {
         store.dispatch(hhdSlice.actions.overrideSettings(settings));
       }
 
-      // Apply new state
-      store.dispatch(hhdSlice.actions.overrideSettingsState(newState));
+      if (
+        JSON.stringify(state.hhd.settingsState) !== JSON.stringify(newState)
+      ) {
+        // Apply new state
+        store.dispatch(hhdSlice.actions.overrideSettingsState(newState));
+      }
     }, 1000);
   }
 };
