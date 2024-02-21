@@ -16,6 +16,7 @@ import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { useLogout } from "./hooks/auth";
 import HhdLogo from "./components/HhdLogo";
 import { CONTENT_WIDTH } from "./components/theme";
+import { hhdPollingInterval } from "./redux-modules/polling";
 
 const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
@@ -92,5 +93,7 @@ function useVerifyTokenRedirect(
     }
   }, [stateLoading, settingsLoading, state]);
 }
+
+hhdPollingInterval();
 
 export default App;

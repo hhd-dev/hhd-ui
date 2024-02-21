@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { set } from "lodash";
+import { get, set } from "lodash";
 import {
   fetchHhdSettings,
   fetchHhdSettingsState,
@@ -85,6 +85,12 @@ const hhdSlice = createSlice({
       const errorName = action.payload;
 
       delete store.error[errorName];
+    },
+    overrideSettings: (store, action: PayloadAction<any>) => {
+      store.settings = action.payload;
+    },
+    overrideSettingsState: (store, action: PayloadAction<any>) => {
+      store.settingsState = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -202,5 +208,12 @@ export const selectHints = (state: RootState) => {
 };
 
 export const selectSectionNames = (state: RootState) => state.hhd.sectionNames;
+
+export const selectVersionHashes = (state: RootState) => {
+  return {
+    state: get(state, "hhd.settingsState.version", ""),
+    settings: get(state, "hhd.settings.hhd.version.value", ""),
+  };
+};
 
 export default hhdSlice;

@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { set } from "lodash";
 import { getToken, getUrl } from "../local";
 
-const fetchFn = async (url: string, options?: { [s: string]: any }) => {
+export const fetchFn = async (url: string, options?: { [s: string]: any }) => {
   const authHeaders = {
     Authorization: `Bearer ${getToken()}`,
   };
