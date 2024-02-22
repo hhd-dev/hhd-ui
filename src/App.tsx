@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "./redux-modules/store";
 import {
@@ -30,24 +30,18 @@ document.addEventListener("visibilitychange", () => {
 });
 
 const App = memo(() => {
-  const dispatch = useDispatch<AppDispatch>();
   const logout = useLogout();
+  const isElectron = useIsElectron();
 
-  const isElectron = window.localStorage.getItem("hhd_electron") === "true";
   const hhdUrl = window.localStorage.getItem("hhd_url");
   const isLocalhost = !hhdUrl || hhdUrl.includes("localhost");
+
+  useInitialFetch();
 
   const { stateLoading, settingsLoading } = useSelector(
     selectHhdStateLoadingStatuses
   );
   const state = useSelector(selectHhdSettingsState);
-
-  useEffect(() => {
-    dispatch(fetchHhdSettings());
-    dispatch(fetchHhdSettingsState());
-    dispatch(fetchSectionNames());
-    clearHhdInterval = hhdPollingInterval();
-  }, []);
 
   useVerifyTokenRedirect(stateLoading, settingsLoading, state);
 
@@ -88,6 +82,25 @@ const App = memo(() => {
     </Flex>
   );
 });
+
+function useInitialFetch() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchHhdSettings());
+    dispatch(fetchHhdSettingsState());
+    dispatch(fetchSectionNames());
+    clearHhdInterval = hhdPollingInterval();
+  }, []);
+}
+
+function useIsElectron() {
+  const isElectron = useMemo(
+    () => window.localStorage.getItem("hhd_electron") === "true",
+    []
+  );
+  return isElectron;
+}
 
 function useVerifyTokenRedirect(
   stateLoading: LoadingStatusType,
