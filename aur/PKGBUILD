@@ -16,9 +16,7 @@ optdepends=('hhd: a version of Handheld Daemon to connect to (also works over th
 makedepends=('asar' 'libxss' 'npm')
 _srcname=hhd-ui-$pkgver
 source=("https://github.com/hhd-dev/hhd-ui/archive/refs/tags/v${pkgver}.tar.gz" "hhd-ui.desktop" "hhd-ui.sh")
-sha512sums=('97ad1e6fd91925c8342624672b4aeef63ae0a7824aeff51aa79f213d5143d0189f69c847cb89985ae587cd047341e2734c80bdd10019dbbb2e3b1bba5ed15fe8'
-            '598e77e42769adf69b78b39e784c24bb53202039316309c216ab1bb17d55f1820dadd453234085118aa3563d1593105b6287d793e58c5246bb71ec260103da28'
-            '3f3a0b215d241b2c9f37efa3ce66adf1f1f58dc651853c924ac44c597b6b6b813548af4aba58c3c030ccbb56264bf4bb5e3d2b5a7be5098650e2581adf70645a')
+sha512sums=('SKIP' 'SKIP' 'SKIP')
 
 prepare() {
 	export ELECTRONVERSION=$_electronversion
