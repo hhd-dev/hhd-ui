@@ -1,10 +1,24 @@
-const { app, BrowserWindow, screen: electronScreen } = require("electron");
+const { app, BrowserWindow, screen } = require("electron");
 const path = require("path");
 const homeDir = app.getPath("home");
 const fs = require("fs");
 
 const createMainWindow = async () => {
   isSteamUi = process.env.SteamGamepadUI;
+
+  // Get scale factor for steamui
+  let scaleFactor;
+  if (isSteamUi) {
+    // Fix gamescope amateur hour not exposing scaling info
+    // Assume we are on a screen the size of the deck
+    // And add a bit of zoom even for that
+    const SCREEN_RATIO = 1.5;
+    const w = screen.getPrimaryDisplay().size.width;
+    scaleFactor = (SCREEN_RATIO * w) / 1280;
+    console.log("Launching in steamui. Zoom factor: " + scaleFactor);
+  } else {
+    scaleFactor = 1;
+  }
 
   let mainWindow = new BrowserWindow({
     width: 1280,
@@ -15,6 +29,7 @@ const createMainWindow = async () => {
     webPreferences: {
       nodeIntegration: false,
       webSecurity: false,
+      zoomFactor: scaleFactor,
     },
   });
 
@@ -63,11 +78,12 @@ const createMainWindow = async () => {
 app.whenReady().then(() => {
   createMainWindow();
 
-  app.on("activate", () => {
-    if (!BrowserWindow.getAllWindows().length) {
-      createMainWindow();
-    }
-  });
+  // Seems to cause issues
+  // app.on("activate", () => {
+  //   if (!BrowserWindow.getAllWindows().length) {
+  //     createMainWindow();
+  //   }
+  // });
 });
 
 app.on("window-all-closed", () => {
