@@ -10,6 +10,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import hhdSlice, { selectTagFilter } from "../redux-modules/hhdSlice";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { capitalize } from "lodash";
 
 export const TAG_FILTER_CACHE_KEY = "hhd-ui.tagFilter";
 
@@ -31,8 +32,8 @@ const TagFilterDropdown: FC = ({}) => {
 
   return (
     <Menu>
-      <MenuButton as={Button} width={"5rem"} rightIcon={<ChevronDownIcon />}>
-        Filter
+      <MenuButton as={Button} width={"12rem"} rightIcon={<ChevronDownIcon />}>
+        {capitalize(currentTagFilter)}
       </MenuButton>
       <MenuList>
         <MenuOptionGroup
