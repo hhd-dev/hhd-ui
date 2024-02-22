@@ -33,6 +33,8 @@ const App = memo(() => {
   const dispatch = useDispatch<AppDispatch>();
   const logout = useLogout();
 
+  const isElectron = window.localStorage.getItem("hhd_electron") === "true";
+
   const { stateLoading, settingsLoading } = useSelector(
     selectHhdStateLoadingStatuses
   );
@@ -66,10 +68,10 @@ const App = memo(() => {
           <Box flexGrow="3"></Box>
           <Button
             onClick={() => {
-              logout();
+              isElectron ? window.close() : logout();
             }}
           >
-            Disconnect
+            {isElectron ? "Exit" : "Disconnect"}
           </Button>
         </Flex>
       </Flex>
