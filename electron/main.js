@@ -9,22 +9,22 @@ const createMainWindow = async () => {
   // Get scale factor for steamui
   let scaleFactor;
   if (isSteamUi) {
-    // Fix gamescope amateur hour not exposing scaling info
     // Assume we are on a screen the size of the deck
     // And add a bit of zoom even for that
-    const SCREEN_RATIO = 1.5;
+    const SCREEN_RATIO = 1.2;
     const w = screen.getPrimaryDisplay().size.width;
     scaleFactor = (SCREEN_RATIO * w) / 1280;
+    scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
     console.log("Launching in steamui. Zoom factor: " + scaleFactor);
   } else {
-    scaleFactor = 1;
+    scaleFactor = 1.0;
   }
 
   let mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     show: false,
-    backgroundColor: "white",
+    backgroundColor: "#1a202c",
     icon: "./icon/android-chrome-512x512.png",
     webPreferences: {
       nodeIntegration: false,
@@ -32,20 +32,7 @@ const createMainWindow = async () => {
       zoomFactor: scaleFactor,
     },
   });
-
   mainWindow.setMenu(null);
-  mainWindow.once("ready-to-show", () => {
-    if (!mainWindow) return;
-    // Maximize if on a steam session
-    if (isSteamUi) {
-      // mainWindow.maximize();
-      mainWindow.setFullScreen(true);
-    }
-    mainWindow.show();
-  });
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
 
   // Load a proper webpage so js can run
   const startURL = `file://${path.join(
@@ -53,7 +40,7 @@ const createMainWindow = async () => {
     "./static/build/index.html"
   )}`;
 
-  mainWindow.loadURL(startURL);
+  await mainWindow.loadURL(startURL);
 
   // Attempt to autologin with user token
   try {
@@ -69,22 +56,24 @@ const createMainWindow = async () => {
     await mainWindow.webContents.executeJavaScript(cmd);
 
     // Navigate to login
-    mainWindow.loadURL(startURL + "#/ui");
+    await mainWindow.loadURL(startURL + "#/ui");
   } catch (err) {
     console.log("Token file not found, skipping autologin.");
   }
+
+  await mainWindow.whenReady;
+
+  // Maximize if on a steam session
+  if (isSteamUi) {
+    // mainWindow.maximize();
+    mainWindow.setFullScreen(true);
+  }
+
+  mainWindow.webContents.zoomFactor = scaleFactor;
+  mainWindow.show();
 };
 
-app.whenReady().then(() => {
-  createMainWindow();
-
-  // Seems to cause issues
-  // app.on("activate", () => {
-  //   if (!BrowserWindow.getAllWindows().length) {
-  //     createMainWindow();
-  //   }
-  // });
-});
+app.whenReady().then(() => createMainWindow());
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
