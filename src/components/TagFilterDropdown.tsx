@@ -1,32 +1,20 @@
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  FormLabel,
-  Select,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, Select } from "@chakra-ui/react";
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import hhdSlice, { selectTagFilter } from "../redux-modules/hhdSlice";
 import { capitalize } from "lodash";
 
-type DropdownProps = {};
-
 export const TAG_FILTER_CACHE_KEY = "hhd-ui.tagFilter";
 
 export type TagFilterType = "simple" | "advanced" | "expert";
 
-const tagFilters: TagFilterType[] = ["simple", "advanced", "expert"];
-
 export const TagFilters: { [key: string]: TagFilterType } = {
   simple: "simple",
   advanced: "advanced",
-  export: "expert",
+  expert: "expert",
 };
 
-const TagFilterDropdown: FC<DropdownProps> = ({}) => {
+const TagFilterDropdown: FC = ({}) => {
   const currentTagFilter = useSelector(selectTagFilter);
   const dispatch = useDispatch();
 
@@ -44,7 +32,7 @@ const TagFilterDropdown: FC<DropdownProps> = ({}) => {
           }}
           value={currentTagFilter}
         >
-          {tagFilters.map((filter, idx: number) => {
+          {Object.values(TagFilters).map((filter, idx: number) => {
             return (
               <option key={idx} value={filter}>
                 {capitalize(filter)}
