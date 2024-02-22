@@ -19,7 +19,7 @@ const TagFilterDropdown: FC = ({}) => {
   const dispatch = useDispatch();
 
   return (
-    <Box margin="0 1rem" width="12rem">
+    <Box width="12rem">
       <Select
         id={`hhd-tag-filter`}
         onChange={(e) => {

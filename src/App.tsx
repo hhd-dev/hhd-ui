@@ -70,7 +70,11 @@ const App = memo(() => {
 
           <TagFilterDropdown />
           {(!isLocalhost || !isElectron) && (
-            <Button padding="0 2rem" onClick={() => logout()}>
+            <Button
+              padding="0 2rem"
+              margin="0 0 0 1rem"
+              onClick={() => logout()}
+            >
               Disconnect
             </Button>
           )}
