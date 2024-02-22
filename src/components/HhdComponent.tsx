@@ -7,6 +7,10 @@ import {
   Flex,
   FormLabel,
   Heading,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
   Select,
   Stack,
 } from "@chakra-ui/react";
@@ -202,26 +206,31 @@ const HhdComponent: FC<HhdComponentType> = memo(
       // dropdown component
       const value = get(state, `${statePath}`, defaultValue);
 
+      const onClick = (value: string) => {
+        if (updating) {
+          return;
+        }
+        if (type === "discrete") {
+          // discrete is always numeric
+          return updateState(`${statePath}`, Number(value));
+        }
+        return updateState(`${statePath}`, value);
+      };
+
       return (
         <Flex flexDirection="column">
           <ErrorBoundary title={title}>
             <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
-            <Select
-              id={`${statePath}`}
-              onChange={(e) => {
-                if (updating) {
-                  return;
-                }
-                if (type === "discrete") {
-                  // discrete is always numeric
-                  return updateState(`${statePath}`, Number(e.target.value));
-                }
-                return updateState(`${statePath}`, e.target.value);
-              }}
-              value={value}
-            >
-              <HhdOptions type={type} options={options} />
-            </Select>
+            <Menu>
+              <MenuButton as={Button}>
+                {type === "multiple" ? options[value] : value}
+              </MenuButton>
+              <MenuList>
+                <MenuOptionGroup type="radio" defaultValue={value}>
+                  <HhdOptions type={type} options={options} onClick={onClick} />
+                </MenuOptionGroup>
+              </MenuList>
+            </Menu>
           </ErrorBoundary>
         </Flex>
       );
