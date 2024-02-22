@@ -34,6 +34,8 @@ const App = memo(() => {
   const logout = useLogout();
 
   const isElectron = window.localStorage.getItem("hhd_electron") === "true";
+  const hhdUrl = window.localStorage.getItem("hhd_url");
+  const isLocalhost = !hhdUrl || hhdUrl.includes("localhost");
 
   const { stateLoading, settingsLoading } = useSelector(
     selectHhdStateLoadingStatuses
@@ -55,7 +57,7 @@ const App = memo(() => {
 
   return (
     <Flex w="100%" flexDirection="column" alignItems="center">
-      <Flex margin="15px">
+      <Flex margin="2rem 1rem 1.2rem 1rem">
         <Flex
           w={CONTENT_WIDTH}
           flexDirection="row"
@@ -66,13 +68,12 @@ const App = memo(() => {
             <HhdLogo width={30} />
           </Heading>
           <Box flexGrow="3"></Box>
-          <Button
-            onClick={() => {
-              isElectron ? window.close() : logout();
-            }}
-          >
-            {isElectron ? "Exit" : "Disconnect"}
-          </Button>
+          {(!isLocalhost || !isElectron) && (
+            <Button margin="0 1rem 0 0" onClick={() => logout()}>
+              Disconnect
+            </Button>
+          )}
+          {isElectron && <Button onClick={() => window.close()}>Exit</Button>}
         </Flex>
       </Flex>
       <Box w="50px"></Box>
