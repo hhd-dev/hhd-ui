@@ -6,7 +6,7 @@ import {
   fetchHhdSettingsState,
   fetchSectionNames,
 } from "./redux-modules/hhdAsyncThunks";
-import {
+import hhdSlice, {
   LoadingStatusType,
   selectHhdSettingsState,
   selectHhdStateLoadingStatuses,
@@ -17,6 +17,11 @@ import { useLogout } from "./hooks/auth";
 import HhdLogo from "./components/HhdLogo";
 import { CONTENT_WIDTH } from "./components/theme";
 import { hhdPollingInterval } from "./redux-modules/polling";
+import TagFilterDropdown, {
+  TAG_FILTER_CACHE_KEY,
+  TagFilterType,
+  TagFilters,
+} from "./components/TagFilterDropdown";
 
 let clearHhdInterval: any;
 
@@ -59,9 +64,10 @@ const App = memo(() => {
           justifyContent="start"
         >
           <Heading>
-            <HhdLogo width={30} />
+            <HhdLogo width={42} />
           </Heading>
           <Box flexGrow="3"></Box>
+          <TagFilterDropdown />
           {(!isLocalhost || !isElectron) && (
             <Button margin="0 1rem 0 0" onClick={() => logout()}>
               Disconnect
@@ -70,7 +76,6 @@ const App = memo(() => {
           {isElectron && <Button onClick={() => window.close()}>Exit</Button>}
         </Flex>
       </Flex>
-      <Box w="50px"></Box>
       <Flex
         w={CONTENT_WIDTH}
         flexDirection="column"
@@ -87,6 +92,14 @@ function useInitialFetch() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    const tagFilter = window.localStorage.getItem(
+      TAG_FILTER_CACHE_KEY
+    ) as TagFilterType | null;
+
+    if (tagFilter && TagFilters[tagFilter]) {
+      dispatch(hhdSlice.actions.setTagFilter(tagFilter));
+    }
+
     dispatch(fetchHhdSettings());
     dispatch(fetchHhdSettingsState());
     dispatch(fetchSectionNames());

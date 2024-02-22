@@ -7,6 +7,10 @@ import {
   updateHhdState,
 } from "./hhdAsyncThunks";
 import { RootState } from "./store";
+import {
+  TAG_FILTER_CACHE_KEY,
+  TagFilterType,
+} from "../components/TagFilterDropdown";
 
 export enum ErrorStates {
   LoginFailed = "LoginFailed",
@@ -43,6 +47,7 @@ interface HhdState {
   loading: { [loadState: string]: LoadingStatusType };
   error: { [key: string]: string };
   sectionNames: { [key: string]: string };
+  tagFilter: TagFilterType;
 }
 
 const initialState = {
@@ -55,6 +60,7 @@ const initialState = {
   },
   error: {},
   sectionNames: {},
+  tagFilter: "simple",
 } as HhdState;
 
 const hhdSlice = createSlice({
@@ -72,6 +78,11 @@ const hhdSlice = createSlice({
       store.loading = initialState.loading;
       store.settings = initialState.settings;
       store.settingsState = initialState.settingsState;
+    },
+    setTagFilter: (store, action: PayloadAction<TagFilterType>) => {
+      const tagFilter = action.payload;
+      window.localStorage.setItem(TAG_FILTER_CACHE_KEY, `${tagFilter}`);
+      store.tagFilter = tagFilter;
     },
     setError: (
       store,
@@ -206,6 +217,8 @@ export const selectHints = (state: RootState) => {
 
   return hints;
 };
+
+export const selectTagFilter = (state: RootState) => state.hhd.tagFilter;
 
 export const selectSectionNames = (state: RootState) => state.hhd.sectionNames;
 
