@@ -1,8 +1,14 @@
-import { Box, Select } from "@chakra-ui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItemOption,
+  Button,
+  MenuOptionGroup,
+} from "@chakra-ui/react";
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import hhdSlice, { selectTagFilter } from "../redux-modules/hhdSlice";
-import { capitalize } from "lodash";
 
 export const TAG_FILTER_CACHE_KEY = "hhd-ui.tagFilter";
 
@@ -18,28 +24,33 @@ const TagFilterDropdown: FC = ({}) => {
   const currentTagFilter = useSelector(selectTagFilter);
   const dispatch = useDispatch();
 
-  return (
-    <Box width="12rem">
-      <Select
-        id={`hhd-tag-filter`}
-        onChange={(e) => {
-          const newValue = e.target.value as TagFilterType | undefined;
+  const onClick = (tagFilter: TagFilterType) => () => {
+    return dispatch(hhdSlice.actions.setTagFilter(tagFilter));
+  };
 
-          if (newValue && TagFilters[newValue]) {
-            return dispatch(hhdSlice.actions.setTagFilter(newValue));
-          }
-        }}
-        value={currentTagFilter}
-      >
-        {Object.values(TagFilters).map((filter, idx: number) => {
-          return (
-            <option key={idx} value={filter}>
-              {capitalize(filter)}
-            </option>
-          );
-        })}
-      </Select>
-    </Box>
+  return (
+    <Menu>
+      <MenuButton as={Button} width={"5rem"}>
+        Filter
+      </MenuButton>
+      <MenuList>
+        <MenuOptionGroup
+          title="Filter"
+          type="radio"
+          defaultValue={currentTagFilter}
+        >
+          <MenuItemOption value="simple" onClick={onClick("simple")}>
+            Simple
+          </MenuItemOption>
+          <MenuItemOption value="advanced" onClick={onClick("advanced")}>
+            Advanced
+          </MenuItemOption>
+          <MenuItemOption value="expert" onClick={onClick("expert")}>
+            Expert
+          </MenuItemOption>
+        </MenuOptionGroup>
+      </MenuList>
+    </Menu>
   );
 };
 
