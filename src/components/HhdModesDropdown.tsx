@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Center,
@@ -57,7 +58,7 @@ const HhdModesDropdown: FC<DropdownProps> = ({
       <Box>
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
         <Menu>
-          <MenuButton as={Button} width="100%">
+          <MenuButton as={Button} width="100%" rightIcon={<ChevronDownIcon />}>
             {currentMode?.title}
           </MenuButton>
           <MenuList>

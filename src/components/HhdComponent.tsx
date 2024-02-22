@@ -24,6 +24,7 @@ import HintsAccordion from "./HintsAccordion";
 import ErrorBoundary from "./ErrorBoundary";
 import HhdInt from "./HhdInt";
 import { useShouldRenderChild } from "../hooks/conditionalRender";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -222,7 +223,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
           <ErrorBoundary title={title}>
             <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
             <Menu>
-              <MenuButton as={Button}>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
                 {type === "multiple" ? options[value] : value}
               </MenuButton>
               <MenuList>
