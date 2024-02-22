@@ -4,9 +4,11 @@ const homeDir = app.getPath("home");
 const fs = require("fs");
 
 const createMainWindow = async () => {
+  isSteamUi = process.env.SteamGamepadUI;
+
   let mainWindow = new BrowserWindow({
     width: 1280,
-    height: 720,
+    height: 800,
     show: false,
     backgroundColor: "white",
     icon: "./icon/android-chrome-512x512.png",
@@ -17,7 +19,14 @@ const createMainWindow = async () => {
   });
 
   mainWindow.setMenu(null);
-  mainWindow.once("ready-to-show", () => mainWindow && mainWindow.show());
+  mainWindow.once("ready-to-show", () => {
+    if (!mainWindow) return;
+    // Maximize if on a steam session
+    if (isSteamUi) {
+      mainWindow.maximize();
+    }
+    mainWindow.show();
+  });
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
@@ -29,11 +38,6 @@ const createMainWindow = async () => {
   )}`;
 
   mainWindow.loadURL(startURL);
-
-  // Maximize if on a steam session
-  if (process.env.SteamGamepadUI) {
-    mainWindow.maximize();
-  }
 
   // Attempt to autologin with user token
   try {
