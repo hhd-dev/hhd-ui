@@ -23,7 +23,8 @@ const createMainWindow = async () => {
     if (!mainWindow) return;
     // Maximize if on a steam session
     if (isSteamUi) {
-      mainWindow.maximize();
+      // mainWindow.maximize();
+      mainWindow.setFullScreen(true);
     }
     mainWindow.show();
   });
