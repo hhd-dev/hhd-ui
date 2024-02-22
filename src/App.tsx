@@ -55,8 +55,8 @@ const App = memo(() => {
   }
 
   return (
-    <Flex w="100%" flexDirection="column" alignItems="center">
-      <Flex margin="2rem 1rem 1.2rem 1rem">
+    <Flex margin="2rem 0" w="100%" flexDirection="column" alignItems="center">
+      <Flex margin="0.5rem 1rem 1.2rem 1rem">
         <Flex
           w={CONTENT_WIDTH}
           flexDirection="row"
@@ -67,13 +67,18 @@ const App = memo(() => {
             <HhdLogo width={42} />
           </Heading>
           <Box flexGrow="3"></Box>
+
           <TagFilterDropdown />
           {(!isLocalhost || !isElectron) && (
-            <Button margin="0 1rem 0 0" onClick={() => logout()}>
+            <Button padding="0 2rem" onClick={() => logout()}>
               Disconnect
             </Button>
           )}
-          {isElectron && <Button onClick={() => window.close()}>Exit</Button>}
+          {isElectron && (
+            <Button margin="0 0 0 1rem" onClick={() => window.close()}>
+              Exit
+            </Button>
+          )}
         </Flex>
       </Flex>
       <Flex

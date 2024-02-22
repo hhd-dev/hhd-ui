@@ -19,29 +19,27 @@ const TagFilterDropdown: FC = ({}) => {
   const dispatch = useDispatch();
 
   return (
-    <>
-      <Box margin="0 0.5rem" width="12rem">
-        <Select
-          id={`hhd-tag-filter`}
-          onChange={(e) => {
-            const newValue = e.target.value as TagFilterType | undefined;
+    <Box margin="0 1rem" width="12rem">
+      <Select
+        id={`hhd-tag-filter`}
+        onChange={(e) => {
+          const newValue = e.target.value as TagFilterType | undefined;
 
-            if (newValue && TagFilters[newValue]) {
-              return dispatch(hhdSlice.actions.setTagFilter(newValue));
-            }
-          }}
-          value={currentTagFilter}
-        >
-          {Object.values(TagFilters).map((filter, idx: number) => {
-            return (
-              <option key={idx} value={filter}>
-                {capitalize(filter)}
-              </option>
-            );
-          })}
-        </Select>
-      </Box>
-    </>
+          if (newValue && TagFilters[newValue]) {
+            return dispatch(hhdSlice.actions.setTagFilter(newValue));
+          }
+        }}
+        value={currentTagFilter}
+      >
+        {Object.values(TagFilters).map((filter, idx: number) => {
+          return (
+            <option key={idx} value={filter}>
+              {capitalize(filter)}
+            </option>
+          );
+        })}
+      </Select>
+    </Box>
   );
 };
 
