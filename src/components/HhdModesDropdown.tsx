@@ -4,8 +4,13 @@ import {
   Divider,
   Flex,
   FormLabel,
-  Select,
+  MenuItemOption,
+  MenuOptionGroup,
+  MenuList,
+  MenuButton,
+  Menu,
   Stack,
+  Button,
 } from "@chakra-ui/react";
 import { FC } from "react";
 
@@ -40,30 +45,39 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   const type = currentMode ? currentMode.type : null;
   const children = currentMode ? Object.entries(currentMode.children) : [];
 
+  const createClickHandler = (value: any) => () => {
+    if (updating) {
+      return;
+    }
+    return updateState(`${statePath}.mode`, value);
+  };
+
   return (
     <>
       <Box>
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
-        <Select
-          id={`${statePath}`}
-          onChange={(e) => {
-            if (updating) {
-              return;
-            }
-            return updateState(`${statePath}.mode`, e.target.value);
-          }}
-          value={selectedValue}
-        >
-          {Object.entries(modes).map(
-            ([value, { title: label }], idx: number) => {
-              return (
-                <option key={idx} value={value}>
-                  {label as string}
-                </option>
-              );
-            }
-          )}
-        </Select>
+        <Menu>
+          <MenuButton as={Button} width="100%">
+            {currentMode?.title}
+          </MenuButton>
+          <MenuList>
+            <MenuOptionGroup type="radio" defaultValue={selectedValue}>
+              {Object.entries(modes).map(
+                ([value, { title: label }], idx: number) => {
+                  return (
+                    <MenuItemOption
+                      key={idx}
+                      value={value}
+                      onClick={createClickHandler(value)}
+                    >
+                      {label as string}
+                    </MenuItemOption>
+                  );
+                }
+              )}
+            </MenuOptionGroup>
+          </MenuList>
+        </Menu>
       </Box>
       <Flex direction="row">
         <Center>
