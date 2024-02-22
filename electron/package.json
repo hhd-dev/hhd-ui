@@ -16,6 +16,7 @@
   "scripts": {
     "postinstall": "npx electron-builder install-app-deps",
     "start": "npx electron .",
+    "dev": "npx electron .",
     "build": "npx electron-builder build --linux"
   },
   "build": {
@@ -29,6 +30,7 @@
     }
   },
   "files": [
+    "icon/**/*",
     "static/**/*",
     "!**/node_modules/*",
     "!**/dist/*",
