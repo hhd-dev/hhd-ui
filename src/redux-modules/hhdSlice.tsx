@@ -60,7 +60,7 @@ const initialState = {
   },
   error: {},
   sectionNames: {},
-  tagFilter: "simple",
+  tagFilter: "advanced",
 } as HhdState;
 
 const hhdSlice = createSlice({

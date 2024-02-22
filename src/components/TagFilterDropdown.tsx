@@ -14,12 +14,16 @@ import { capitalize } from "lodash";
 
 export const TAG_FILTER_CACHE_KEY = "hhd-ui.tagFilter";
 
-export type TagFilterType = "simple" | "advanced" | "expert";
+export type TagFilterType = "advanced" | "expert";
 
 export const TagFilters: { [key: string]: TagFilterType } = {
-  simple: "simple",
   advanced: "advanced",
   expert: "expert",
+};
+
+const LabelMap = {
+  advanced: "Simple",
+  expert: "Advanced",
 };
 
 const TagFilterDropdown: FC = ({}) => {
@@ -33,7 +37,7 @@ const TagFilterDropdown: FC = ({}) => {
   return (
     <Menu>
       <MenuButton as={Button} width={"12rem"} rightIcon={<ChevronDownIcon />}>
-        {capitalize(currentTagFilter)}
+        {LabelMap[currentTagFilter]}
       </MenuButton>
       <MenuList>
         <MenuOptionGroup
@@ -41,14 +45,11 @@ const TagFilterDropdown: FC = ({}) => {
           type="radio"
           defaultValue={currentTagFilter}
         >
-          <MenuItemOption value="simple" onClick={onClick("simple")}>
+          <MenuItemOption value="advanced" onClick={onClick("advanced")}>
             Simple
           </MenuItemOption>
-          <MenuItemOption value="advanced" onClick={onClick("advanced")}>
-            Advanced
-          </MenuItemOption>
           <MenuItemOption value="expert" onClick={onClick("expert")}>
-            Expert
+            Advanced
           </MenuItemOption>
         </MenuOptionGroup>
       </MenuList>

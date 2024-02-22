@@ -30,9 +30,7 @@ function useFilters() {
   const tagFilter = useSelector(selectTagFilter);
 
   const filters = useMemo(() => {
-    if (tagFilter === "simple") {
-      return ["advanced", "expert"];
-    } else if (tagFilter === "advanced") {
+    if (tagFilter === "advanced") {
       return ["expert"];
     }
 
