@@ -32,6 +32,22 @@ interface HhdComponentType extends SettingsType {
   statePath?: string;
 }
 
+export const shouldRenderChild = (tags: string[]) => {
+  if (tags.indexOf("advanced") >= 0) {
+    // don't render advanced values
+    return false;
+  }
+
+  if (
+    tags.indexOf("hhd-update-decky") >= 0 ||
+    tags.indexOf("hhd-version-display-decky") >= 0
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
 const HhdComponent: FC<HhdComponentType> = memo(
   ({
     type,
@@ -54,6 +70,10 @@ const HhdComponent: FC<HhdComponentType> = memo(
   }) => {
     const updating = useUpdateHhdStatePending();
     const componentRef = useRef<HTMLInputElement>(null);
+
+    if (tags && !shouldRenderChild(tags)) {
+      return null;
+    }
 
     if (tags)
       if (
