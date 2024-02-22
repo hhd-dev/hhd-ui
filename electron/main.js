@@ -8,12 +8,13 @@ const createMainWindow = async () => {
 
   // Get scale factor for steamui
   let scaleFactor;
+  const { width, height } = screen.getPrimaryDisplay().size;
+
   if (isSteamUi) {
     // Assume we are on a screen the size of the deck
     // And add a bit of zoom even for that
     const SCREEN_RATIO = 1.2;
-    const w = screen.getPrimaryDisplay().size.width;
-    scaleFactor = (SCREEN_RATIO * w) / 1280;
+    scaleFactor = (SCREEN_RATIO * width) / 1280;
     scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
     console.log("Launching in steamui. Zoom factor: " + scaleFactor);
   } else {
@@ -21,8 +22,9 @@ const createMainWindow = async () => {
   }
 
   let mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
+    ...(isSteamUi
+      ? { width: width, height: height }
+      : { width: 1280, height: 800 }),
     show: false,
     backgroundColor: "#1a202c",
     icon: "./icon/android-chrome-512x512.png",
@@ -62,12 +64,6 @@ const createMainWindow = async () => {
   }
 
   await mainWindow.whenReady;
-
-  // Maximize if on a steam session
-  if (isSteamUi) {
-    // mainWindow.maximize();
-    mainWindow.setFullScreen(true);
-  }
 
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
