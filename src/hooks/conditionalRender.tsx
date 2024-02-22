@@ -51,6 +51,11 @@ export const useShouldRenderParent = () => {
 const shouldRenderParent =
   (shouldRenderChild: any) => (plugins: { [key: string]: any }) => {
     const shouldRenderChildrenValues = Object.values(plugins).map((p) => {
+      if (p.tags && !shouldRenderChild(p.tags)) {
+        // if parent for children shuoldn't be rendered, no children should be rendered
+        return false;
+      }
+
       const children = p.children;
 
       if (!children) {
