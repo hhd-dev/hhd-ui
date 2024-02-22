@@ -30,6 +30,11 @@ const createMainWindow = async () => {
 
   mainWindow.loadURL(startURL);
 
+  // Maximize if on a steam session
+  if (process.env.SteamGamepadUI) {
+    mainWindow.maximize();
+  }
+
   // Attempt to autologin with user token
   try {
     const data = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
