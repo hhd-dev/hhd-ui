@@ -27,7 +27,7 @@ const createMainWindow = async () => {
       : { width: 1280, height: 800 }),
     show: false,
     backgroundColor: "#1a202c",
-    icon: "./icon/android-chrome-512x512.png",
+    icon: path.join(__dirname, "./icon/android-chrome-512x512.png"),
     webPreferences: {
       nodeIntegration: false,
       webSecurity: false,
