@@ -46,7 +46,6 @@ package() {
   cd $srcdir/$_srcname/electron
 	install -vDm644 ./dist/linux-unpacked/resources/app.asar -t "${pkgdir}/usr/lib/${_pkgname}"
 	install -vDm644 ./package.json -t "${pkgdir}/usr/lib/${_pkgname}"
-	install -vDm644 ./icon/android-chrome-512x512.png "${pkgdir}/usr/share/icons/hicolor/512x512/apps/${pkgname}.png"
 
   # Install the icons
   cd $srcdir/$_srcname
