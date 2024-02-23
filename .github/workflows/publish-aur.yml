@@ -30,6 +30,6 @@ jobs:
           allow_empty_commits: false
           ssh_keyscan_types: rsa,dsa,ecdsa,ed25519
           updpkgsums: true
-          assets: >-
-            ./aur/hhd-ui.desktop
-            ./aur/hhd-ui.sh
+          # assets: >-
+          #   ./aur/hhd-ui.desktop
+          #   ./aur/hhd-ui.sh
