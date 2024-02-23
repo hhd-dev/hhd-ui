@@ -14,9 +14,9 @@ license=('MIT')
 depends=("electron$_electronversion")
 optdepends=('hhd: a version of Handheld Daemon to connect to (also works over the network).')
 makedepends=('asar' 'libxss' 'npm')
-_srcname=hhd-ui-$pkgver
-source=("https://github.com/hhd-dev/hhd-ui/archive/refs/tags/v${pkgver}.tar.gz")
-sha512sums=('68114c667d6b5aad5e77b2679709480402f5538bff79ff9f770aacbf45ec1b1133112e6b969ba494417ca0691f4f1084b5c0db22b36500ce8216dd15866d2bfd')
+_srcname=hhd-ui
+source=("git+https://github.com/hhd-dev/hhd-ui.git#tag=${pkgver}")
+sha512sums=('SKIP')
 
 prepare() {
 	export ELECTRONVERSION=$_electronversion
