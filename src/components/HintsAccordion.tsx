@@ -9,6 +9,7 @@ import {
   Button,
   Flex,
   Heading,
+  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,7 +17,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useColorMode,
 } from "@chakra-ui/react";
 import { get } from "lodash";
 import { FC, useState } from "react";
@@ -106,9 +106,12 @@ const HintsAccordion: FC<ContainerProps> = ({ path }) => {
 
   return (
     <>
-      <Button variant="ghost" onClick={onOpen}>
-        <InfoIcon />
-      </Button>
+      <IconButton
+        aria-label="Open settings context."
+        variant="ghost"
+        onClick={onOpen}
+        icon={<InfoIcon />}
+      />
       <Modal isOpen={open} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

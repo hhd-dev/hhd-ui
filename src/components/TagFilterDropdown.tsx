@@ -36,7 +36,12 @@ const TagFilterDropdown: FC = ({}) => {
 
   return (
     <Menu>
-      <MenuButton as={Button} width={"12rem"} rightIcon={<ChevronDownIcon />}>
+      <MenuButton
+        margin="0 0 0 1rem"
+        as={Button}
+        width={"12rem"}
+        rightIcon={<ChevronDownIcon />}
+      >
         {LabelMap[currentTagFilter]}
       </MenuButton>
       <MenuList>

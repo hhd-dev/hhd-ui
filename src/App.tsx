@@ -12,7 +12,14 @@ import hhdSlice, {
   selectHhdStateLoadingStatuses,
 } from "./redux-modules/hhdSlice";
 import HhdState from "./components/HhdState";
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  useColorMode,
+} from "@chakra-ui/react";
 import { useLogout } from "./hooks/auth";
 import HhdLogo from "./components/HhdLogo";
 import { CONTENT_WIDTH } from "./components/theme";
@@ -22,6 +29,7 @@ import TagFilterDropdown, {
   TagFilterType,
   TagFilters,
 } from "./components/TagFilterDropdown";
+import { InfoOutlineIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 let clearHhdInterval: any;
 
@@ -54,6 +62,8 @@ const App = memo(() => {
     return null;
   }
 
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <Flex padding="2rem 0" w="100%" flexDirection="column" alignItems="center">
       <Flex margin="0.5rem 1rem 1.2rem 1rem">
@@ -64,10 +74,16 @@ const App = memo(() => {
           justifyContent="start"
         >
           <Heading>
-            <HhdLogo width={42} />
+            <HhdLogo width={50} />
           </Heading>
           <Box flexGrow="3"></Box>
 
+          <IconButton
+            variant="ghost"
+            onClick={toggleColorMode}
+            aria-label="Toggle Darkmode"
+            icon={colorMode == "dark" ? <MoonIcon /> : <SunIcon />}
+          />
           <TagFilterDropdown />
           {(!isLocalhost || !isElectron) && (
             <Button
