@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen } = require("electron");
+const { app, BrowserWindow, screen, protocol } = require("electron");
 const path = require("path");
 const homeDir = app.getPath("home");
 const fs = require("fs");
@@ -36,12 +36,28 @@ const createMainWindow = async () => {
   });
   mainWindow.setMenu(null);
 
-  // Load a proper webpage so js can run
-  const startURL = `file://${path.join(
-    __dirname,
-    "./static/build/index.html"
-  )}`;
+  // Redirect local files to proper path
+  // TODO: Fix this. Probably insecure.
+  protocol.interceptFileProtocol(
+    "file",
+    (request, callback) => {
+      const url = request.url.substr(7); /* all urls start with 'file://' */
+      callback({
+        path: path.normalize(`${__dirname}/static/build/${url}`.split("#")[0]),
+      });
+    },
+    (err) => {
+      if (err) console.error("Failed to register protocol");
+    }
+  );
 
+  // Load a proper webpage so js can run
+  const startURL = require("url").format({
+    protocol: "file",
+    slashes: true,
+    // pathname: require("node:path").join(__dirname, "./static/build/index.html"),
+    pathname: "index.html",
+  });
   await mainWindow.loadURL(startURL);
 
   // Attempt to autologin with user token
@@ -67,6 +83,7 @@ const createMainWindow = async () => {
 
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
+  mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(() => createMainWindow());
