@@ -13,22 +13,30 @@ import BackgroundLight from "./assets/background_light.svg";
 
 function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
+  console.log(colorMode);
   return (
-    <Box
-      h="100vh"
-      backgroundImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
-      backgroundAttachment="fixed"
-      backgroundPosition="center"
-      backgroundRepeat="no-repeat"
-      backgroundSize="cover"
-    >
-      <HashRouter>
-        <Routes>
-          <Route path="/" Component={FrontPage} />
-          <Route path="/ui" Component={App} />
-        </Routes>
-      </HashRouter>
-    </Box>
+    <>
+      <Box
+        bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
+        h="100vh"
+        w="100vw"
+        backgroundAttachment="fixed"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        backgroundSize="cover"
+        backgroundColor="black"
+        position="absolute"
+        zIndex="-1"
+      ></Box>
+      <Box h="100vh" w="100vw" overflowX="clip" overflowY="scroll">
+        <HashRouter>
+          <Routes>
+            <Route path="/" Component={FrontPage} />
+            <Route path="/ui" Component={App} />
+          </Routes>
+        </HashRouter>
+      </Box>
+    </>
   );
 }
 
