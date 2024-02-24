@@ -28,7 +28,13 @@ function Wrapper() {
         position="absolute"
         zIndex="-1"
       ></Box>
-      <Box h="100vh" w="100vw" overflowX="clip" overflowY="scroll">
+      <Box
+        h="100vh"
+        w="100vw"
+        overflowX="clip"
+        overflowY="scroll"
+        css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
+      >
         <HashRouter>
           <Routes>
             <Route path="/" Component={FrontPage} />
