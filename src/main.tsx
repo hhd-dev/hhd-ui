@@ -15,13 +15,12 @@ function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
   return (
     <Box
-      bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
       h="100vh"
+      backgroundImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
       backgroundAttachment="fixed"
       backgroundPosition="center"
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
-      backgroundColor="black"
     >
       <HashRouter>
         <Routes>
