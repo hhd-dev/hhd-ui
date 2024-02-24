@@ -3,7 +3,7 @@ import {
   withDefaultColorScheme,
   type ThemeConfig,
 } from "@chakra-ui/react";
-import { mode } from "@chakra-ui/theme-tools";
+import { mode } from '@chakra-ui/theme-tools';
 export const CONTENT_WIDTH = "500px";
 
 const config: ThemeConfig = {
