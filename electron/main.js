@@ -83,7 +83,6 @@ const createMainWindow = async () => {
 
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
-  mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(() => createMainWindow());
