@@ -94,8 +94,6 @@ const HintsAccordion: FC<ContainerProps> = ({ path }) => {
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
 
-  const {colorMode, setColorMode: _} = useColorMode();
-
   const data = get(settings, path, null);
 
   if (!data) {
@@ -108,8 +106,8 @@ const HintsAccordion: FC<ContainerProps> = ({ path }) => {
 
   return (
     <>
-      <Button backgroundColor="transparent" onClick={onOpen}>
-        <InfoIcon color={colorMode == "dark" ? "white" : "black"}/>
+      <Button variant="ghost" onClick={onOpen}>
+        <InfoIcon />
       </Button>
       <Modal isOpen={open} onClose={onClose}>
         <ModalOverlay />
