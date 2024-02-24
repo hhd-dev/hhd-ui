@@ -25,12 +25,12 @@
     "artifactName": "hhd-ui.${ext}",
     "linux": {
       "target": "AppImage",
-      "icon": "icon/android-chrome-512x512.png",
+      "icon": "art/icon.png",
       "category": "game"
     }
   },
   "files": [
-    "icon/**/*",
+    "art/**/*",
     "static/**/*",
     "!**/node_modules/*",
     "!**/dist/*",

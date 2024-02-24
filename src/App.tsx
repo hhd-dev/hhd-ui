@@ -55,7 +55,7 @@ const App = memo(() => {
   }
 
   return (
-    <Flex margin="2rem 0" w="100%" flexDirection="column" alignItems="center">
+    <Flex padding="2rem 0" w="100%" flexDirection="column" alignItems="center">
       <Flex margin="0.5rem 1rem 1.2rem 1rem">
         <Flex
           w={CONTENT_WIDTH}

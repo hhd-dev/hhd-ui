@@ -117,7 +117,6 @@ export default function FrontPage() {
                   onClick={() => {
                     login();
                   }}
-                  borderLeftRadius="0"
                 >
                   Connect
                 </Button>

@@ -32,3 +32,5 @@ electron/*
 !electron/yarn.lock
 !electron/icon*
 !electron/icon/*
+!electron/art*
+!electron/art/*

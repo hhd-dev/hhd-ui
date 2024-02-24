@@ -16,6 +16,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useColorMode,
 } from "@chakra-ui/react";
 import { get } from "lodash";
 import { FC, useState } from "react";
@@ -93,6 +94,8 @@ const HintsAccordion: FC<ContainerProps> = ({ path }) => {
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
 
+  const {colorMode, setColorMode: _} = useColorMode();
+
   const data = get(settings, path, null);
 
   if (!data) {
@@ -106,7 +109,7 @@ const HintsAccordion: FC<ContainerProps> = ({ path }) => {
   return (
     <>
       <Button backgroundColor="transparent" onClick={onOpen}>
-        <InfoIcon />
+        <InfoIcon color={colorMode == "dark" ? "white" : "black"}/>
       </Button>
       <Modal isOpen={open} onClose={onClose}>
         <ModalOverlay />
