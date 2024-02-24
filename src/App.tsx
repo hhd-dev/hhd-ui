@@ -29,7 +29,7 @@ import TagFilterDropdown, {
   TagFilterType,
   TagFilters,
 } from "./components/TagFilterDropdown";
-import { InfoOutlineIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 let clearHhdInterval: any;
 
@@ -74,12 +74,11 @@ const App = memo(() => {
           justifyContent="start"
         >
           <Heading>
-            <HhdLogo width={50} />
+            <HhdLogo width="7rem" />
           </Heading>
           <Box flexGrow="3"></Box>
 
           <IconButton
-            variant="ghost"
             onClick={toggleColorMode}
             aria-label="Toggle Darkmode"
             icon={colorMode == "dark" ? <MoonIcon /> : <SunIcon />}
@@ -87,7 +86,6 @@ const App = memo(() => {
           <TagFilterDropdown />
           {(!isLocalhost || !isElectron) && (
             <Button
-              padding="0 2rem"
               margin="0 0 0 1rem"
               onClick={() => logout()}
             >
@@ -95,7 +93,10 @@ const App = memo(() => {
             </Button>
           )}
           {isElectron && (
-            <Button margin="0 0 0 1rem" onClick={() => window.close()}>
+            <Button
+              margin="0 0 0 1rem"
+              onClick={() => window.close()}
+            >
               Exit
             </Button>
           )}

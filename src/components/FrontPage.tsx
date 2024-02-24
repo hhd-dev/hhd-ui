@@ -42,7 +42,7 @@ export default function FrontPage() {
       <Box>
         <Card maxW="md" margin="1rem 0">
           <CardHeader>
-            <HhdLogo width={60} style={{ margin: "auto" }} />
+            <HhdLogo width="65%" style={{ margin: "1rem auto 0.5rem auto" }} />
           </CardHeader>
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
