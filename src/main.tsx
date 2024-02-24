@@ -13,7 +13,6 @@ import BackgroundLight from "./assets/background_light.svg";
 
 function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
-  console.log(colorMode);
   return (
     <Box
       bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
