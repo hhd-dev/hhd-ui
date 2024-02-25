@@ -30,6 +30,7 @@ import TagFilterDropdown, {
   TagFilters,
 } from "./components/TagFilterDropdown";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { isLoggedIn } from "./local";
 
 let clearHhdInterval: any;
 
@@ -37,7 +38,7 @@ document.addEventListener("visibilitychange", () => {
   clearHhdInterval && clearHhdInterval();
   clearHhdInterval = undefined;
 
-  if (!document.hidden) {
+  if (!document.hidden && isLoggedIn()) {
     clearHhdInterval = hhdPollingInterval();
   }
 });
@@ -130,6 +131,13 @@ function useInitialFetch() {
     dispatch(fetchHhdSettingsState());
     dispatch(fetchSectionNames());
     clearHhdInterval = hhdPollingInterval();
+
+    return () => {
+      if (clearHhdInterval) {
+        clearHhdInterval()
+        clearHhdInterval = undefined
+      }
+    }
   }, []);
 }
 
