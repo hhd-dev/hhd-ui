@@ -11,7 +11,8 @@
 A UI app that can manage Handheld Daemon settings from Steam, the Desktop, and
 the Web.
 
-![hhd ui picture](./images/app-picture-2.png)
+![Light Mode Picture](./res/app_light.png)
+![Dark Mode Picture](./res/app_dark.png)
 
 # Usage
 
