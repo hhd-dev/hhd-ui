@@ -3,7 +3,6 @@ import {
   withDefaultColorScheme,
   type ThemeConfig,
 } from "@chakra-ui/react";
-import { mode } from '@chakra-ui/theme-tools';
 export const CONTENT_WIDTH = "500px";
 
 const config: ThemeConfig = {
@@ -26,6 +25,15 @@ const theme = extendTheme(
         "700": "#897110",
         "800": "#5B4B0B",
         "900": "#2E2605",
+      },
+    },
+    styles: {
+      global: {
+        // styles for the `body`
+        body: {
+          bg: "transparent",
+          color: "transparent",
+        },
       },
     },
   },

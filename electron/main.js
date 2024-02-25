@@ -5,6 +5,7 @@ const fs = require("fs");
 
 const createMainWindow = async () => {
   isSteamUi = process.env.SteamGamepadUI;
+  isQamUi = process.env.STEAM_QAM;
 
   // Get scale factor for steamui
   let scaleFactor;
@@ -22,8 +23,8 @@ const createMainWindow = async () => {
   }
 
   let mainWindow = new BrowserWindow({
-    ...(isSteamUi
-      ? { width: width, height: height }
+    ...(isSteamUi || isQamUi
+      ? { width: width, height: height, transparent: true }
       : { width: 1280, height: 800 }),
     show: false,
     backgroundColor: "#1a202c",
@@ -35,6 +36,7 @@ const createMainWindow = async () => {
     },
   });
   mainWindow.setMenu(null);
+  if (isQamUi) mainWindow.setBackgroundColor("#00000000");
 
   // Redirect local files to proper path
   // TODO: Fix this. Probably insecure.
@@ -74,7 +76,7 @@ const createMainWindow = async () => {
     await mainWindow.webContents.executeJavaScript(cmd);
 
     // Navigate to login
-    await mainWindow.loadURL(startURL + "#/ui");
+    await mainWindow.loadURL(startURL + (isQamUi ? "#/ui?qam=1" : "#/ui"));
   } catch (err) {
     console.log("Token file not found, skipping autologin.");
   }
