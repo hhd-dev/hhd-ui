@@ -11,7 +11,7 @@ const createMainWindow = async () => {
   let scaleFactor;
   const { width, height } = screen.getPrimaryDisplay().size;
 
-  if (isSteamUi) {
+  if (isSteamUi || isQamUi) {
     // Assume we are on a screen the size of the deck
     // And add a bit of zoom even for that
     const SCREEN_RATIO = 1.2;
@@ -24,9 +24,10 @@ const createMainWindow = async () => {
 
   let mainWindow = new BrowserWindow({
     ...(isSteamUi || isQamUi
-      ? { width: width, height: height, transparent: true }
+      ? { width: width, height: height }
       : { width: 1280, height: 800 }),
     show: false,
+    ...(isQamUi && { transparent: true }),
     backgroundColor: "#1a202c",
     icon: path.join(__dirname, "./icon/android-chrome-512x512.png"),
     webPreferences: {
