@@ -32,7 +32,7 @@ const theme = extendTheme(
         // styles for the `body`
         body: {
           bg: "transparent",
-          color: "transparent",
+          // color: "transparent",
         },
       },
     },
