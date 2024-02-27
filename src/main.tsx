@@ -67,6 +67,7 @@ function Wrapper() {
         backgroundColor="black"
         position="absolute"
         zIndex="-1"
+        transition="0.15s ease-in-out"
         opacity={background}
       ></Box>
 
