@@ -2,7 +2,13 @@ import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { HashRouter, Route, Routes, useSearchParams } from "react-router-dom";
+import {
+  RouterProvider,
+  Route,
+  Routes,
+  createHashRouter,
+  useSearchParams,
+} from "react-router-dom";
 import App from "./App.tsx";
 import FrontPage from "./components/FrontPage.tsx";
 import theme from "./components/theme.tsx";
@@ -10,6 +16,8 @@ import { store } from "./redux-modules/store.tsx";
 
 import BackgroundDark from "./assets/background_dark.svg";
 import BackgroundLight from "./assets/background_light.svg";
+
+export const router = createHashRouter([{ path: "*", element: <Main /> }]);
 
 function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
@@ -51,14 +59,18 @@ function Wrapper() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+function Main() {
+  return (
     <Provider store={store}>
       <ChakraProvider theme={theme}>
-        <HashRouter>
-          <Wrapper />
-        </HashRouter>
+        <Wrapper />
       </ChakraProvider>
     </Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
