@@ -39,9 +39,12 @@ export type SettingsType = {
   children?: { [childName: string]: SettingsType };
 };
 
+type UiType = "full-ui" | "notification" | "qam";
+
 export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
 
 interface HhdState {
+  uiType?: UiType;
   settingsState?: any;
   settings?: any;
   loading: { [loadState: string]: LoadingStatusType };
@@ -51,6 +54,7 @@ interface HhdState {
 }
 
 const initialState = {
+  uiType: "full-ui",
   settingsState: {},
   settings: {},
   loading: {
@@ -83,6 +87,9 @@ const hhdSlice = createSlice({
       const tagFilter = action.payload;
       window.localStorage.setItem(TAG_FILTER_CACHE_KEY, `${tagFilter}`);
       store.tagFilter = tagFilter;
+    },
+    setUiType: (store, action: PayloadAction<UiType | undefined>) => {
+      store.uiType = action.payload;
     },
     setError: (
       store,
@@ -227,6 +234,10 @@ export const selectVersionHashes = (state: RootState) => {
     state: get(state, "hhd.settingsState.version", ""),
     settings: get(state, "hhd.settings.hhd.version.value", ""),
   };
+};
+
+export const selectUiType = (state: RootState) => {
+  return state.hhd.uiType;
 };
 
 export default hhdSlice;

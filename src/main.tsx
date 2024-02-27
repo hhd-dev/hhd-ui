@@ -16,8 +16,25 @@ import { store } from "./redux-modules/store.tsx";
 
 import BackgroundDark from "./assets/background_dark.svg";
 import BackgroundLight from "./assets/background_light.svg";
+import {
+  login,
+  logout,
+  setUiType,
+  clearUiType,
+} from "./utils/electronUtils.tsx";
 
 export const router = createHashRouter([{ path: "*", element: <Main /> }]);
+
+// @ts-ignore
+if (!window.hhdElectronUtils) {
+  // @ts-ignore
+  window["hhdElectronUtils"] = {
+    login,
+    logout,
+    setUiType,
+    clearUiType,
+  };
+}
 
 function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
