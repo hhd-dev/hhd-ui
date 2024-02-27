@@ -43,6 +43,17 @@ function Wrapper() {
     background = "0%";
   }
 
+  const scrollCss =
+    appType == "overlay"
+      ? {
+          sx: {
+            "::-webkit-scrollbar": {
+              display: "none",
+            },
+          },
+        }
+      : {};
+
   return (
     <>
       <Box
@@ -64,6 +75,7 @@ function Wrapper() {
         w="100vw"
         overflowX="clip"
         overflowY="scroll"
+        {...scrollCss}
         css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
       >
         <Routes>
