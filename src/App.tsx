@@ -8,8 +8,10 @@ import {
 } from "./redux-modules/hhdAsyncThunks";
 import hhdSlice, {
   LoadingStatusType,
+  selectAppType,
   selectHhdSettingsState,
   selectHhdStateLoadingStatuses,
+  selectUiType,
 } from "./redux-modules/hhdSlice";
 import HhdState from "./components/HhdState";
 import {
@@ -30,7 +32,7 @@ import TagFilterDropdown, {
   TagFilters,
 } from "./components/TagFilterDropdown";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { isLoggedIn } from "./local";
+import { getUrl, isLoggedIn } from "./local";
 
 let clearHhdInterval: any;
 
@@ -45,10 +47,9 @@ document.addEventListener("visibilitychange", () => {
 
 const App = memo(() => {
   const logout = useLogout();
-  const isElectron = useIsElectron();
-
-  const hhdUrl = window.localStorage.getItem("hhd_url");
-  const isLocalhost = !hhdUrl || hhdUrl.includes("localhost");
+  const uiType = useSelector(selectUiType);
+  const appType = useSelector(selectAppType);
+  const isLocalhost = getUrl().includes("localhost");
 
   useInitialFetch();
 
@@ -85,19 +86,13 @@ const App = memo(() => {
             icon={colorMode == "dark" ? <MoonIcon /> : <SunIcon />}
           />
           <TagFilterDropdown />
-          {(!isLocalhost || !isElectron) && (
-            <Button
-              margin="0 0 0 1rem"
-              onClick={() => logout()}
-            >
+          {(!isLocalhost || appType == "web") && (
+            <Button margin="0 0 0 1rem" onClick={() => logout()}>
               Disconnect
             </Button>
           )}
-          {isElectron && (
-            <Button
-              margin="0 0 0 1rem"
-              onClick={() => window.close()}
-            >
+          {appType == "app" && (
+            <Button margin="0 0 0 1rem" onClick={() => window.close()}>
               Exit
             </Button>
           )}
@@ -134,19 +129,11 @@ function useInitialFetch() {
 
     return () => {
       if (clearHhdInterval) {
-        clearHhdInterval()
-        clearHhdInterval = undefined
+        clearHhdInterval();
+        clearHhdInterval = undefined;
       }
-    }
+    };
   }, []);
-}
-
-function useIsElectron() {
-  const isElectron = useMemo(
-    () => window.localStorage.getItem("hhd_electron") === "true",
-    []
-  );
-  return isElectron;
 }
 
 function useVerifyTokenRedirect(

@@ -4,14 +4,14 @@ const homeDir = app.getPath("home");
 const fs = require("fs");
 
 const createMainWindow = async () => {
-  isSteamUi = process.env.SteamGamepadUI;
-  isQamUi = process.env.STEAM_QAM;
+  const isSteamUi = process.env.SteamGamepadUI;
+  const isOverlayUi = process.env.STEAM_OVERLAY;
 
   // Get scale factor for steamui
   let scaleFactor;
   const { width, height } = screen.getPrimaryDisplay().size;
 
-  if (isSteamUi || isQamUi) {
+  if (isSteamUi || isOverlayUi) {
     // Assume we are on a screen the size of the deck
     // And add a bit of zoom even for that
     const SCREEN_RATIO = 1.2;
@@ -23,11 +23,11 @@ const createMainWindow = async () => {
   }
 
   let mainWindow = new BrowserWindow({
-    ...(isSteamUi || isQamUi
+    ...(isSteamUi || isOverlayUi
       ? { width: width, height: height }
       : { width: 1280, height: 800 }),
     show: false,
-    ...(isQamUi && { transparent: true }),
+    ...(isOverlayUi && { transparent: true }),
     backgroundColor: "#1a202c",
     icon: path.join(__dirname, "./icon/android-chrome-512x512.png"),
     webPreferences: {
@@ -37,7 +37,7 @@ const createMainWindow = async () => {
     },
   });
   mainWindow.setMenu(null);
-  if (isQamUi) mainWindow.setBackgroundColor("#00000000");
+  if (isOverlayUi) mainWindow.setBackgroundColor("#00000000");
 
   // Redirect local files to proper path
   // TODO: Fix this. Probably insecure.
@@ -65,19 +65,14 @@ const createMainWindow = async () => {
 
   // Attempt to autologin with user token
   try {
-    const data = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
+    const token = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
       encoding: "utf8",
       flag: "r",
     });
 
-    const cmd =
-      `localStorage.setItem("hhd_token", "${data}");` +
-      `localStorage.setItem("hhd_logged_in", "true");` +
-      `localStorage.setItem("hhd_electron", "true");`;
+    let cmd = `window.hhdElectronUtils.login("${encodeURI(token)}");`;
+    if (isOverlayUi) cmd += `window.hhdElectronUtils.setUiType("closed");`;
     await mainWindow.webContents.executeJavaScript(cmd);
-
-    // Navigate to login
-    await mainWindow.loadURL(startURL + (isQamUi ? "#/ui?qam=1" : "#/ui"));
   } catch (err) {
     console.log("Token file not found, skipping autologin.");
   }
@@ -86,6 +81,15 @@ const createMainWindow = async () => {
 
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
+
+  // const rl = readline.createInterface({
+  //   input: process.stdin,
+  //   output: process.stdout,
+  // });
+
+  // for await (const line of rl) {
+  //   console.log(line);
+  // }
 };
 
 app.whenReady().then(() => createMainWindow());

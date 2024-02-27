@@ -1,13 +1,13 @@
 import { clearLoggedIn, setLoggedIn } from "../local";
 import { router } from "../main";
-import hhdSlice, { ErrorStates } from "../redux-modules/hhdSlice";
+import hhdSlice, { ErrorStates, UiType } from "../redux-modules/hhdSlice";
 import { store } from "../redux-modules/store";
 
-export const login = (hhdToken: string, isElectron = true) => {
+export const login = (hhdToken: string, appType: UiType) => {
   window.localStorage.setItem("hhd_token", `${hhdToken}`);
-  window.localStorage.setItem("hhd_electron", `${isElectron}`);
-  setLoggedIn();
+  store.dispatch(hhdSlice.actions.setUiType(appType));
 
+  setLoggedIn();
   store.dispatch(hhdSlice.actions.resetHhdState());
   store.dispatch(hhdSlice.actions.clearError(ErrorStates.LoginFailed));
 
@@ -21,12 +21,6 @@ export const logout = () => {
   router.navigate("/");
 };
 
-export const setUiType = (uiType: string) => {
-  if (uiType === "qam" || uiType === "notification" || uiType === "full-ui") {
-    store.dispatch(hhdSlice.actions.setUiType(uiType));
-  }
-};
-
-export const clearUiType = () => {
-  store.dispatch(hhdSlice.actions.setUiType(undefined));
+export const setUiType = (uiType: UiType) => {
+  store.dispatch(hhdSlice.actions.setUiType(uiType));
 };

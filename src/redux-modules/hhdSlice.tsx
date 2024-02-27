@@ -39,12 +39,14 @@ export type SettingsType = {
   children?: { [childName: string]: SettingsType };
 };
 
-type UiType = "full-ui" | "notification" | "qam";
+export type UiType = "full-ui" | "notification" | "qam" | "closed";
+type AppType = "web" | "app" | "overlay";
 
 export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
 
 interface HhdState {
-  uiType?: UiType;
+  uiType: UiType;
+  appType: AppType;
   settingsState?: any;
   settings?: any;
   loading: { [loadState: string]: LoadingStatusType };
@@ -55,6 +57,7 @@ interface HhdState {
 
 const initialState = {
   uiType: "full-ui",
+  appType: "web",
   settingsState: {},
   settings: {},
   loading: {
@@ -88,8 +91,11 @@ const hhdSlice = createSlice({
       window.localStorage.setItem(TAG_FILTER_CACHE_KEY, `${tagFilter}`);
       store.tagFilter = tagFilter;
     },
-    setUiType: (store, action: PayloadAction<UiType | undefined>) => {
+    setUiType: (store, action: PayloadAction<UiType>) => {
       store.uiType = action.payload;
+    },
+    setAppType: (store, action: PayloadAction<AppType>) => {
+      store.appType = action.payload;
     },
     setError: (
       store,
@@ -141,6 +147,10 @@ const hhdSlice = createSlice({
 });
 
 // selectors
+
+export const selectAppType = (state: RootState) => {
+  return state.hhd.appType;
+};
 
 export const selectHhdSettings = (state: RootState) => {
   return state.hhd.settings;

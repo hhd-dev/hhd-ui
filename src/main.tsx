@@ -1,7 +1,7 @@
 import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import {
   RouterProvider,
   Route,
@@ -16,12 +16,8 @@ import { store } from "./redux-modules/store.tsx";
 
 import BackgroundDark from "./assets/background_dark.svg";
 import BackgroundLight from "./assets/background_light.svg";
-import {
-  login,
-  logout,
-  setUiType,
-  clearUiType,
-} from "./utils/electronUtils.tsx";
+import { login, logout, setUiType } from "./utils/electronUtils.tsx";
+import { selectAppType, selectUiType } from "./redux-modules/hhdSlice.tsx";
 
 export const router = createHashRouter([{ path: "*", element: <Main /> }]);
 
@@ -32,33 +28,38 @@ if (!window.hhdElectronUtils) {
     login,
     logout,
     setUiType,
-    clearUiType,
   };
 }
 
 function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
+  const uiType = useSelector(selectUiType);
+  const appType = useSelector(selectAppType);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams);
-  const isQam = searchParams.get("qam");
+  let background;
+  if (appType === "web" || appType === "app") {
+    background = "100%";
+  } else if (uiType === "full-ui") {
+    background = "90%";
+  } else {
+    background = "0%";
+  }
 
   return (
     <>
-      {!isQam && (
-        <Box
-          bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
-          h="100vh"
-          w="100vw"
-          backgroundAttachment="fixed"
-          backgroundPosition="center"
-          backgroundRepeat="no-repeat"
-          backgroundSize="cover"
-          backgroundColor="black"
-          position="absolute"
-          zIndex="-1"
-        ></Box>
-      )}
+      <Box
+        bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
+        h="100vh"
+        w="100vw"
+        backgroundAttachment="fixed"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        backgroundSize="cover"
+        backgroundColor="black"
+        position="absolute"
+        zIndex="-1"
+        opacity={background}
+      ></Box>
 
       <Box
         h="100vh"
