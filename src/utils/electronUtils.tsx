@@ -1,6 +1,10 @@
 import { clearLoggedIn, setLoggedIn } from "../local";
 import { router } from "../main";
-import hhdSlice, { ErrorStates, UiType } from "../redux-modules/hhdSlice";
+import hhdSlice, {
+  AppType,
+  ErrorStates,
+  UiType,
+} from "../redux-modules/hhdSlice";
 import { store } from "../redux-modules/store";
 
 export const login = (hhdToken: string, appType: UiType) => {
@@ -23,4 +27,8 @@ export const logout = () => {
 
 export const setUiType = (uiType: UiType) => {
   store.dispatch(hhdSlice.actions.setUiType(uiType));
+};
+
+export const setAppType = (appType: AppType) => {
+  store.dispatch(hhdSlice.actions.setAppType(appType));
 };

@@ -39,8 +39,8 @@ export type SettingsType = {
   children?: { [childName: string]: SettingsType };
 };
 
-export type UiType = "full-ui" | "notification" | "qam" | "closed";
-type AppType = "web" | "app" | "overlay";
+export type UiType = "expanded" | "notification" | "qam" | "closed";
+export type AppType = "web" | "app" | "overlay";
 
 export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
 
@@ -56,7 +56,7 @@ interface HhdState {
 }
 
 const initialState = {
-  uiType: "full-ui",
+  uiType: "expanded",
   appType: "web",
   settingsState: {},
   settings: {},

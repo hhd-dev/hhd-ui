@@ -2,6 +2,7 @@ const { app, BrowserWindow, screen, protocol } = require("electron");
 const path = require("path");
 const homeDir = app.getPath("home");
 const fs = require("fs");
+const readline = require("readline");
 
 const createMainWindow = async () => {
   const isSteamUi = process.env.SteamGamepadUI;
@@ -63,6 +64,17 @@ const createMainWindow = async () => {
   });
   await mainWindow.loadURL(startURL);
 
+  // Set appropriate initial state for the app
+  let cmd;
+  if (isOverlayUi) {
+    cmd =
+      `window.electronUtils.setUiType("closed");` +
+      `window.electronUtils.setAppType("overlay");`;
+  } else {
+    cmd = `window.electronUtils.setAppType("app");`;
+  }
+  await mainWindow.webContents.executeJavaScript(cmd);
+
   // Attempt to autologin with user token
   try {
     const token = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
@@ -70,8 +82,7 @@ const createMainWindow = async () => {
       flag: "r",
     });
 
-    let cmd = `window.hhdElectronUtils.login("${encodeURI(token)}");`;
-    if (isOverlayUi) cmd += `window.hhdElectronUtils.setUiType("closed");`;
+    const cmd = `window.electronUtils.login("${encodeURI(token)}");`;
     await mainWindow.webContents.executeJavaScript(cmd);
   } catch (err) {
     console.log("Token file not found, skipping autologin.");
@@ -82,14 +93,39 @@ const createMainWindow = async () => {
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
 
-  // const rl = readline.createInterface({
-  //   input: process.stdin,
-  //   output: process.stdout,
-  // });
+  if (!isOverlayUi) return;
 
-  // for await (const line of rl) {
-  //   console.log(line);
-  // }
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  for await (const line of rl) {
+    if (!line.startsWith("cmd:")) continue;
+    const cmd = line.substring(4);
+
+    let uiType = null;
+    switch (cmd) {
+      case "open_qam":
+        uiType = "qam";
+        break;
+      case "open_expanded":
+        uiType = "expanded";
+        break;
+      case "open_notification":
+        uiType = "notification";
+        break;
+      case "close":
+        uiType = "closed";
+        break;
+    }
+    if (!uiType) continue;
+
+    console.log(`Switching ui to '${uiType}'`);
+    await mainWindow.webContents.executeJavaScript(
+      `window.electronUtils.setUiType("${uiType}");`
+    );
+  }
 };
 
 app.whenReady().then(() => createMainWindow());

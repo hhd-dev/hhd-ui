@@ -25,8 +25,3 @@ export function isLoggedIn() {
 export function clearLoggedIn() {
   window.localStorage.setItem("hhd_logged_in", "false");
 }
-
-function isLocalhost() {
-  const url = getUrl();
-  return !url || url.includes("localhost");
-}

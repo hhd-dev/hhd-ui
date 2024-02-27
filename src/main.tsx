@@ -7,7 +7,6 @@ import {
   Route,
   Routes,
   createHashRouter,
-  useSearchParams,
 } from "react-router-dom";
 import App from "./App.tsx";
 import FrontPage from "./components/FrontPage.tsx";
@@ -16,20 +15,19 @@ import { store } from "./redux-modules/store.tsx";
 
 import BackgroundDark from "./assets/background_dark.svg";
 import BackgroundLight from "./assets/background_light.svg";
-import { login, logout, setUiType } from "./utils/electronUtils.tsx";
+import * as electronUtils from "./utils/electronUtils.tsx";
 import { selectAppType, selectUiType } from "./redux-modules/hhdSlice.tsx";
 
 export const router = createHashRouter([{ path: "*", element: <Main /> }]);
 
-// @ts-ignore
-if (!window.hhdElectronUtils) {
-  // @ts-ignore
-  window["hhdElectronUtils"] = {
-    login,
-    logout,
-    setUiType,
-  };
+declare global {
+  interface Window {
+    electronUtils: any;
+  }
 }
+
+// Inject electron utils
+window.electronUtils = electronUtils;
 
 function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
@@ -39,7 +37,7 @@ function Wrapper() {
   let background;
   if (appType === "web" || appType === "app") {
     background = "100%";
-  } else if (uiType === "full-ui") {
+  } else if (uiType === "expanded") {
     background = "90%";
   } else {
     background = "0%";
