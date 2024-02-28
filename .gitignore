@@ -34,3 +34,4 @@ electron/*
 !electron/icon/*
 !electron/art*
 !electron/art/*
+!electron/preload.js

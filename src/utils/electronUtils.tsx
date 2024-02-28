@@ -7,9 +7,8 @@ import hhdSlice, {
 } from "../redux-modules/hhdSlice";
 import { store } from "../redux-modules/store";
 
-export const login = (hhdToken: string, appType: UiType) => {
+export const login = (hhdToken: string) => {
   window.localStorage.setItem("hhd_token", `${hhdToken}`);
-  store.dispatch(hhdSlice.actions.setUiType(appType));
 
   setLoggedIn();
   store.dispatch(hhdSlice.actions.resetHhdState());

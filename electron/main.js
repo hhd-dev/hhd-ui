@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen, protocol } = require("electron");
+const { app, BrowserWindow, screen, protocol, ipcMain } = require("electron");
 const path = require("path");
 const homeDir = app.getPath("home");
 const fs = require("fs");
@@ -18,7 +18,7 @@ const createMainWindow = async () => {
     const SCREEN_RATIO = 1.2;
     scaleFactor = (SCREEN_RATIO * width) / 1280;
     scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
-    console.log("Launching in steamui. Zoom factor: " + scaleFactor);
+    console.error("Launching in steamui. Zoom factor: " + scaleFactor);
   } else {
     scaleFactor = 1.0;
   }
@@ -35,6 +35,7 @@ const createMainWindow = async () => {
       nodeIntegration: false,
       webSecurity: false,
       zoomFactor: scaleFactor,
+      preload: path.join(__dirname, "./preload.js"),
     },
   });
   mainWindow.setMenu(null);
@@ -85,7 +86,7 @@ const createMainWindow = async () => {
     const cmd = `window.electronUtils.login("${encodeURI(token)}");`;
     await mainWindow.webContents.executeJavaScript(cmd);
   } catch (err) {
-    console.log("Token file not found, skipping autologin.");
+    console.error("Token file not found, skipping autologin.");
   }
 
   await mainWindow.whenReady;
@@ -93,13 +94,18 @@ const createMainWindow = async () => {
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
 
+  // Handle Overlay Communication
   if (!isOverlayUi) return;
 
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
+    // output: process.stdout,
   });
 
+  // Inform the overlay has closed to hide it
+  ipcMain.on("close-overlay", () => console.log("cmd:closed"));
+
+  // Receive open and close commands
   for await (const line of rl) {
     if (!line.startsWith("cmd:")) continue;
     const cmd = line.substring(4);
@@ -109,6 +115,7 @@ const createMainWindow = async () => {
       case "open_qam":
         uiType = "qam";
         break;
+      case "open_overlay":
       case "open_expanded":
         uiType = "expanded";
         break;
@@ -121,7 +128,7 @@ const createMainWindow = async () => {
     }
     if (!uiType) continue;
 
-    console.log(`Switching ui to '${uiType}'`);
+    console.error(`Switching ui to '${uiType}'`);
     await mainWindow.webContents.executeJavaScript(
       `window.electronUtils.setUiType("${uiType}");`
     );

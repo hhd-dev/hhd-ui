@@ -1,5 +1,5 @@
 import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useSelector } from "react-redux";
 import {
@@ -23,8 +23,11 @@ export const router = createHashRouter([{ path: "*", element: <Main /> }]);
 declare global {
   interface Window {
     electronUtils: any;
+    electronUtilsRender: any;
   }
 }
+
+const ANIMATION_DELAY = 500;
 
 // Inject electron utils
 window.electronUtils = electronUtils;
@@ -42,6 +45,30 @@ function Wrapper() {
   } else {
     background = "0%";
   }
+
+  useEffect(() => {
+    console.log(appType);
+    console.log(uiType);
+    if (appType !== "overlay" || uiType !== "closed") return;
+    console.log("closing");
+
+    let interval: number | null = setInterval(() => {
+      const closeOverlay = window.electronUtilsRender?.closeOverlay;
+      if (closeOverlay) closeOverlay();
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    }, ANIMATION_DELAY);
+
+    //Clearing the interval
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    };
+  }, [uiType, appType]);
 
   const scrollCss =
     appType == "overlay"
