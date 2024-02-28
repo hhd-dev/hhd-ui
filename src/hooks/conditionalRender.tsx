@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectTagFilter } from "../redux-modules/hhdSlice";
+import { selectTagFilter, selectUiType } from "../redux-modules/hhdSlice";
 
 export const DEFAULT_HIDDEN = [
   "hidden",
@@ -45,6 +45,10 @@ export const useShouldRenderChild = (filters: string[] | null = null) => {
 
 function useFilters() {
   const tagFilter = useSelector(selectTagFilter);
+  const uiType = useSelector(selectUiType);
+
+  if (uiType === "qam") return QAM_FILTERS;
+
   return tagFilter === "advanced"
     ? ["expert", ...DEFAULT_HIDDEN]
     : DEFAULT_HIDDEN;

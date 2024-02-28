@@ -3,7 +3,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Heading,
   Button,
   Flex,
@@ -11,7 +10,7 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { QAM_FILTERS, useShouldRenderParent } from "../hooks/conditionalRender";
+import { useShouldRenderParent } from "../hooks/conditionalRender";
 import { useSetHhdState } from "../hooks/controller";
 import hhdSlice, {
   SettingsType,
@@ -31,7 +30,7 @@ const HhdQamState = () => {
     useSelector(selectHhdSettings);
   const sectionNames = useSelector(selectSectionNames);
   const setState = useSetHhdState();
-  const shouldRenderParent = useShouldRenderParent(QAM_FILTERS);
+  const shouldRenderParent = useShouldRenderParent();
   const dispatch = useDispatch();
 
   return (
