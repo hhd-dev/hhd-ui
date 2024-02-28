@@ -1,5 +1,5 @@
 import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
@@ -20,6 +20,7 @@ import hhdSlice, {
   selectAppType,
   selectUiType,
 } from "./redux-modules/hhdSlice.tsx";
+import { useHddRelayEffect } from "./hooks/electron.tsx";
 
 declare global {
   interface Window {
@@ -27,8 +28,6 @@ declare global {
     electronUtilsRender: any;
   }
 }
-
-const ANIMATION_DELAY = 500;
 
 // Inject electron utils
 window.electronUtils = electronUtils;
@@ -48,27 +47,7 @@ function Wrapper() {
     background = "0%";
   }
 
-  // Inform that Daemon should close the UI
-  useEffect(() => {
-    if (appType !== "overlay" || uiType !== "closed") return;
-
-    let interval: number | null = setInterval(() => {
-      const closeOverlay = window.electronUtilsRender?.closeOverlay;
-      if (closeOverlay) closeOverlay();
-      if (interval) {
-        clearInterval(interval);
-        interval = null;
-      }
-    }, ANIMATION_DELAY);
-
-    //Clearing the interval
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-        interval = null;
-      }
-    };
-  }, [uiType, appType]);
+  useHddRelayEffect(appType, uiType);
 
   const scrollCss =
     appType == "overlay"
