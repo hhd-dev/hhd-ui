@@ -18,8 +18,6 @@ import BackgroundLight from "./assets/background_light.svg";
 import * as electronUtils from "./utils/electronUtils.tsx";
 import { selectAppType, selectUiType } from "./redux-modules/hhdSlice.tsx";
 
-export const router = createHashRouter([{ path: "*", element: <Main /> }]);
-
 declare global {
   interface Window {
     electronUtils: any;
@@ -47,10 +45,7 @@ function Wrapper() {
   }
 
   useEffect(() => {
-    console.log(appType);
-    console.log(uiType);
     if (appType !== "overlay" || uiType !== "closed") return;
-    console.log("closing");
 
     let interval: number | null = setInterval(() => {
       const closeOverlay = window.electronUtilsRender?.closeOverlay;
@@ -117,16 +112,18 @@ function Wrapper() {
 
 function Main() {
   return (
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-        <Wrapper />
-      </ChakraProvider>
-    </Provider>
+    <React.StrictMode>
+      <Provider store={store}>
+        <ChakraProvider theme={theme}>
+          <Wrapper />
+        </ChakraProvider>
+      </Provider>
+    </React.StrictMode>
   );
 }
 
+export const router = createHashRouter([{ path: "*", element: <Main /> }]);
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );

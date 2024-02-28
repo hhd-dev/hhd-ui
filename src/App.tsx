@@ -59,12 +59,11 @@ const App = memo(() => {
   const state = useSelector(selectHhdSettingsState);
 
   useVerifyTokenRedirect(stateLoading, settingsLoading, state);
+  const { colorMode, toggleColorMode } = useColorMode();
 
   if (!state || stateLoading == "pending" || settingsLoading == "pending") {
     return null;
   }
-
-  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Flex padding="2rem 0" w="100%" flexDirection="column" alignItems="center">
