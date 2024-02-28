@@ -6,13 +6,11 @@ import {
   Heading,
   IconButton,
   ScaleFade,
-  Slide,
   useColorMode,
 } from "@chakra-ui/react";
-import { memo, useEffect } from "react";
+import { FC, memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import HhdLogo from "./components/HhdLogo";
-import HhdQamState from "./components/HhdQamState";
 import HhdTabbedState from "./components/HhdTabbedState";
 import TagFilterDropdown, {
   TAG_FILTER_CACHE_KEY,
@@ -36,6 +34,7 @@ import hhdSlice, {
 } from "./redux-modules/hhdSlice";
 import { hhdPollingInterval } from "./redux-modules/polling";
 import { AppDispatch } from "./redux-modules/store";
+import QamUi from "./components/QamUi";
 
 let clearHhdInterval: any;
 
@@ -47,39 +46,6 @@ document.addEventListener("visibilitychange", () => {
     clearHhdInterval = hhdPollingInterval();
   }
 });
-
-const QamUi = () => {
-  const appType = useSelector(selectAppType);
-  const uiType = useSelector(selectUiType);
-
-  const shouldExist = appType === "overlay";
-  const isOpen = appType !== "overlay" || uiType === "qam";
-  const { colorMode, toggleColorMode: _ } = useColorMode();
-  const dispatch = useDispatch();
-
-  if (!shouldExist) return <></>;
-  return (
-    <Slide
-      in={isOpen}
-      onClick={(e) => {
-        if (e.currentTarget != e.target) return;
-        dispatch(hhdSlice.actions.setUiType("closed"));
-      }}
-    >
-      <Flex
-        top="0"
-        right="0"
-        height="100vh"
-        position="absolute"
-        overflowY="scroll"
-        css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
-        boxShadow="2xl"
-      >
-        <HhdQamState />
-      </Flex>
-    </Slide>
-  );
-};
 
 const ExpandedUi = () => {
   const logout = useLogout();
@@ -168,6 +134,10 @@ const ExpandedUi = () => {
 
 const App = memo(() => {
   useInitialFetch();
+  const appType = useSelector(selectAppType);
+  const uiType = useSelector(selectUiType);
+
+  const shouldRenderQam = appType === "overlay";
 
   const { stateLoading, settingsLoading } = useSelector(
     selectHhdStateLoadingStatuses
@@ -182,7 +152,7 @@ const App = memo(() => {
 
   return (
     <>
-      <QamUi />
+      {shouldRenderQam ? <QamUi /> : null}
       <ExpandedUi />
     </>
   );
