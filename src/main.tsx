@@ -1,4 +1,4 @@
-import { Box, ChakraProvider, Flex, useColorMode } from "@chakra-ui/react";
+import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
@@ -97,12 +97,11 @@ function Wrapper() {
         transition="0.15s ease-in-out"
         opacity={background}
       ></Box>
-      <Flex
+      <Box
         h="100vh"
         w="100vw"
         overflowX="clip"
         overflowY="scroll"
-        flexDirection="column"
         {...scrollCss}
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
@@ -114,7 +113,7 @@ function Wrapper() {
           <Route path="/" Component={FrontPage} />
           <Route path="/ui" Component={App} />
         </Routes>
-      </Flex>
+      </Box>
     </>
   );
 }

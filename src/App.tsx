@@ -21,6 +21,8 @@ import {
   Heading,
   IconButton,
   ScaleFade,
+  Slide,
+  SlideFade,
   useColorMode,
 } from "@chakra-ui/react";
 import { useLogout } from "./hooks/auth";
@@ -46,6 +48,30 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+const QamUi = () => {
+  const appType = useSelector(selectAppType);
+  const uiType = useSelector(selectUiType);
+
+  const shouldExist = appType === "overlay";
+  const isOpen = appType !== "overlay" || uiType === "qam";
+
+  if (!shouldExist) return <></>;
+  return (
+    <Slide in={isOpen}>
+      <Flex
+        w={CONTENT_WIDTH}
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        right="0"
+        position="absolute"
+      >
+        <HhdState />
+      </Flex>
+    </Slide>
+  );
+};
+
 const ExpandedUi = () => {
   const logout = useLogout();
   const appType = useSelector(selectAppType);
@@ -63,8 +89,6 @@ const ExpandedUi = () => {
       w="fit-content"
       flexDirection="column"
       alignItems="center"
-      justifySelf="start"
-      alignSelf="center"
     >
       <Flex margin="0.5rem 1rem 1.2rem 1rem">
         <Flex
@@ -109,14 +133,18 @@ const ExpandedUi = () => {
 
   if (shouldFadeOpen) {
     return (
-      <Box justifySelf="start" alignSelf="center">
+      <Box w="fit-content" margin="0 auto">
         <ScaleFade initialScale={0.7} in={isOpen}>
           {component}
         </ScaleFade>
       </Box>
     );
   } else {
-    return component;
+    return (
+      <Box w="fit-content" margin="0 auto">
+        {component}
+      </Box>
+    );
   }
 };
 
@@ -136,7 +164,12 @@ const App = memo(() => {
     return null;
   }
 
-  return <ExpandedUi />;
+  return (
+    <>
+      <QamUi />
+      <ExpandedUi />
+    </>
+  );
 });
 
 function useInitialFetch() {
