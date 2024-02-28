@@ -70,14 +70,13 @@ const HhdInt: FC<Props> = ({
             <FormLabel minW="2.4rem" htmlFor={`${statePath}`} textAlign="end">
               {title}
             </FormLabel>
-            <Box w="1rem" />
             <Slider min={min} max={max} {...valueProp} onChange={onChange}>
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
               <SliderThumb />
             </Slider>
-            <Box w="1rem" />
+            <Box w="0.6rem" />
             {value && (
               <FormLabel minW="2.7rem" textAlign="end">
                 {value}
