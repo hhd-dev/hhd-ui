@@ -20,6 +20,7 @@ import {
   Flex,
   Heading,
   IconButton,
+  ScaleFade,
   useColorMode,
 } from "@chakra-ui/react";
 import { useLogout } from "./hooks/auth";
@@ -45,27 +46,17 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-const App = memo(() => {
+const ExpandedUi = () => {
   const logout = useLogout();
-  const uiType = useSelector(selectUiType);
   const appType = useSelector(selectAppType);
+  const uiType = useSelector(selectUiType);
   const isLocalhost = getUrl().includes("localhost");
-
-  useInitialFetch();
-
-  const { stateLoading, settingsLoading } = useSelector(
-    selectHhdStateLoadingStatuses
-  );
-  const state = useSelector(selectHhdSettingsState);
-
-  useVerifyTokenRedirect(stateLoading, settingsLoading, state);
   const { colorMode, toggleColorMode } = useColorMode();
 
-  if (!state || stateLoading == "pending" || settingsLoading == "pending") {
-    return null;
-  }
+  const isOpen = appType !== "overlay" || uiType === "expanded";
+  const shouldFadeOpen = appType === "overlay";
 
-  return (
+  const component = (
     <Flex padding="2rem 0" w="100%" flexDirection="column" alignItems="center">
       <Flex margin="0.5rem 1rem 1.2rem 1rem">
         <Flex
@@ -107,6 +98,35 @@ const App = memo(() => {
       </Flex>
     </Flex>
   );
+
+  if (shouldFadeOpen) {
+    return (
+      <ScaleFade initialScale={0.7} in={isOpen}>
+        {component}
+      </ScaleFade>
+    );
+  } else {
+    return component;
+  }
+};
+
+const App = memo(() => {
+  useInitialFetch();
+  const uiType = useSelector(selectUiType);
+  const appType = useSelector(selectAppType);
+
+  const { stateLoading, settingsLoading } = useSelector(
+    selectHhdStateLoadingStatuses
+  );
+  const state = useSelector(selectHhdSettingsState);
+
+  useVerifyTokenRedirect(stateLoading, settingsLoading, state);
+
+  if (!state || stateLoading == "pending" || settingsLoading == "pending") {
+    return null;
+  }
+
+  return <ExpandedUi />;
 });
 
 function useInitialFetch() {

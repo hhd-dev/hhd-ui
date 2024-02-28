@@ -44,6 +44,7 @@ function Wrapper() {
     background = "0%";
   }
 
+  // Inform that Daemon should close the UI
   useEffect(() => {
     if (appType !== "overlay" || uiType !== "closed") return;
 
