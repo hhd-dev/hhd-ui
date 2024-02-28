@@ -9,20 +9,7 @@ const createMainWindow = async () => {
 
   const { mainWindow, scaleFactor } = initMainWindow();
 
-  // Redirect local files to proper path
-  // TODO: Fix this. Probably insecure.
-  protocol.interceptFileProtocol(
-    "file",
-    (request, callback) => {
-      const url = request.url.substr(7); /* all urls start with 'file://' */
-      callback({
-        path: path.normalize(`${__dirname}/static/build/${url}`.split("#")[0]),
-      });
-    },
-    (err) => {
-      if (err) console.error("Failed to register protocol");
-    }
-  );
+  fileProtocolRedirect();
 
   // Load a proper webpage so js can run
   const startURL = require("url").format({
@@ -96,7 +83,7 @@ const createMainWindow = async () => {
     }
     if (!uiType) continue;
 
-    console.error(`Switching ui to '${uiType}'`);
+    // console.error(`Switching ui to '${uiType}'`);
     await mainWindow.webContents.executeJavaScript(
       `window.electronUtils.setUiType("${uiType}");`
     );
@@ -141,6 +128,23 @@ function initMainWindow() {
   if (isOverlayUi) mainWindow.setBackgroundColor("#00000000");
 
   return { mainWindow, scaleFactor };
+}
+
+function fileProtocolRedirect() {
+  // Redirect local files to proper path
+  // TODO: Fix this. Probably insecure.
+  protocol.interceptFileProtocol(
+    "file",
+    (request, callback) => {
+      const url = request.url.substr(7); /* all urls start with 'file://' */
+      callback({
+        path: path.normalize(`${__dirname}/static/build/${url}`.split("#")[0]),
+      });
+    },
+    (err) => {
+      if (err) console.error("Failed to register protocol");
+    }
+  );
 }
 
 app.whenReady().then(() => createMainWindow());
