@@ -23,6 +23,7 @@ type Props = {
   onChange: (args: any) => any;
   min: number;
   max: number;
+  unit?: string;
 };
 
 const HhdInt: FC<Props> = ({
@@ -33,6 +34,7 @@ const HhdInt: FC<Props> = ({
   tags,
   min,
   max,
+  unit,
 }) => {
   const valueProp = value ? { value } : {};
 
@@ -59,13 +61,47 @@ const HhdInt: FC<Props> = ({
     );
   }
 
+  if (tags?.includes("slim")) {
+    // TODO: Fix style boundary
+    return (
+      <div>
+        <ErrorBoundary title={title}>
+          <Flex direction="row" alignItems="center">
+            <FormLabel minW="2.4rem" htmlFor={`${statePath}`} textAlign="end">
+              {title}
+            </FormLabel>
+            <Box w="1rem" />
+            <Slider min={min} max={max} {...valueProp} onChange={onChange}>
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider>
+            <Box w="1rem" />
+            {value && (
+              <FormLabel minW="2.7rem" textAlign="end">
+                {value}
+                {unit || ""}
+              </FormLabel>
+            )}
+          </Flex>
+        </ErrorBoundary>
+      </div>
+    );
+  }
+
   return (
     <div>
       <ErrorBoundary title={title}>
         <Flex direction="row" alignItems="center">
           <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
           <Box flexGrow="1" minW="2rem" />
-          {value && <FormLabel>{value}</FormLabel>}
+          {value && (
+            <FormLabel>
+              {value}
+              {unit || ""}
+            </FormLabel>
+          )}
         </Flex>
         <Slider min={min} max={max} {...valueProp} onChange={onChange}>
           <SliderTrack>

@@ -34,6 +34,7 @@ export type SettingsType = {
   options?: any;
   modes?: any;
   min?: number;
+  unit?: string;
   tags?: string[];
   max?: number;
   children?: { [childName: string]: SettingsType };

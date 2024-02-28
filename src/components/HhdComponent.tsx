@@ -54,6 +54,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
     state,
     min,
     max,
+    unit,
     tags,
     updateState,
     default: defaultValue,
@@ -164,6 +165,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
           statePath={`${statePath}`}
           min={min}
           max={max}
+          unit={unit}
         />
       );
     }
