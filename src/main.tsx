@@ -1,7 +1,7 @@
-import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
+import { Box, ChakraProvider, Flex, useColorMode } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import {
   RouterProvider,
   Route,
@@ -11,12 +11,15 @@ import {
 import App from "./App.tsx";
 import FrontPage from "./components/FrontPage.tsx";
 import theme from "./components/theme.tsx";
-import { store } from "./redux-modules/store.tsx";
+import { AppDispatch, store } from "./redux-modules/store.tsx";
 
 import BackgroundDark from "./assets/background_dark.svg";
 import BackgroundLight from "./assets/background_light.svg";
 import * as electronUtils from "./utils/electronUtils.tsx";
-import { selectAppType, selectUiType } from "./redux-modules/hhdSlice.tsx";
+import hhdSlice, {
+  selectAppType,
+  selectUiType,
+} from "./redux-modules/hhdSlice.tsx";
 
 declare global {
   interface Window {
@@ -34,6 +37,7 @@ function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
   const uiType = useSelector(selectUiType);
   const appType = useSelector(selectAppType);
+  const dispatch = useDispatch<AppDispatch>();
 
   let background;
   if (appType === "web" || appType === "app") {
@@ -93,20 +97,24 @@ function Wrapper() {
         transition="0.15s ease-in-out"
         opacity={background}
       ></Box>
-
-      <Box
+      <Flex
         h="100vh"
         w="100vw"
         overflowX="clip"
         overflowY="scroll"
+        flexDirection="column"
         {...scrollCss}
+        onClick={(e) => {
+          if (e.currentTarget != e.target) return;
+          dispatch(hhdSlice.actions.setUiType("closed"));
+        }}
         css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
       >
         <Routes>
           <Route path="/" Component={FrontPage} />
           <Route path="/ui" Component={App} />
         </Routes>
-      </Box>
+      </Flex>
     </>
   );
 }

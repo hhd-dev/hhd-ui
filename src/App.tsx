@@ -50,6 +50,7 @@ const ExpandedUi = () => {
   const logout = useLogout();
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
+
   const isLocalhost = getUrl().includes("localhost");
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -57,7 +58,14 @@ const ExpandedUi = () => {
   const shouldFadeOpen = appType === "overlay";
 
   const component = (
-    <Flex padding="2rem 0" w="100%" flexDirection="column" alignItems="center">
+    <Flex
+      padding="2rem 0"
+      w="fit-content"
+      flexDirection="column"
+      alignItems="center"
+      justifySelf="start"
+      alignSelf="center"
+    >
       <Flex margin="0.5rem 1rem 1.2rem 1rem">
         <Flex
           w={CONTENT_WIDTH}
@@ -101,9 +109,11 @@ const ExpandedUi = () => {
 
   if (shouldFadeOpen) {
     return (
-      <ScaleFade initialScale={0.7} in={isOpen}>
-        {component}
-      </ScaleFade>
+      <Box justifySelf="start" alignSelf="center">
+        <ScaleFade initialScale={0.7} in={isOpen}>
+          {component}
+        </ScaleFade>
+      </Box>
     );
   } else {
     return component;
