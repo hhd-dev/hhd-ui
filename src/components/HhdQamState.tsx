@@ -34,7 +34,7 @@ const HhdQamState = () => {
   const dispatch = useDispatch();
 
   return (
-    <Card width={QAM_WIDTH}>
+    <Card width={QAM_WIDTH} h="fit-content">
       <CardHeader>
         <Flex>
           <Heading>
