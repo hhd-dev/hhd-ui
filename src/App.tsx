@@ -55,10 +55,17 @@ const QamUi = () => {
   const shouldExist = appType === "overlay";
   const isOpen = appType !== "overlay" || uiType === "qam";
   const { colorMode, toggleColorMode: _ } = useColorMode();
+  const dispatch = useDispatch();
 
   if (!shouldExist) return <></>;
   return (
-    <Slide in={isOpen}>
+    <Slide
+      in={isOpen}
+      onClick={(e) => {
+        if (e.currentTarget != e.target) return;
+        dispatch(hhdSlice.actions.setUiType("closed"));
+      }}
+    >
       <Flex
         top="0"
         right="0"
