@@ -4,6 +4,7 @@ import {
   type ThemeConfig,
 } from "@chakra-ui/react";
 export const CONTENT_WIDTH = "500px";
+export const QAM_WIDTH = "375px";
 
 const config: ThemeConfig = {
   initialColorMode: "dark",

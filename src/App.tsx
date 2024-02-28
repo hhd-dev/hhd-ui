@@ -54,17 +54,19 @@ const QamUi = () => {
 
   const shouldExist = appType === "overlay";
   const isOpen = appType !== "overlay" || uiType === "qam";
+  const { colorMode, toggleColorMode: _ } = useColorMode();
 
   if (!shouldExist) return <></>;
   return (
     <Slide in={isOpen}>
       <Flex
-        w={CONTENT_WIDTH}
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
+        top="0"
         right="0"
+        height="100vh"
         position="absolute"
+        overflowY="scroll"
+        css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
+        boxShadow="2xl"
       >
         <HhdQamState />
       </Flex>
@@ -79,6 +81,7 @@ const ExpandedUi = () => {
 
   const isLocalhost = getUrl().includes("localhost");
   const { colorMode, toggleColorMode } = useColorMode();
+  const dispatch = useDispatch();
 
   const isOpen = appType !== "overlay" || uiType === "expanded";
   const shouldFadeOpen = appType === "overlay";
@@ -116,6 +119,14 @@ const ExpandedUi = () => {
           {appType == "app" && (
             <Button margin="0 0 0 1rem" onClick={() => window.close()}>
               Exit
+            </Button>
+          )}
+          {appType == "overlay" && (
+            <Button
+              margin="0 0 0 1rem"
+              onClick={() => dispatch(hhdSlice.actions.setUiType("qam"))}
+            >
+              Quick Menu
             </Button>
           )}
         </Flex>
