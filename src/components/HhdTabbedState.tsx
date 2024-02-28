@@ -15,12 +15,13 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Box,
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { CONTENT_WIDTH } from "./theme";
 import { useShouldRenderParent } from "../hooks/conditionalRender";
 
-const HhdState = () => {
+const HhdTabbedState = () => {
   const state = useSelector(selectHhdSettingsState);
   const settings: { [key: string]: { [key: string]: SettingsType } } =
     useSelector(selectHhdSettings);
@@ -52,7 +53,7 @@ const HhdState = () => {
               return null;
             }
             return (
-              <div key={topIdx}>
+              <Box key={topIdx}>
                 {Object.keys(plugins).map((pluginName, idx) => {
                   const plugin = plugins[pluginName] as SettingsType;
                   const statePath = `${topLevelStr}.${pluginName}`;
@@ -72,7 +73,7 @@ const HhdState = () => {
                     </TabPanel>
                   );
                 })}
-              </div>
+              </Box>
             );
           })}
         </TabPanels>
@@ -81,4 +82,4 @@ const HhdState = () => {
   );
 };
 
-export default HhdState;
+export default HhdTabbedState;

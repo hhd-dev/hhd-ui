@@ -1,6 +1,27 @@
-import { memo, useEffect, useMemo } from "react";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  ScaleFade,
+  Slide,
+  useColorMode,
+} from "@chakra-ui/react";
+import { memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "./redux-modules/store";
+import HhdLogo from "./components/HhdLogo";
+import HhdQamState from "./components/HhdQamState";
+import HhdTabbedState from "./components/HhdTabbedState";
+import TagFilterDropdown, {
+  TAG_FILTER_CACHE_KEY,
+  TagFilterType,
+  TagFilters,
+} from "./components/TagFilterDropdown";
+import { CONTENT_WIDTH } from "./components/theme";
+import { useLogout } from "./hooks/auth";
+import { getUrl, isLoggedIn } from "./local";
 import {
   fetchHhdSettings,
   fetchHhdSettingsState,
@@ -13,29 +34,8 @@ import hhdSlice, {
   selectHhdStateLoadingStatuses,
   selectUiType,
 } from "./redux-modules/hhdSlice";
-import HhdState from "./components/HhdState";
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  IconButton,
-  ScaleFade,
-  Slide,
-  SlideFade,
-  useColorMode,
-} from "@chakra-ui/react";
-import { useLogout } from "./hooks/auth";
-import HhdLogo from "./components/HhdLogo";
-import { CONTENT_WIDTH } from "./components/theme";
 import { hhdPollingInterval } from "./redux-modules/polling";
-import TagFilterDropdown, {
-  TAG_FILTER_CACHE_KEY,
-  TagFilterType,
-  TagFilters,
-} from "./components/TagFilterDropdown";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { getUrl, isLoggedIn } from "./local";
+import { AppDispatch } from "./redux-modules/store";
 
 let clearHhdInterval: any;
 
@@ -66,7 +66,7 @@ const QamUi = () => {
         right="0"
         position="absolute"
       >
-        <HhdState />
+        <HhdQamState />
       </Flex>
     </Slide>
   );
@@ -126,7 +126,7 @@ const ExpandedUi = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <HhdState />
+        <HhdTabbedState />
       </Flex>
     </Flex>
   );
@@ -150,8 +150,6 @@ const ExpandedUi = () => {
 
 const App = memo(() => {
   useInitialFetch();
-  const uiType = useSelector(selectUiType);
-  const appType = useSelector(selectAppType);
 
   const { stateLoading, settingsLoading } = useSelector(
     selectHhdStateLoadingStatuses
