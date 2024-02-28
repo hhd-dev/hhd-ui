@@ -5,41 +5,9 @@ const fs = require("fs");
 const readline = require("readline");
 
 const createMainWindow = async () => {
-  const isSteamUi = process.env.SteamGamepadUI;
   const isOverlayUi = process.env.STEAM_OVERLAY;
 
-  // Get scale factor for steamui
-  let scaleFactor;
-  const { width, height } = screen.getPrimaryDisplay().size;
-
-  if (isSteamUi || isOverlayUi) {
-    // Assume we are on a screen the size of the deck
-    // And add a bit of zoom even for that
-    const SCREEN_RATIO = 1.2;
-    scaleFactor = (SCREEN_RATIO * width) / 1280;
-    scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
-    console.error("Launching in steamui. Zoom factor: " + scaleFactor);
-  } else {
-    scaleFactor = 1.0;
-  }
-
-  let mainWindow = new BrowserWindow({
-    ...(isSteamUi || isOverlayUi
-      ? { width: width, height: height }
-      : { width: 1280, height: 800 }),
-    show: false,
-    ...(isOverlayUi && { transparent: true }),
-    backgroundColor: "#1a202c",
-    icon: path.join(__dirname, "./icon/android-chrome-512x512.png"),
-    webPreferences: {
-      nodeIntegration: false,
-      webSecurity: false,
-      zoomFactor: scaleFactor,
-      preload: path.join(__dirname, "./preload.js"),
-    },
-  });
-  mainWindow.setMenu(null);
-  if (isOverlayUi) mainWindow.setBackgroundColor("#00000000");
+  const { mainWindow, scaleFactor } = initMainWindow();
 
   // Redirect local files to proper path
   // TODO: Fix this. Probably insecure.
@@ -134,6 +102,46 @@ const createMainWindow = async () => {
     );
   }
 };
+
+function initMainWindow() {
+  const isSteamUi = process.env.SteamGamepadUI;
+  const isOverlayUi = process.env.STEAM_OVERLAY;
+
+  // Get scale factor for steamui
+  let scaleFactor;
+  const { width, height } = screen.getPrimaryDisplay().size;
+
+  if (isSteamUi || isOverlayUi) {
+    // Assume we are on a screen the size of the deck
+    // And add a bit of zoom even for that
+    const SCREEN_RATIO = 1.2;
+    scaleFactor = (SCREEN_RATIO * width) / 1280;
+    scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
+    console.error("Launching in steamui. Zoom factor: " + scaleFactor);
+  } else {
+    scaleFactor = 1.0;
+  }
+
+  let mainWindow = new BrowserWindow({
+    ...(isSteamUi || isOverlayUi
+      ? { width: width, height: height }
+      : { width: 1280, height: 800 }),
+    show: false,
+    ...(isOverlayUi && { transparent: true }),
+    backgroundColor: "#1a202c",
+    icon: path.join(__dirname, "./icon/android-chrome-512x512.png"),
+    webPreferences: {
+      nodeIntegration: false,
+      webSecurity: false,
+      zoomFactor: scaleFactor,
+      preload: path.join(__dirname, "./preload.js"),
+    },
+  });
+  mainWindow.setMenu(null);
+  if (isOverlayUi) mainWindow.setBackgroundColor("#00000000");
+
+  return { mainWindow, scaleFactor };
+}
 
 app.whenReady().then(() => createMainWindow());
 
