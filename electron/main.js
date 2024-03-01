@@ -33,6 +33,7 @@ const createMainWindow = async () => {
 
   // Attempt to autologin with user token
   try {
+    console.error(`Checking dir '${homeDir}' for the user token.`);
     const token = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
       encoding: "utf8",
       flag: "r",
@@ -54,16 +55,15 @@ const createMainWindow = async () => {
 
   const rl = readline.createInterface({
     input: process.stdin,
-    // output: process.stdout,
   });
 
   // Inform the overlay has closed to hide it
   ipcMain.on("update-status", (_, stat) => console.log(`stat:${stat}`));
 
   // Receive open and close commands
-  for await (const line of rl) {
-    if (!line.startsWith("cmd:")) continue;
-    const cmd = line.substring(4);
+  rl.on("line", (line) => {
+    if (!line.startsWith("cmd:")) return;
+    const cmd = line.trim().substring(4);
 
     let uiType = null;
     switch (cmd) {
@@ -81,13 +81,15 @@ const createMainWindow = async () => {
         uiType = "closed";
         break;
     }
-    if (!uiType) continue;
+    if (!uiType) return;
 
-    // console.error(`Switching ui to '${uiType}'`);
-    await mainWindow.webContents.executeJavaScript(
-      `window.electronUtils.setUiType("${uiType}");`
-    );
-  }
+    if (mainWindow) {
+      console.error(`Switching ui to '${uiType}'`);
+      mainWindow.webContents.executeJavaScript(
+        `window.electronUtils.setUiType("${uiType}");`
+      );
+    }
+  });
 };
 
 function initMainWindow() {
