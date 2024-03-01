@@ -41,12 +41,14 @@ export type SettingsType = {
 };
 
 export type UiType = "expanded" | "notification" | "qam" | "closed";
+export type PrevUiType = UiType | "init";
 export type AppType = "web" | "app" | "overlay";
 
 export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
 
 interface HhdState {
   uiType: UiType;
+  prevUiType: PrevUiType;
   appType: AppType;
   settingsState?: any;
   settings?: any;
@@ -58,6 +60,7 @@ interface HhdState {
 
 const initialState = {
   uiType: "expanded",
+  prevUiType: "init",
   appType: "web",
   settingsState: {},
   settings: {},
@@ -93,6 +96,7 @@ const hhdSlice = createSlice({
       store.tagFilter = tagFilter;
     },
     setUiType: (store, action: PayloadAction<UiType>) => {
+      store.prevUiType = store.uiType;
       store.uiType = action.payload;
     },
     setAppType: (store, action: PayloadAction<AppType>) => {
@@ -249,6 +253,10 @@ export const selectVersionHashes = (state: RootState) => {
 
 export const selectUiType = (state: RootState) => {
   return state.hhd.uiType;
+};
+
+export const selectPrevUiType = (state: RootState) => {
+  return state.hhd.prevUiType;
 };
 
 export default hhdSlice;

@@ -1,14 +1,26 @@
 import { useEffect } from "react";
-import { AppType, UiType } from "../redux-modules/hhdSlice";
+import {
+  selectAppType,
+  selectPrevUiType,
+  selectUiType,
+} from "../redux-modules/hhdSlice";
+import { useSelector } from "react-redux";
 
-const ANIMATION_DELAY = 300;
+const CLOSE_DELAY = 300;
 
 let interval: number | undefined;
 
-export const useHddRelayEffect = (appType: AppType, uiType: UiType) => {
+export const useHddRelayEffect = () => {
+  const uiType = useSelector(selectUiType);
+  const prevUiType = useSelector(selectPrevUiType);
+  const appType = useSelector(selectAppType);
+
   // Inform that Daemon should close the UI
   useEffect(() => {
     if (appType !== "overlay") return;
+
+    let delay = 0;
+    if (uiType === "closed" && prevUiType !== "init") delay = CLOSE_DELAY;
 
     interval = setInterval(() => {
       const updateStatus = window.electronUtilsRender?.updateStatus;
@@ -17,7 +29,7 @@ export const useHddRelayEffect = (appType: AppType, uiType: UiType) => {
         clearInterval(interval);
         interval = undefined;
       }
-    }, ANIMATION_DELAY);
+    }, delay);
 
     //Clearing the interval
     return () => {

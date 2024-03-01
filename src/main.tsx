@@ -47,7 +47,7 @@ function Wrapper() {
     background = "0%";
   }
 
-  useHddRelayEffect(appType, uiType);
+  useHddRelayEffect();
 
   const scrollCss =
     appType == "overlay"
