@@ -1,17 +1,18 @@
 import { useEffect } from "react";
+import { AppType, UiType } from "../redux-modules/hhdSlice";
 
-const ANIMATION_DELAY = 500;
+const ANIMATION_DELAY = 300;
 
 let interval: number | undefined;
 
-export const useHddRelayEffect = (appType: string, uiType: string) => {
+export const useHddRelayEffect = (appType: AppType, uiType: UiType) => {
   // Inform that Daemon should close the UI
   useEffect(() => {
-    if (appType !== "overlay" || uiType !== "closed") return;
+    if (appType !== "overlay") return;
 
     interval = setInterval(() => {
-      const closeOverlay = window.electronUtilsRender?.closeOverlay;
-      if (closeOverlay) closeOverlay();
+      const updateStatus = window.electronUtilsRender?.updateStatus;
+      if (updateStatus) updateStatus(uiType);
       if (interval) {
         clearInterval(interval);
         interval = undefined;

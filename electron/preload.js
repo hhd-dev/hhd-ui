@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronUtilsRender", {
-  closeOverlay: () => ipcRenderer.send("close-overlay"),
+  updateStatus: (status) => ipcRenderer.send("update-status", status),
 });

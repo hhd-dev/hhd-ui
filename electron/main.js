@@ -58,7 +58,7 @@ const createMainWindow = async () => {
   });
 
   // Inform the overlay has closed to hide it
-  ipcMain.on("close-overlay", () => console.log("cmd:closed"));
+  ipcMain.on("update-status", (_, stat) => console.log(`stat:${stat}`));
 
   // Receive open and close commands
   for await (const line of rl) {
