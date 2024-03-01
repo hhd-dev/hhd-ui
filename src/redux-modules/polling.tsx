@@ -10,10 +10,9 @@ const MIN_WAITTIME_NEW = 250;
 const MIN_WAITTIME_OLD = 1000;
 
 async function pollState(a: AbortController) {
+  let start = Date.now();
   try {
     while (!a.signal.aborted) {
-      const start = Date.now();
-
       // Fetch
       const state = store.getState();
       const currHash = get(
@@ -22,7 +21,7 @@ async function pollState(a: AbortController) {
         get(state, "hhd.settingsState.version", "")
       );
 
-      const newState = await fetchFn("state", { signal: a.signal });
+      const newState = await fetchFn("state?poll", { signal: a.signal });
       const newHash = get(newState, "version", "");
 
       // If settings changed reload them
@@ -40,7 +39,7 @@ async function pollState(a: AbortController) {
 
       const del = Date.now() - start;
       let waitTime: number | null = null;
-      if (del < 100) {
+      if (del < MIN_WAITTIME_NEW) {
         // If less than 100ms, we are using a legacy
         // handheld daemon version. Avoid overloading.
         waitTime = MIN_WAITTIME_OLD - del;
@@ -48,7 +47,11 @@ async function pollState(a: AbortController) {
         waitTime = MIN_WAITTIME_NEW - del;
       }
 
-      if (waitTime != null) {
+      // We count the time before the request starts
+      // to ensure that we make at most 1 / MIN_DELAY_LEGACY per sec
+      start = Date.now();
+
+      if (waitTime != null && waitTime > 0) {
         const actWaitTime = waitTime;
         const p = new Promise((r) =>
           setTimeout(r, actWaitTime, { signal: a.signal })
@@ -64,13 +67,13 @@ export const hhdPollingInterval = () => {
     if (abort) return;
 
     abort = new AbortController();
-    pollState(abort);
+    pollState(abort).catch((_) => {});
   } catch (e) {
     console.log(e);
   }
   return () => {
     if (abort) {
-      abort.abort();
+      abort.abort("Stopping polling due to cleanup.");
       abort = undefined;
     }
   };
