@@ -97,6 +97,10 @@ const createMainWindow = async () => {
       case "close":
         uiType = "closed";
         break;
+      case "close_now":
+        uiType = "closed";
+        console.log(`stat:closed`);
+        break;
     }
     if (!uiType) return;
 
