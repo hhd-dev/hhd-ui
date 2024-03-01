@@ -6,6 +6,7 @@ import { get } from "lodash";
 
 let abort: AbortController | undefined;
 
+const LEGACY_DELAY = 100;
 const MIN_WAITTIME_NEW = 250;
 const MIN_WAITTIME_OLD = 1000;
 
@@ -40,7 +41,7 @@ async function pollState(a: AbortController) {
 
       const del = Date.now() - start;
       let waitTime: number | null = null;
-      if (del < MIN_WAITTIME_NEW) {
+      if (del < LEGACY_DELAY) {
         // If less than 100ms, we are using a legacy
         // handheld daemon version. Avoid overloading.
         waitTime = MIN_WAITTIME_OLD - del;
