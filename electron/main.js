@@ -57,8 +57,13 @@ const createMainWindow = async () => {
     input: process.stdin,
   });
 
-  // Inform the overlay has closed to hide it
-  ipcMain.on("update-status", (_, stat) => console.log(`stat:${stat}`));
+  let currentType = "closed";
+
+  // Inform hhd of the new status
+  ipcMain.on("update-status", (_, stat) => {
+    currentType = stat;
+    console.log(`stat:${stat}`);
+  });
 
   // Receive open and close commands
   rl.on("line", (line) => {
@@ -68,11 +73,23 @@ const createMainWindow = async () => {
     let uiType = null;
     switch (cmd) {
       case "open_qam":
-        uiType = "qam";
+        // If the user presses QAM again close
+        if (currentType === "qam") {
+          console.error("QAM is currently open, closing.");
+          uiType = "closed";
+        } else {
+          uiType = "qam";
+        }
         break;
       case "open_overlay":
       case "open_expanded":
-        uiType = "expanded";
+        // If the user presses QAM for expanded and we are expanded close
+        if (currentType === "expanded") {
+          console.error("Currently expanded, closing.");
+          uiType = "closed";
+        } else {
+          uiType = "expanded";
+        }
         break;
       case "open_notification":
         uiType = "notification";
