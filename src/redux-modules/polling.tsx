@@ -12,6 +12,7 @@ const MIN_WAITTIME_OLD = 1000;
 
 async function pollState(a: AbortController) {
   let start = Date.now();
+  let initial = true;
   try {
     while (!a.signal.aborted) {
       // Fetch
@@ -22,8 +23,11 @@ async function pollState(a: AbortController) {
         get(state, "hhd.settingsState.version", "")
       );
 
-      const newState = await fetchFn("state?poll", { signal: a.signal });
+      const newState = await fetchFn(initial ? "state" : "state?poll", {
+        signal: a.signal,
+      });
       const newHash = get(newState, "version", "");
+      initial = false;
 
       // If settings changed reload them
       if (newState && newHash !== currHash) {
