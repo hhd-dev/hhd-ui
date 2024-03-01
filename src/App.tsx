@@ -5,8 +5,9 @@ import { useLogout } from "./hooks/auth";
 import {
   LoadingStatusType,
   selectAppType,
+  selectHhdSettingsLoading,
   selectHhdSettingsState,
-  selectHhdStateLoadingStatuses,
+  selectHhdSettingsStateLoading,
 } from "./redux-modules/hhdSlice";
 
 import QamUi from "./components/QamUi";
@@ -19,9 +20,8 @@ const App = memo(() => {
 
   const shouldRenderQam = appType === "overlay";
 
-  const { stateLoading, settingsLoading } = useSelector(
-    selectHhdStateLoadingStatuses
-  );
+  const settingsLoading = useSelector(selectHhdSettingsLoading);
+  const stateLoading = useSelector(selectHhdSettingsStateLoading);
   const state = useSelector(selectHhdSettingsState);
 
   useVerifyTokenRedirect(stateLoading, settingsLoading, state);

@@ -9,6 +9,7 @@ let abort: AbortController | undefined;
 const LEGACY_DELAY = 100;
 const MIN_WAITTIME_NEW = 250;
 const MIN_WAITTIME_OLD = 1000;
+const ERROR_WAITTIME = 3000;
 
 async function pollState(a: AbortController) {
   let start = Date.now();
@@ -23,16 +24,21 @@ async function pollState(a: AbortController) {
         get(state, "hhd.settingsState.version", "")
       );
 
-      const newState = await fetchFn(initial ? "state" : "state?poll", {
-        signal: a.signal,
-      });
+      const newState = await fetchFn(
+        initial ? "state" : "state?poll",
+        {
+          signal: a.signal,
+        },
+        true
+      );
       const newHash = get(newState, "version", "");
       initial = false;
 
       // If settings changed reload them
       if (newState && newHash !== currHash) {
-        const settings = await fetchFn("settings", { signal: a.signal });
-        store.dispatch(hhdSlice.actions.overrideSettings(settings));
+        const settings = await fetchFn("settings", { signal: a.signal }, true);
+        if (settings)
+          store.dispatch(hhdSlice.actions.overrideSettings(settings));
       }
 
       // Apply new state
@@ -45,7 +51,9 @@ async function pollState(a: AbortController) {
 
       const del = Date.now() - start;
       let waitTime: number | null = null;
-      if (del < LEGACY_DELAY) {
+      if (!newState) {
+        waitTime = ERROR_WAITTIME;
+      } else if (del < LEGACY_DELAY) {
         // If less than 100ms, we are using a legacy
         // handheld daemon version. Avoid overloading.
         waitTime = MIN_WAITTIME_OLD - del;

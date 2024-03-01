@@ -165,10 +165,10 @@ export const selectHhdSettingsState = (state: RootState) => {
   return state.hhd.settingsState;
 };
 
-const selectHhdSettingsLoading = (state: RootState) =>
+export const selectHhdSettingsLoading = (state: RootState) =>
   state.hhd.loading.settings;
 
-const selectHhdSettingsStateLoading = (state: RootState) =>
+export const selectHhdSettingsStateLoading = (state: RootState) =>
   state.hhd.loading.settingsState;
 
 export const selectUpdateHhdStatePending = (state: RootState) => {
@@ -180,13 +180,6 @@ export const selectAllHhdSettingsLoading = (state: RootState) => {
     selectHhdSettingsLoading(state) === "pending" ||
     selectHhdSettingsStateLoading(state) === "pending"
   );
-};
-
-export const selectHhdStateLoadingStatuses = (state: RootState) => {
-  return {
-    stateLoading: selectHhdSettingsStateLoading(state),
-    settingsLoading: selectHhdSettingsLoading(state),
-  };
 };
 
 export const selectLoginErrorMessage = (state: RootState) => {

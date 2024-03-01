@@ -2,7 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { set } from "lodash";
 import { getToken, getUrl } from "../local";
 
-export const fetchFn = async (url: string, options?: { [s: string]: any }) => {
+export const fetchFn = async (
+  url: string,
+  options?: { [s: string]: any },
+  mute: boolean = false
+) => {
   const authHeaders = {
     Authorization: `Bearer ${getToken()}`,
   };
@@ -20,7 +24,7 @@ export const fetchFn = async (url: string, options?: { [s: string]: any }) => {
         return r.json();
       }
     })
-    .catch(console.log);
+    .catch(mute ? () => {} : console.log);
 };
 
 export const fetchHhdSettings = createAsyncThunk(
