@@ -25,6 +25,7 @@ import { QAM_WIDTH } from "./theme";
 import HhdLogo from "./HhdLogo";
 import { capitalize } from "lodash";
 import { CloseIcon, ArrowLeftIcon } from "@chakra-ui/icons";
+import { ControllerButton } from "./Controller";
 
 const HhdQamState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -41,20 +42,36 @@ const HhdQamState = () => {
       <CardHeader>
         <Flex>
           <Heading>
-            <HhdLogo width="7rem" />
+            <HhdLogo width="9rem" />
           </Heading>
           <Box flexGrow="3"></Box>
           <Button
             margin="0 0 0 1rem"
             onClick={() => dispatch(hhdSlice.actions.setUiType("expanded"))}
           >
-            <ArrowLeftIcon /> {controller && <>&nbsp;(Y)</>}
+            <ArrowLeftIcon h="1.7rem" />
+            {controller && (
+              <ControllerButton
+                button="y"
+                margin="0 0 0 0.3rem"
+                h="1.7rem"
+                invert
+              />
+            )}
           </Button>
           <Button
             margin="0 0 0 1rem"
             onClick={() => dispatch(hhdSlice.actions.setUiType("closed"))}
           >
-            <CloseIcon /> {controller && <>&nbsp;(B)</>}
+            <CloseIcon h="1.7rem" />{" "}
+            {controller && (
+              <ControllerButton
+                button="b"
+                margin="0 0 0 0.3rem"
+                h="1.7rem"
+                invert
+              />
+            )}
           </Button>
         </Flex>
       </CardHeader>

@@ -21,6 +21,7 @@ import {
 import { capitalize } from "lodash";
 import { CONTENT_WIDTH } from "./theme";
 import { useShouldRenderParent } from "../hooks/conditionalRender";
+import { ControllerButton } from "./Controller";
 
 const HhdTabbedState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -39,7 +40,12 @@ const HhdTabbedState = () => {
         <TabList style={{ padding: "1rem 0" }}>
           {controller && (
             <Tab isDisabled justifyContent="end">
-              (LB)
+              <ControllerButton
+                button="lb"
+                w="2.5rem"
+                marginBottom="-.6rem"
+                marginTop="-0.8rem"
+              />
             </Tab>
           )}
           {Object.entries(settings).map(([name, plugins], idx) => {
@@ -59,7 +65,7 @@ const HhdTabbedState = () => {
           })}
           {controller && (
             <Tab isDisabled justifyContent="end">
-              (RB)
+              <ControllerButton button="rb" w="2.5rem" marginTop="-.6rem" />
             </Tab>
           )}
         </TabList>

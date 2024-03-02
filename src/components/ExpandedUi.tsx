@@ -24,6 +24,7 @@ import hhdSlice, {
 import TagFilterDropdown from "./TagFilterDropdown";
 
 import { FC } from "react";
+import { ControllerButton } from "./Controller";
 
 type Props = {
   shouldFadeOpen: boolean;
@@ -103,8 +104,15 @@ const ExpandedUi = () => {
                 margin="0 0 0 1rem"
                 onClick={() => dispatch(hhdSlice.actions.setUiType("qam"))}
               >
-                {controller && <>(Y)&nbsp;</>}
-                <ArrowRightIcon />
+                {controller && (
+                  <ControllerButton
+                    button="y"
+                    margin="0 0.3rem 0 0"
+                    h="1.7rem"
+                    invert
+                  />
+                )}
+                <ArrowRightIcon h="1.7rem" />
               </Button>
             )}
           </Flex>
