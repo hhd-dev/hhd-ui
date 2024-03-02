@@ -17,7 +17,12 @@ import {
 import { get, isEqual } from "lodash";
 import { FC, useRef, memo } from "react";
 import { useUpdateHhdStatePending } from "../hooks/controller";
-import { SettingType, SettingsType } from "../redux-modules/hhdSlice";
+import {
+  SettingType,
+  SettingsType,
+  selectIsQam,
+  selectShowHintModal,
+} from "../redux-modules/hhdSlice";
 import HhdModesDropdown from "./HhdModesDropdown";
 import HhdOptions from "./HhdOptions";
 import HintsAccordion from "./HintsAccordion";
@@ -25,6 +30,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import HhdInt from "./HhdInt";
 import { useShouldRenderChild } from "../hooks/conditionalRender";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { useSelector } from "react-redux";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -63,18 +69,14 @@ const HhdComponent: FC<HhdComponentType> = memo(
     const componentRef = useRef<HTMLInputElement>(null);
 
     const shouldRenderChild = useShouldRenderChild();
+    const showModals = useSelector(selectShowHintModal);
+    const isQam = useSelector(selectIsQam);
 
     if (tags && !shouldRenderChild(tags)) {
       return null;
     }
 
-    if (tags)
-      if (
-        tags.indexOf("hhd-update-decky") >= 0 ||
-        tags.indexOf("hhd-version-display-decky") >= 0
-      ) {
-        return null;
-      }
+    const showTitle = !isQam || !tags?.includes("hide-title");
 
     const renderChildren = () => {
       if (children)
@@ -101,13 +103,19 @@ const HhdComponent: FC<HhdComponentType> = memo(
           <CardBody
             style={{ display: "flex", flexDirection: "column", padding: 0 }}
           >
-            <Flex direction="row" marginBottom="1rem" alignItems="center">
-              <Heading as="h1" fontSize="xl">
-                {title}
-              </Heading>
-              <Box flexGrow="1" minW="2rem"></Box>
-              <HintsAccordion path={`${statePath}`} />
-            </Flex>
+            {showTitle && (
+              <Flex direction="row" marginBottom="1rem" alignItems="center">
+                <Heading as="h1" fontSize="xl">
+                  {title}
+                </Heading>
+                {showModals && (
+                  <>
+                    <Box flexGrow="1" minW="2rem"></Box>
+                    <HintsAccordion path={`${statePath}`} />
+                  </>
+                )}
+              </Flex>
+            )}
             <Stack spacing="3">
               <ErrorBoundary title={title}>
                 {renderChild &&

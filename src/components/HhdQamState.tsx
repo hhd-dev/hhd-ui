@@ -92,7 +92,7 @@ const HhdQamState = () => {
                   color="brand.700"
                   textTransform="uppercase"
                   marginLeft="0.1rem"
-                  marginBottom="0.3rem"
+                  marginBottom="0.7rem"
                 >
                   {label}
                 </Heading>
