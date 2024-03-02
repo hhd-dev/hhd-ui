@@ -76,19 +76,19 @@ async function pollState(a: AbortController) {
   } catch (e) {}
 }
 
-export const hhdPollingInterval = () => {
+export const enablePolling = () => {
+  if (abort) return;
   try {
-    if (abort) return;
-
     abort = new AbortController();
     pollState(abort).catch((_) => {});
   } catch (e) {
     console.log(e);
   }
-  return () => {
-    if (abort) {
-      abort.abort("Stopping polling due to cleanup.");
-      abort = undefined;
-    }
-  };
+};
+
+export const disablePolling = () => {
+  if (abort) {
+    abort.abort("Stopping polling due to cleanup.");
+    abort = undefined;
+  }
 };

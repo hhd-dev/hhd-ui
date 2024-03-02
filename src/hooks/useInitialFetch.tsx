@@ -4,25 +4,19 @@ import {
   TagFilterType,
   TagFilters,
 } from "../components/TagFilterDropdown";
-import { isLoggedIn } from "../local";
 import {
-  fetchHhdSettings,
-  fetchHhdSettingsState,
   fetchSectionNames,
 } from "../redux-modules/hhdAsyncThunks";
 import hhdSlice from "../redux-modules/hhdSlice";
-import { hhdPollingInterval } from "../redux-modules/polling";
+import { disablePolling, enablePolling } from "../redux-modules/polling";
 import { AppDispatch } from "../redux-modules/store";
 import { useEffect } from "react";
 
-let clearHhdInterval: any;
-
 document.addEventListener("visibilitychange", () => {
-  clearHhdInterval && clearHhdInterval();
-  clearHhdInterval = undefined;
-
-  if (!document.hidden && isLoggedIn()) {
-    clearHhdInterval = hhdPollingInterval();
+  if (document.hidden) {
+    disablePolling();
+  } else {
+    enablePolling();
   }
 });
 
@@ -38,17 +32,8 @@ function useInitialFetch() {
       dispatch(hhdSlice.actions.setTagFilter(tagFilter));
     }
 
-    dispatch(fetchHhdSettings());
-    dispatch(fetchHhdSettingsState());
+    enablePolling();
     dispatch(fetchSectionNames());
-    clearHhdInterval = hhdPollingInterval();
-
-    return () => {
-      if (clearHhdInterval) {
-        clearHhdInterval();
-        clearHhdInterval = undefined;
-      }
-    };
   }, []);
 }
 

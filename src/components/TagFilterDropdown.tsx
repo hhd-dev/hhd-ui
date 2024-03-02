@@ -10,8 +10,6 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import hhdSlice, { selectTagFilter } from "../redux-modules/hhdSlice";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { capitalize } from "lodash";
-
 export const TAG_FILTER_CACHE_KEY = "hhd-ui.tagFilter";
 
 export type TagFilterType = "advanced" | "expert";
