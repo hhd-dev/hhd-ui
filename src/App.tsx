@@ -10,9 +10,9 @@ import {
   selectHhdSettingsStateLoading,
 } from "./redux-modules/hhdSlice";
 
-import QamUi from "./components/QamUi";
 import ExpandedUi from "./components/ExpandedUi";
 import useInitialFetch from "./hooks/useInitialFetch";
+import HhdQamState from "./components/HhdQamState";
 
 const App = memo(() => {
   useInitialFetch();
@@ -32,7 +32,7 @@ const App = memo(() => {
 
   return (
     <>
-      {shouldRenderQam ? <QamUi /> : null}
+      {shouldRenderQam ? <HhdQamState /> : null}
       <ExpandedUi />
     </>
   );
