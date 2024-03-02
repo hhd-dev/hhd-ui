@@ -15,7 +15,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { get, isEqual } from "lodash";
-import { FC, useRef, memo } from "react";
+import { FC, useRef, memo, useEffect } from "react";
 import { useUpdateHhdStatePending } from "../hooks/controller";
 import {
   SettingType,
@@ -30,6 +30,11 @@ import HhdInt from "./HhdInt";
 import { useShouldRenderChild } from "../hooks/conditionalRender";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useSelector } from "react-redux";
+import {
+  focusCurrentHhdElement,
+  registerHhdElement,
+  resetHhdElements,
+} from "../controller/hhdComponentsNavigation";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -71,6 +76,20 @@ const HhdComponent: FC<HhdComponentType> = memo(
 
     const shouldRenderChild = useShouldRenderChild(isQam);
     const showModals = useSelector(selectShowHintModal);
+
+    useEffect(() => {
+      if (componentRef.current) {
+        registerHhdElement(componentRef.current);
+      }
+      if (depth == 0 && type === "container") {
+        focusCurrentHhdElement();
+      }
+      return () => {
+        if (depth === 0 && type === "container") {
+          resetHhdElements();
+        }
+      };
+    }, []);
 
     if (tags && !shouldRenderChild(tags)) {
       return null;
@@ -235,7 +254,11 @@ const HhdComponent: FC<HhdComponentType> = memo(
           <ErrorBoundary title={title}>
             <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+              <MenuButton
+                ref={componentRef}
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+              >
                 {type === "multiple" ? options[value] : value}
               </MenuButton>
               <MenuList>
@@ -269,7 +292,10 @@ const HhdComponent: FC<HhdComponentType> = memo(
     if (type === "action" && title) {
       return (
         <ErrorBoundary title={title}>
-          <Button onClick={() => updateState(`${statePath}`, true)}>
+          <Button
+            ref={componentRef}
+            onClick={() => updateState(`${statePath}`, true)}
+          >
             {title}
           </Button>
         </ErrorBoundary>

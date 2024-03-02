@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import ErrorBoundary from "./ErrorBoundary";
 import {
   FormLabel,
@@ -14,6 +14,7 @@ import {
   Flex,
   Box,
 } from "@chakra-ui/react";
+import { registerHhdElement } from "../controller/hhdComponentsNavigation";
 
 type Props = {
   value?: number;
@@ -37,6 +38,13 @@ const HhdInt: FC<Props> = ({
   unit,
 }) => {
   const valueProp = value ? { value } : {};
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      registerHhdElement(ref.current);
+    }
+  }, []);
 
   if (tags?.includes("dropdown")) {
     return (
@@ -74,7 +82,7 @@ const HhdInt: FC<Props> = ({
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
-              <SliderThumb />
+              <SliderThumb ref={ref} />
             </Slider>
             <Box w="0.6rem" />
             {value && (
@@ -106,7 +114,7 @@ const HhdInt: FC<Props> = ({
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
-          <SliderThumb />
+          <SliderThumb ref={ref} />
         </Slider>
       </ErrorBoundary>
     </div>

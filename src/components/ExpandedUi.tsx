@@ -25,6 +25,7 @@ import TagFilterDropdown from "./TagFilterDropdown";
 
 import { FC } from "react";
 import { ControllerButton } from "./Controller";
+import { resetSectionElements } from "../controller/sectionsNavigation";
 
 type Props = {
   shouldFadeOpen: boolean;
@@ -90,7 +91,13 @@ const ExpandedUi = () => {
             />
             <TagFilterDropdown />
             {(!isLocalhost || appType == "web") && (
-              <Button margin="0 0 0 1rem" onClick={() => logout()}>
+              <Button
+                margin="0 0 0 1rem"
+                onClick={() => {
+                  resetSectionElements();
+                  logout();
+                }}
+              >
                 Disconnect
               </Button>
             )}

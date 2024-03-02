@@ -13,8 +13,9 @@ import {
   Stack,
   Button,
 } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useShouldRenderChild } from "../hooks/conditionalRender";
+import { registerHhdElement } from "../controller/hhdComponentsNavigation";
 
 type DropdownProps = {
   modes: { [value: string]: any };
@@ -45,11 +46,18 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   updating,
   isQam,
 }) => {
+  const ref = useRef<HTMLElement>(null);
   const currentMode = modes[selectedValue];
   const modeTags = currentMode ? currentMode.tags : null;
   const type = currentMode ? currentMode.type : null;
   const children = currentMode ? Object.entries(currentMode.children) : [];
   const shouldRenderChild = useShouldRenderChild(isQam);
+
+  useEffect(() => {
+    if (ref.current) {
+      registerHhdElement(ref.current);
+    }
+  }, []);
 
   const createClickHandler = (value: any) => () => {
     if (updating) {
@@ -63,7 +71,12 @@ const HhdModesDropdown: FC<DropdownProps> = ({
       <Box>
         <FormLabel htmlFor={`${statePath}`}>{title}</FormLabel>
         <Menu>
-          <MenuButton as={Button} width="100%" rightIcon={<ChevronDownIcon />}>
+          <MenuButton
+            ref={ref}
+            as={Button}
+            width="100%"
+            rightIcon={<ChevronDownIcon />}
+          >
             {currentMode?.title}
           </MenuButton>
           <MenuList>

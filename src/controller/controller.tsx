@@ -1,9 +1,20 @@
+import { debounce } from "lodash";
 import hhdSlice from "../redux-modules/hhdSlice";
 import { store } from "../redux-modules/store";
+import { navigateHhdComponents } from "./hhdComponentsNavigation";
 import { navigateSections } from "./sectionsNavigation";
 
+const requestAnimationFrame =
+  window.requestAnimationFrame ||
+  window.mozRequestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.msRequestAnimationFrame;
+
+const cancelAnimationFrame =
+  window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
 let gpIndex: number = -1;
-let timeoutId: number | undefined;
+let animationFrameId: number | undefined;
 
 export const setupGamepadEventListener = () => {
   window.addEventListener("gamepadconnected", function (event) {
@@ -18,9 +29,9 @@ export const setupGamepadEventListener = () => {
   window.addEventListener("gamepaddisconnected", function (event) {
     // Do something on disconnect
     gpIndex = -1;
-    if (timeoutId) {
-      window.clearTimeout(timeoutId);
-      timeoutId = undefined;
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = undefined;
     }
   });
 };
@@ -32,7 +43,8 @@ function updateLoop() {
       // gamepad is connected
 
       navigateSections(gp);
+      navigateHhdComponents(gp);
     }
-    timeoutId = setTimeout(() => window.requestAnimationFrame(updateLoop), 150);
+    animationFrameId = requestAnimationFrame(updateLoop);
   }
 }

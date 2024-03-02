@@ -1,6 +1,11 @@
-const sectionButtons: HTMLElement[] = [];
+import { debounce } from "lodash";
+
+let sectionButtons: HTMLElement[] = [];
 
 let currentSectionIndex = 0;
+
+const prevItem = debounce(prevItemOriginal, 70);
+const nextItem = debounce(nextItemOriginal, 70);
 
 export const navigateSections = (gp: Gamepad) => {
   const LButton = gp.buttons[4];
@@ -8,11 +13,9 @@ export const navigateSections = (gp: Gamepad) => {
 
   try {
     if (LButton.pressed) {
-      //   console.log("l pressed");
       prevItem();
     }
     if (RButton.pressed) {
-      //   console.log("r pressed");
       nextItem();
     }
   } catch (e) {
@@ -24,23 +27,25 @@ export const registerSectionElement = (el: any) => {
   sectionButtons.push(el);
 };
 
-function prevItem() {
+export const resetSectionElements = () => {
+  sectionButtons = [];
+  currentSectionIndex = 0;
+};
+
+function prevItemOriginal() {
   if (currentSectionIndex === 0) {
     currentSectionIndex = sectionButtons.length - 1;
   } else {
     currentSectionIndex--;
   }
-  console.log(currentSectionIndex);
   sectionButtons[currentSectionIndex].focus();
 }
 
-function nextItem() {
+function nextItemOriginal() {
   if (currentSectionIndex == sectionButtons.length - 1) {
     currentSectionIndex = 0;
   } else {
     currentSectionIndex++;
   }
-  console.log(currentSectionIndex);
-
   sectionButtons[currentSectionIndex].focus();
 }
