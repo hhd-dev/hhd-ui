@@ -1,4 +1,4 @@
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { ArrowRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import { getUrl } from "../local";
 
 import hhdSlice, {
   selectAppType,
+  selectHasController,
   selectUiType,
 } from "../redux-modules/hhdSlice";
 import TagFilterDropdown from "./TagFilterDropdown";
@@ -52,6 +53,7 @@ const ExpandedUi = () => {
   const logout = useLogout();
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
+  const controller = useSelector(selectHasController);
 
   const isLocalhost = getUrl().includes("localhost");
   const { colorMode, toggleColorMode } = useColorMode();
@@ -101,7 +103,8 @@ const ExpandedUi = () => {
                 margin="0 0 0 1rem"
                 onClick={() => dispatch(hhdSlice.actions.setUiType("qam"))}
               >
-                Quick Menu
+                {controller && <>(Y)&nbsp;</>}
+                <ArrowRightIcon />
               </Button>
             )}
           </Flex>

@@ -50,6 +50,7 @@ interface HhdState {
   uiType: UiType;
   prevUiType: PrevUiType;
   appType: AppType;
+  controller: boolean;
   settingsState?: any;
   settings?: any;
   loading: { [loadState: string]: LoadingStatusType };
@@ -62,6 +63,7 @@ const initialState = {
   uiType: "expanded",
   prevUiType: "init",
   appType: "web",
+  controller: true,
   settingsState: {},
   settings: {},
   loading: {
@@ -94,6 +96,9 @@ const hhdSlice = createSlice({
       const tagFilter = action.payload;
       window.localStorage.setItem(TAG_FILTER_CACHE_KEY, `${tagFilter}`);
       store.tagFilter = tagFilter;
+    },
+    setController: (store, action: PayloadAction<boolean>) => {
+      store.controller = action.payload;
     },
     setUiType: (store, action: PayloadAction<UiType>) => {
       store.prevUiType = store.uiType;
@@ -163,6 +168,10 @@ export const selectHhdSettings = (state: RootState) => {
 
 export const selectHhdSettingsState = (state: RootState) => {
   return state.hhd.settingsState;
+};
+
+export const selectHasController = (state: RootState) => {
+  return state.hhd.controller;
 };
 
 export const selectHhdSettingsLoading = (state: RootState) =>

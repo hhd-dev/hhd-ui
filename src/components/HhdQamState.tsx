@@ -14,6 +14,7 @@ import { useShouldRenderParent } from "../hooks/conditionalRender";
 import { useSetHhdState } from "../hooks/controller";
 import hhdSlice, {
   SettingsType,
+  selectHasController,
   selectHhdSettings,
   selectHhdSettingsState,
   selectSectionNames,
@@ -23,6 +24,7 @@ import HhdComponent, { renderChild } from "./HhdComponent";
 import { QAM_WIDTH } from "./theme";
 import HhdLogo from "./HhdLogo";
 import { capitalize } from "lodash";
+import { CloseIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 
 const HhdQamState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -32,6 +34,7 @@ const HhdQamState = () => {
   const setState = useSetHhdState();
   const shouldRenderParent = useShouldRenderParent();
   const dispatch = useDispatch();
+  const controller = useSelector(selectHasController);
 
   return (
     <Card width={QAM_WIDTH} h="fit-content">
@@ -45,7 +48,13 @@ const HhdQamState = () => {
             margin="0 0 0 1rem"
             onClick={() => dispatch(hhdSlice.actions.setUiType("expanded"))}
           >
-            Expand
+            <ArrowLeftIcon /> {controller && <>&nbsp;(Y)</>}
+          </Button>
+          <Button
+            margin="0 0 0 1rem"
+            onClick={() => dispatch(hhdSlice.actions.setUiType("closed"))}
+          >
+            <CloseIcon /> {controller && <>&nbsp;(B)</>}
           </Button>
         </Flex>
       </CardHeader>
@@ -61,7 +70,13 @@ const HhdQamState = () => {
             }
             return (
               <Box key={topIdx}>
-                <Heading size="md" color="brand.700" textTransform="uppercase" marginLeft="0.1rem" marginBottom="0.3rem">
+                <Heading
+                  size="md"
+                  color="brand.700"
+                  textTransform="uppercase"
+                  marginLeft="0.1rem"
+                  marginBottom="0.3rem"
+                >
                   {label}
                 </Heading>
                 {Object.keys(plugins).map((pluginName, idx) => {

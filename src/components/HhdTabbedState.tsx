@@ -4,6 +4,7 @@ import {
   selectHhdSettingsState,
   selectHhdSettings,
   selectSectionNames,
+  selectHasController,
 } from "../redux-modules/hhdSlice";
 import HhdComponent, { renderChild } from "./HhdComponent";
 import { useSetHhdState } from "../hooks/controller";
@@ -28,13 +29,19 @@ const HhdTabbedState = () => {
   const sectionNames = useSelector(selectSectionNames);
 
   const setState = useSetHhdState();
+  const controller = useSelector(selectHasController);
 
   const shouldRenderParent = useShouldRenderParent();
 
   return (
     <Card width={CONTENT_WIDTH}>
-      <Tabs defaultIndex={0} size="md" orientation="vertical">
+      <Tabs defaultIndex={1} size="md" orientation="vertical">
         <TabList style={{ padding: "1rem 0" }}>
+          {controller && (
+            <Tab isDisabled justifyContent="end">
+              (LB)
+            </Tab>
+          )}
           {Object.entries(settings).map(([name, plugins], idx) => {
             if (!shouldRenderParent(plugins)) {
               return null;
@@ -44,10 +51,20 @@ const HhdTabbedState = () => {
               label = sectionNames[name];
             }
 
-            return <Tab key={`tablist-tab-${idx}`}>{label}</Tab>;
+            return (
+              <Tab justifyContent="end" key={`tablist-tab-${idx}`}>
+                {label}
+              </Tab>
+            );
           })}
+          {controller && (
+            <Tab isDisabled justifyContent="end">
+              (RB)
+            </Tab>
+          )}
         </TabList>
         <TabPanels>
+          {controller && <TabPanel></TabPanel>}
           {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
             if (!shouldRenderParent(plugins)) {
               return null;
