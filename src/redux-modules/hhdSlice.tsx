@@ -63,7 +63,7 @@ const initialState = {
   uiType: "expanded",
   prevUiType: "init",
   appType: "web",
-  controller: true,
+  controller: false,
   settingsState: {},
   settings: {},
   loading: {

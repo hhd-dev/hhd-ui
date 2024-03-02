@@ -3,8 +3,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
-  RouterProvider,
   Route,
+  RouterProvider,
   Routes,
   createHashRouter,
 } from "react-router-dom";
@@ -15,12 +15,13 @@ import { AppDispatch, store } from "./redux-modules/store.tsx";
 
 import BackgroundDark from "./assets/background_dark.svg";
 import BackgroundLight from "./assets/background_light.svg";
-import * as electronUtils from "./utils/electronUtils.tsx";
+import { useHddRelayEffect } from "./hooks/electron.tsx";
 import hhdSlice, {
   selectAppType,
   selectUiType,
 } from "./redux-modules/hhdSlice.tsx";
-import { useHddRelayEffect } from "./hooks/electron.tsx";
+import "./utils/controller.tsx";
+import * as electronUtils from "./utils/electronUtils.tsx";
 
 declare global {
   interface Window {
