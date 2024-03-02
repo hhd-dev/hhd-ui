@@ -20,8 +20,10 @@ import hhdSlice, {
   selectAppType,
   selectUiType,
 } from "./redux-modules/hhdSlice.tsx";
-import "./utils/controller.tsx";
 import * as electronUtils from "./utils/electronUtils.tsx";
+import { setupGamepadEventListener } from "./controller/controller.tsx";
+
+setupGamepadEventListener();
 
 declare global {
   interface Window {

@@ -22,6 +22,7 @@ import { capitalize } from "lodash";
 import { CONTENT_WIDTH } from "./theme";
 import { useShouldRenderParent } from "../hooks/conditionalRender";
 import { ControllerButton } from "./Controller";
+import SectionButton from "./SectionButton";
 
 const HhdTabbedState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -36,7 +37,7 @@ const HhdTabbedState = () => {
 
   return (
     <Card width={CONTENT_WIDTH}>
-      <Tabs defaultIndex={1} size="md" orientation="vertical" isLazy>
+      <Tabs defaultIndex={0} size="md" orientation="vertical" isLazy>
         <TabList style={{ padding: "1rem 0" }}>
           {controller && (
             <ControllerButton
@@ -56,9 +57,11 @@ const HhdTabbedState = () => {
             }
 
             return (
-              <Tab justifyContent="end" key={`tablist-tab-${idx}`}>
-                {label}
-              </Tab>
+              <SectionButton
+                label={label}
+                justifyContent="end"
+                key={`tablist-tab-${idx}`}
+              />
             );
           })}
           {controller && (
