@@ -20,7 +20,6 @@ import { useUpdateHhdStatePending } from "../hooks/controller";
 import {
   SettingType,
   SettingsType,
-  selectIsQam,
   selectShowHintModal,
 } from "../redux-modules/hhdSlice";
 import HhdModesDropdown from "./HhdModesDropdown";
@@ -42,6 +41,7 @@ interface HhdComponentType extends SettingsType {
   // statePath is the path to set/get the currently set value from state
   // e.g.such as lodash.get(state, 'xinput.ds5e.led_support')
   statePath?: string;
+  isQam: boolean;
 }
 
 const HhdComponent: FC<HhdComponentType> = memo(
@@ -63,14 +63,14 @@ const HhdComponent: FC<HhdComponentType> = memo(
     unit,
     tags,
     updateState,
+    isQam,
     default: defaultValue,
   }) => {
     const updating = useUpdateHhdStatePending();
     const componentRef = useRef<HTMLInputElement>(null);
 
-    const shouldRenderChild = useShouldRenderChild();
+    const shouldRenderChild = useShouldRenderChild(isQam);
     const showModals = useSelector(selectShowHintModal);
-    const isQam = useSelector(selectIsQam);
 
     if (tags && !shouldRenderChild(tags)) {
       return null;
@@ -91,6 +91,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
             updateState,
             tags,
             statePath: statePath ? `${statePath}.${childName}` : `${childName}`,
+            isQam,
           });
         });
       return;
@@ -144,6 +145,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
             hint={hint}
             renderChild={renderChild}
             updating={updating}
+            isQam={isQam}
           />
         </ErrorBoundary>
       );
@@ -296,6 +298,7 @@ export const renderChild = ({
   tags,
   updateState,
   depth,
+  isQam,
 }: HhdChildComponentType) => {
   return (
     <HhdComponent
@@ -308,6 +311,7 @@ export const renderChild = ({
       state={state}
       tags={tags}
       updateState={updateState}
+      isQam={isQam}
       {...child}
     />
   );

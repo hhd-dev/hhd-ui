@@ -37,7 +37,7 @@ const HhdQamState = () => {
     useSelector(selectHhdSettings);
   const sectionNames = useSelector(selectSectionNames);
   const setState = useSetHhdState();
-  const shouldRenderParent = useShouldRenderParent();
+  const shouldRenderParent = useShouldRenderParent(true);
   const dispatch = useDispatch();
   const controller = useSelector(selectHasController);
   const appType = useSelector(selectAppType);
@@ -60,7 +60,7 @@ const HhdQamState = () => {
         height="100vh"
         position="absolute"
         overflowY="scroll"
-        css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
+        // css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
         boxShadow="dark-lg"
         sx={{
           "::-webkit-scrollbar": {
@@ -149,6 +149,7 @@ const HhdQamState = () => {
                               renderChild={renderChild}
                               statePath={statePath}
                               updateState={setState}
+                              isQam={true}
                             />
                           </ErrorBoundary>
                         );

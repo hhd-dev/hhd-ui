@@ -13,9 +13,9 @@ export const QAM_FILTERS = [
   ...DEFAULT_HIDDEN,
 ];
 
-export const useShouldRenderChild = (filters: string[] | null = null) => {
+export const useShouldRenderChild = (isQam: boolean) => {
   const currentFilters = useFilters();
-  const actualFilters = filters || currentFilters;
+  const actualFilters = isQam ? QAM_FILTERS : currentFilters;
 
   const shouldRenderChild = (
     tags: string[] | null,
@@ -46,17 +46,14 @@ export const useShouldRenderChild = (filters: string[] | null = null) => {
 
 function useFilters() {
   const tagFilter = useSelector(selectTagFilter);
-  const uiType = useSelector(selectUiType);
-
-  if (uiType === "qam") return QAM_FILTERS;
 
   return tagFilter === "advanced"
     ? ["expert", ...DEFAULT_HIDDEN]
     : DEFAULT_HIDDEN;
 }
 
-export const useShouldRenderParent = (filters: string[] | null = null) => {
-  const shouldRenderChild = useShouldRenderChild(filters);
+export const useShouldRenderParent = (isQam: boolean = false) => {
+  const shouldRenderChild = useShouldRenderChild(isQam);
 
   function parentClosure(plugins: { [key: string]: any }) {
     return Object.values(plugins).some((p) =>

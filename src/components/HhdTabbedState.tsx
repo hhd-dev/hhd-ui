@@ -32,7 +32,7 @@ const HhdTabbedState = () => {
   const setState = useSetHhdState();
   const controller = useSelector(selectHasController);
 
-  const shouldRenderParent = useShouldRenderParent();
+  const shouldRenderParent = useShouldRenderParent(false);
 
   return (
     <Card width={CONTENT_WIDTH}>
@@ -91,6 +91,7 @@ const HhdTabbedState = () => {
                           renderChild={renderChild}
                           statePath={statePath}
                           updateState={setState}
+                          isQam={false}
                         />
                       </ErrorBoundary>
                     </TabPanel>

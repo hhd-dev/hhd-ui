@@ -178,10 +178,6 @@ export const selectShowHintModal = (state: RootState) => {
   return state.hhd.appType !== "overlay" || state.hhd.uiType !== "qam";
 };
 
-export const selectIsQam = (state: RootState) => {
-  return state.hhd.appType === "overlay" && state.hhd.uiType === "qam";
-};
-
 export const selectHhdSettingsLoading = (state: RootState) =>
   state.hhd.loading.settings;
 

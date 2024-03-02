@@ -28,6 +28,7 @@ type DropdownProps = {
   hint?: string;
   renderChild: any;
   updating: boolean;
+  isQam: boolean;
 };
 
 const HhdModesDropdown: FC<DropdownProps> = ({
@@ -42,12 +43,13 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   updateState,
   renderChild,
   updating,
+  isQam,
 }) => {
   const currentMode = modes[selectedValue];
   const modeTags = currentMode ? currentMode.tags : null;
   const type = currentMode ? currentMode.type : null;
   const children = currentMode ? Object.entries(currentMode.children) : [];
-  const shouldRenderChild = useShouldRenderChild();
+  const shouldRenderChild = useShouldRenderChild(isQam);
 
   const createClickHandler = (value: any) => () => {
     if (updating) {
