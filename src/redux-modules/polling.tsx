@@ -11,9 +11,9 @@ const MIN_WAITTIME_NEW = 250;
 const MIN_WAITTIME_OLD = 1000;
 const ERROR_WAITTIME = 3000;
 
-async function pollState(a: AbortController) {
+async function pollState(a: AbortController, reload: boolean) {
   let start = Date.now();
-  let initial = true;
+  let initial = reload;
   try {
     while (!a.signal.aborted) {
       // Fetch
@@ -76,11 +76,11 @@ async function pollState(a: AbortController) {
   } catch (e) {}
 }
 
-export const enablePolling = () => {
+export const enablePolling = (reload: boolean) => {
   if (abort) return;
   try {
     abort = new AbortController();
-    pollState(abort).catch((_) => {});
+    pollState(abort, reload).catch((_) => {});
   } catch (e) {
     console.log(e);
   }

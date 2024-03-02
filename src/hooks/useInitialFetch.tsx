@@ -5,6 +5,8 @@ import {
   TagFilters,
 } from "../components/TagFilterDropdown";
 import {
+  fetchHhdSettings,
+  fetchHhdSettingsState,
   fetchSectionNames,
 } from "../redux-modules/hhdAsyncThunks";
 import hhdSlice from "../redux-modules/hhdSlice";
@@ -16,7 +18,7 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     disablePolling();
   } else {
-    enablePolling();
+    enablePolling(true);
   }
 });
 
@@ -31,9 +33,11 @@ function useInitialFetch() {
     if (tagFilter && TagFilters[tagFilter]) {
       dispatch(hhdSlice.actions.setTagFilter(tagFilter));
     }
-
-    enablePolling();
+    
+    dispatch(fetchHhdSettings());
+    dispatch(fetchHhdSettingsState());
     dispatch(fetchSectionNames());
+    enablePolling(false);
   }, []);
 }
 
