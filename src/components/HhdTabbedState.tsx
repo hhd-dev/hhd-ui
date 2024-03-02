@@ -43,7 +43,7 @@ const HhdTabbedState = () => {
               alignSelf="end"
               button="lb"
               w="2.5rem"
-              margin="-0.6rem 0.5rem -0.4rem 0"
+              margin="-0.6rem 0.5rem -0.1rem 0"
             />
           )}
           {Object.entries(settings).map(([name, plugins], idx) => {
