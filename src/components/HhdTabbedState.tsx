@@ -14,7 +14,6 @@ import {
   Tabs,
   TabList,
   TabPanels,
-  Tab,
   TabPanel,
   Box,
 } from "@chakra-ui/react";

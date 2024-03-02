@@ -13,6 +13,9 @@ import {
 import ExpandedUi from "./components/ExpandedUi";
 import useInitialFetch from "./hooks/useInitialFetch";
 import HhdQamState from "./components/HhdQamState";
+import { setupGamepadEventListener } from "./controller/controller";
+
+setupGamepadEventListener();
 
 const App = memo(() => {
   useInitialFetch();
