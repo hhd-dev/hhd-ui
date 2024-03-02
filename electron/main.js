@@ -124,7 +124,7 @@ function initMainWindow() {
   if (isSteamUi || isOverlayUi) {
     // Assume we are on a screen the size of the deck
     // And add a bit of zoom even for that
-    const SCREEN_RATIO = 1.2;
+    const SCREEN_RATIO = 1.1;
     scaleFactor = (SCREEN_RATIO * width) / 1280;
     scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
     console.error("Launching in steamui. Zoom factor: " + scaleFactor);
