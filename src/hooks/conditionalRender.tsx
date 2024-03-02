@@ -6,7 +6,12 @@ export const DEFAULT_HIDDEN = [
   "hhd-update-decky",
   "hhd-version-display-decky",
 ];
-export const QAM_FILTERS = ["advanced", "expert", ...DEFAULT_HIDDEN];
+export const QAM_FILTERS = [
+  "non-essential",
+  "advanced",
+  "expert",
+  ...DEFAULT_HIDDEN,
+];
 
 export const useShouldRenderChild = (filters: string[] | null = null) => {
   const currentFilters = useFilters();
