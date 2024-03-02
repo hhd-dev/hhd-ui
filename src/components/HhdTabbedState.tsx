@@ -39,14 +39,12 @@ const HhdTabbedState = () => {
       <Tabs defaultIndex={1} size="md" orientation="vertical">
         <TabList style={{ padding: "1rem 0" }}>
           {controller && (
-            <Tab isDisabled justifyContent="end">
-              <ControllerButton
-                button="lb"
-                w="2.5rem"
-                marginBottom="-.6rem"
-                marginTop="-0.8rem"
-              />
-            </Tab>
+            <ControllerButton
+              alignSelf="end"
+              button="lb"
+              w="2.5rem"
+              margin="-0.6rem 0.5rem -0.4rem 0"
+            />
           )}
           {Object.entries(settings).map(([name, plugins], idx) => {
             if (!shouldRenderParent(plugins)) {
@@ -64,13 +62,15 @@ const HhdTabbedState = () => {
             );
           })}
           {controller && (
-            <Tab isDisabled justifyContent="end">
-              <ControllerButton button="rb" w="2.5rem" marginTop="-.6rem" />
-            </Tab>
+            <ControllerButton
+              alignSelf="end"
+              button="rb"
+              w="2.5rem"
+              margin="-0.4rem 0.5rem -0.4rem 0"
+            />
           )}
         </TabList>
         <TabPanels>
-          {controller && <TabPanel></TabPanel>}
           {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
             if (!shouldRenderParent(plugins)) {
               return null;

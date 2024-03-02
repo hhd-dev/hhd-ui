@@ -26,8 +26,9 @@ export const ControllerButton = ({ button, invert, ...props }: any) => {
   }
 
   let filter = null;
+  console.log(colorMode);
   if (colorMode === "dark" && invert) filter = "brightness(0%)";
-  if (colorMode === "light" && invert) filter = "brightness(0%)";
+  if (colorMode === "light" && !invert) filter = "brightness(0%)";
 
   if (!logo) {
     console.error(`Controller button ${button} not found`);
