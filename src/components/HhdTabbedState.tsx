@@ -36,7 +36,7 @@ const HhdTabbedState = () => {
 
   return (
     <Card width={CONTENT_WIDTH}>
-      <Tabs defaultIndex={1} size="md" orientation="vertical">
+      <Tabs defaultIndex={1} size="md" orientation="vertical" isLazy>
         <TabList style={{ padding: "1rem 0" }}>
           {controller && (
             <ControllerButton
