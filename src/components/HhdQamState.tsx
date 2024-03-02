@@ -38,7 +38,13 @@ const HhdQamState = () => {
   const controller = useSelector(selectHasController);
 
   return (
-    <Card width={QAM_WIDTH} h="fit-content">
+    <Card
+      width={QAM_WIDTH}
+      minH="100vh"
+      h="fit-content"
+      margin="0"
+      borderRadius="0"
+    >
       <CardHeader>
         <Flex>
           <Heading>

@@ -30,7 +30,7 @@ const QamUi: FC = () => {
         position="absolute"
         overflowY="scroll"
         css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
-        boxShadow="2xl"
+        boxShadow="dark-lg"
       >
         <HhdQamState />
       </Flex>
