@@ -19,30 +19,26 @@ export const useShouldRenderChild = (filters: string[] | null = null) => {
 
   const shouldRenderChild = (
     tags: string[] | null,
-    children: any[] | null = null
-  ) => {
+    children: any[] | null = null,
+    modes: any[] | null = null
+  ): boolean => {
     if (tags && tags.some((v: string) => actualFilters.includes(v))) {
-      // if parent for children shuoldn't be rendered, no children should be rendered
       return false;
     }
 
-    if (children == null) return true;
-
-    if (!children) {
-      return false;
+    if (children) {
+      return Object.values(children).some((c) =>
+        shouldRenderChild(c.tags, c.children, c.modes)
+      );
     }
 
-    const res = Object.values(children).map((c) => {
-      const { tags } = c as any;
-      if (!tags) {
-        return true;
-      }
-      return !tags.some((v: string) => actualFilters.includes(v));
-    });
+    if (modes) {
+      return Object.values(modes).some((c) => {
+        return shouldRenderChild(c.tags, c.children, c.modes);
+      });
+    }
 
-    // if there's any true values
-    // this means there is a child that should be rendered
-    return res.indexOf(true) >= 0;
+    return true;
   };
 
   return shouldRenderChild;
@@ -64,7 +60,7 @@ export const useShouldRenderParent = (filters: string[] | null = null) => {
 
   function parentClosure(plugins: { [key: string]: any }) {
     return Object.values(plugins).some((p) =>
-      shouldRenderChild(p.tags, p.children)
+      shouldRenderChild(p.tags, p.children, p.modes)
     );
   }
   return parentClosure;

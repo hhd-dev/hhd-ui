@@ -14,6 +14,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { FC } from "react";
+import { useShouldRenderChild } from "../hooks/conditionalRender";
 
 type DropdownProps = {
   modes: { [value: string]: any };
@@ -43,8 +44,10 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   updating,
 }) => {
   const currentMode = modes[selectedValue];
+  const modeTags = currentMode ? currentMode.tags : null;
   const type = currentMode ? currentMode.type : null;
   const children = currentMode ? Object.entries(currentMode.children) : [];
+  const shouldRenderChild = useShouldRenderChild();
 
   const createClickHandler = (value: any) => () => {
     if (updating) {
@@ -89,7 +92,8 @@ const HhdModesDropdown: FC<DropdownProps> = ({
           ></Divider>
         </Center>
         <Stack flexGrow="1">
-          {children &&
+          {shouldRenderChild(modeTags, null, children) &&
+            children &&
             children.length > 0 &&
             children.map(([childName, child], idx) => {
               return renderChild({
