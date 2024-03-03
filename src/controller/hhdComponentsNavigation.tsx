@@ -4,26 +4,41 @@ let hhdComponents: HTMLElement[] = [];
 
 let currentSectionIndex = 0;
 
-const prevItem = debounce(prevItemOriginal, 70);
-const nextItem = debounce(nextItemOriginal, 70);
-
 export const navigateHhdComponents = (gp: Gamepad) => {
+  const el = document.activeElement;
   const dPadUp = gp.buttons[12];
   const dPadDown = gp.buttons[13];
+  const dPadLeft = gp.buttons[14];
+  const dPadRight = gp.buttons[15];
+  const aButton = gp.buttons[0];
+  const bButton = gp.buttons[1];
 
   try {
-    if (dPadUp.pressed || dPadDown.pressed) {
-      const currentEl = document.activeElement as HTMLElement;
-      if (!hhdComponents.includes(currentEl)) {
-        focusCurrentHhdElement();
+    if (dPadUp.pressed) {
+      if (el?.role === "menuitemradio") {
+        sendButtonPressToElectron("up");
+      } else {
+        sendButtonPressToElectron("dPadUp");
       }
     }
-
-    if (dPadUp.pressed) {
-      prevItem();
-    }
     if (dPadDown.pressed) {
-      nextItem();
+      if (el?.role === "menuitemradio") {
+        sendButtonPressToElectron("down");
+      } else {
+        sendButtonPressToElectron("dPadDown");
+      }
+    }
+    if (dPadLeft.pressed) {
+      sendButtonPressToElectron("dPadLeft");
+    }
+    if (dPadRight.pressed) {
+      sendButtonPressToElectron("dPadRight");
+    }
+    if (aButton.pressed) {
+      sendButtonPressToElectron("aButton");
+    }
+    if (bButton.pressed) {
+      sendButtonPressToElectron("bButton");
     }
   } catch (e) {
     console.error("error while listening for section buttons", e);
@@ -43,22 +58,13 @@ export const resetHhdElements = () => {
   hhdComponents = [];
 };
 
-function prevItemOriginal() {
-  if (currentSectionIndex === 0) {
-    currentSectionIndex = hhdComponents.length - 1;
-  } else {
-    currentSectionIndex--;
-  }
-  //   console.log(hhdComponents[currentSectionIndex]);
-  hhdComponents[currentSectionIndex].focus();
-}
+const sendButtonPressToElectron = debounce(
+  sendButtonPressToElectronOriginal,
+  70
+);
 
-function nextItemOriginal() {
-  if (currentSectionIndex == hhdComponents.length - 1) {
-    currentSectionIndex = 0;
-  } else {
-    currentSectionIndex++;
+function sendButtonPressToElectronOriginal(buttonPressed: string) {
+  if (window.electronUtilsRender?.gamepadButtonPress) {
+    window.electronUtilsRender.gamepadButtonPress(buttonPressed);
   }
-  // console.log(hhdComponents[currentSectionIndex]);
-  hhdComponents[currentSectionIndex].focus();
 }
