@@ -162,7 +162,7 @@ function fileProtocolRedirect() {
   );
 }
 
-app.disableHardwareAcceleration()
+app.disableHardwareAcceleration();
 app.whenReady().then(() => createMainWindow());
 
 app.on("window-all-closed", () => {
