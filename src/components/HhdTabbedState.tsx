@@ -19,24 +19,30 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { CONTENT_WIDTH } from "./theme";
-import { useShouldRenderParent } from "../hooks/conditionalRender";
 import { ControllerButton } from "./Controller";
 import SectionButton from "./SectionButton";
+import { useState } from "react";
+import { useFilteredSettings } from "../hooks/conditionalRender";
 
 const HhdTabbedState = () => {
+  const [tabIndex, setTabIndex] = useState(0);
   const state = useSelector(selectHhdSettingsState);
-  const settings: { [key: string]: { [key: string]: SettingsType } } =
-    useSelector(selectHhdSettings);
+
   const sectionNames = useSelector(selectSectionNames);
 
   const setState = useSetHhdState();
   const controller = useSelector(selectHasController);
 
-  const shouldRenderParent = useShouldRenderParent(false);
+  const settings = useFilteredSettings();
 
   return (
     <Card width={CONTENT_WIDTH}>
-      <Tabs defaultIndex={0} size="md" orientation="vertical" isLazy>
+      <Tabs
+        onChange={(index) => setTabIndex(index)}
+        size="md"
+        orientation="vertical"
+        isLazy
+      >
         <TabList style={{ padding: "1rem 0" }}>
           {controller && (
             <ControllerButton
@@ -47,9 +53,6 @@ const HhdTabbedState = () => {
             />
           )}
           {Object.entries(settings).map(([name, plugins], idx) => {
-            if (!shouldRenderParent(plugins)) {
-              return null;
-            }
             let label = name.split("_").map(capitalize).join("\u00a0");
             if (sectionNames && sectionNames[name]) {
               label = sectionNames[name];
@@ -74,9 +77,6 @@ const HhdTabbedState = () => {
         </TabList>
         <TabPanels>
           {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
-            if (!shouldRenderParent(plugins)) {
-              return null;
-            }
             return (
               <Box key={topIdx}>
                 {Object.keys(plugins).map((pluginName, idx) => {
@@ -84,18 +84,20 @@ const HhdTabbedState = () => {
                   const statePath = `${topLevelStr}.${pluginName}`;
 
                   return (
-                    <TabPanel key={`${statePath}${topIdx}${idx}`}>
-                      <ErrorBoundary>
-                        <HhdComponent
-                          {...plugin}
-                          state={state}
-                          childName={pluginName}
-                          renderChild={renderChild}
-                          statePath={statePath}
-                          updateState={setState}
-                          isQam={false}
-                        />
-                      </ErrorBoundary>
+                    <TabPanel key={`${idx}${tabIndex}`}>
+                      {topIdx === tabIndex ? (
+                        <ErrorBoundary>
+                          <HhdComponent
+                            {...plugin}
+                            state={state}
+                            childName={pluginName}
+                            renderChild={renderChild}
+                            statePath={statePath}
+                            updateState={setState}
+                            isQam={false}
+                          />
+                        </ErrorBoundary>
+                      ) : null}
                     </TabPanel>
                   );
                 })}

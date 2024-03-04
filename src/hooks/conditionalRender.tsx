@@ -1,5 +1,10 @@
 import { useSelector } from "react-redux";
-import { selectTagFilter, selectUiType } from "../redux-modules/hhdSlice";
+import {
+  SettingsType,
+  selectTagFilter,
+  selectUiType,
+  selectHhdSettings,
+} from "../redux-modules/hhdSlice";
 
 export const DEFAULT_HIDDEN = [
   "hidden",
@@ -61,4 +66,18 @@ export const useShouldRenderParent = (isQam: boolean = false) => {
     );
   }
   return parentClosure;
+};
+
+export const useFilteredSettings = () => {
+  const settings: { [key: string]: { [key: string]: SettingsType } } =
+    useSelector(selectHhdSettings);
+  const shouldRenderParent = useShouldRenderParent(false);
+
+  Object.entries(settings).forEach(([name, plugins]) => {
+    if (!shouldRenderParent(plugins) && settings[name]) {
+      delete settings[name];
+    }
+  });
+
+  return settings;
 };

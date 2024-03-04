@@ -8,6 +8,7 @@ import {
   selectHhdSettingsLoading,
   selectHhdSettingsState,
   selectHhdSettingsStateLoading,
+  selectUiType,
 } from "./redux-modules/hhdSlice";
 
 import ExpandedUi from "./components/ExpandedUi";
@@ -20,8 +21,9 @@ setupGamepadEventListener();
 const App = memo(() => {
   useInitialFetch();
   const appType = useSelector(selectAppType);
+  const uiType = useSelector(selectUiType);
 
-  const shouldRenderQam = appType === "overlay";
+  const shouldRenderQam = appType === "overlay" && uiType === "qam";
 
   const settingsLoading = useSelector(selectHhdSettingsLoading);
   const stateLoading = useSelector(selectHhdSettingsStateLoading);
@@ -33,12 +35,7 @@ const App = memo(() => {
     return null;
   }
 
-  return (
-    <>
-      {shouldRenderQam ? <HhdQamState /> : null}
-      <ExpandedUi />
-    </>
-  );
+  return <>{shouldRenderQam ? <HhdQamState /> : <ExpandedUi />}</>;
 });
 
 function useVerifyTokenRedirect(
