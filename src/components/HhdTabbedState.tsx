@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import {
   SettingsType,
   selectHhdSettingsState,
-  selectHhdSettings,
   selectSectionNames,
   selectHasController,
 } from "../redux-modules/hhdSlice";
@@ -21,8 +20,9 @@ import { capitalize } from "lodash";
 import { CONTENT_WIDTH } from "./theme";
 import { ControllerButton } from "./Controller";
 import SectionButton from "./SectionButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFilteredSettings } from "../hooks/conditionalRender";
+import { resetSectionElements } from "../controller/sectionsNavigation";
 
 const HhdTabbedState = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -34,6 +34,12 @@ const HhdTabbedState = () => {
   const controller = useSelector(selectHasController);
 
   const settings = useFilteredSettings();
+
+  useEffect(() => {
+    return () => {
+      resetSectionElements();
+    };
+  }, []);
 
   return (
     <Card width={CONTENT_WIDTH}>
