@@ -8,6 +8,7 @@ import {
   selectHhdSettingsLoading,
   selectHhdSettingsState,
   selectHhdSettingsStateLoading,
+  selectPrevUiType,
   selectUiType,
 } from "./redux-modules/hhdSlice";
 
@@ -22,8 +23,7 @@ const App = memo(() => {
   useInitialFetch();
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
-
-  const shouldRenderExpandedUi = appType === "overlay" && uiType !== "qam";
+  const prevUiType = useSelector(selectPrevUiType);
 
   const settingsLoading = useSelector(selectHhdSettingsLoading);
   const stateLoading = useSelector(selectHhdSettingsStateLoading);
@@ -32,14 +32,21 @@ const App = memo(() => {
   useVerifyTokenRedirect(stateLoading, settingsLoading, state);
 
   if (!state || stateLoading == "pending" || settingsLoading == "pending") {
-    return null;
+    return null; // TODO: Implement spinner
   }
 
-  if (appType !== "overlay") {
+  if (
+    // Non-overlay apps always show expanded ui
+    appType !== "overlay" ||
+    // Expanded ui should show expanded
+    uiType === "expanded" ||
+    // When closing the ui expanded, show expanded UI too
+    (prevUiType === "expanded" && uiType === "closed")
+  )
     return <ExpandedUi />;
-  }
 
-  return <>{shouldRenderExpandedUi ? <ExpandedUi /> : <HhdQamState />}</>;
+  // Otherwise QAM is correct
+  return <HhdQamState />;
 });
 
 function useVerifyTokenRedirect(
