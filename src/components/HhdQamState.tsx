@@ -12,13 +12,15 @@ import {
   Slide,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { useShouldRenderParent } from "../hooks/conditionalRender";
+import {
+  useFilteredSettings,
+  useShouldRenderParent,
+} from "../hooks/conditionalRender";
 import { useSetHhdState } from "../hooks/controller";
 import hhdSlice, {
   SettingsType,
   selectAppType,
   selectHasController,
-  selectHhdSettings,
   selectHhdSettingsState,
   selectSectionNames,
   selectUiType,
@@ -33,15 +35,14 @@ import { ControllerButton } from "./Controller";
 
 const HhdQamState = () => {
   const state = useSelector(selectHhdSettingsState);
-  const settings: { [key: string]: { [key: string]: SettingsType } } =
-    useSelector(selectHhdSettings);
+  const settings = useFilteredSettings();
   const sectionNames = useSelector(selectSectionNames);
   const setState = useSetHhdState();
-  const shouldRenderParent = useShouldRenderParent(true);
   const dispatch = useDispatch();
   const controller = useSelector(selectHasController);
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
+  const shouldRenderParent = useShouldRenderParent(true);
 
   const isOpen = appType !== "overlay" || uiType === "qam";
   const { colorMode, toggleColorMode: _ } = useColorMode();
@@ -118,6 +119,7 @@ const HhdQamState = () => {
                   if (!shouldRenderParent(plugins)) {
                     return null;
                   }
+
                   let label = topLevelStr
                     .split("_")
                     .map(capitalize)
