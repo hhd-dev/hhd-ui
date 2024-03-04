@@ -90,7 +90,7 @@ const HhdTabbedState = () => {
                   const statePath = `${topLevelStr}.${pluginName}`;
 
                   return (
-                    <TabPanel key={`${idx}${tabIndex}`}>
+                    <TabPanel key={`${statePath}${topIdx}${idx}`}>
                       {topIdx === tabIndex ? (
                         <ErrorBoundary>
                           <HhdComponent

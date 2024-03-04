@@ -176,26 +176,22 @@ app.on("window-all-closed", () => {
 });
 
 function handleGamepadButtonPress(mainWindow, buttonName) {
-  if (buttonName === "bButton") {
+  function sendKeyCode(keyCode) {
     mainWindow.webContents.sendInputEvent({
       type: "keyDown",
-      keyCode: "escape",
+      keyCode,
     });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode: "escape" });
+    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode });
+  }
+
+  if (buttonName === "bButton") {
+    sendKeyCode("escape");
   }
   if (buttonName === "aButton") {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "space",
-    });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode: "space" });
+    sendKeyCode("space");
   }
   if (buttonName === "dPadDown") {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "tab",
-    });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode: "tab" });
+    sendKeyCode("tab");
   }
   if (buttonName === "dPadUp") {
     mainWindow.webContents.sendInputEvent({
@@ -218,31 +214,15 @@ function handleGamepadButtonPress(mainWindow, buttonName) {
     });
   }
   if (buttonName == "dPadLeft") {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "left",
-    });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode: "left" });
+    sendKeyCode("left");
   }
   if (buttonName == "dPadRight") {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "right",
-    });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode: "right" });
+    sendKeyCode("right");
   }
   if (buttonName == "up") {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "up",
-    });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode: "up" });
+    sendKeyCode("up");
   }
   if (buttonName == "down") {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "down",
-    });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode: "down" });
+    sendKeyCode("down");
   }
 }
