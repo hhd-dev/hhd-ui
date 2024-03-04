@@ -23,7 +23,7 @@ const App = memo(() => {
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
 
-  const shouldRenderQam = appType === "overlay" && uiType === "qam";
+  const shouldRenderExpandedUi = appType === "overlay" && uiType !== "qam";
 
   const settingsLoading = useSelector(selectHhdSettingsLoading);
   const stateLoading = useSelector(selectHhdSettingsStateLoading);
@@ -35,7 +35,11 @@ const App = memo(() => {
     return null;
   }
 
-  return <>{shouldRenderQam ? <HhdQamState /> : <ExpandedUi />}</>;
+  if (appType !== "overlay") {
+    return <ExpandedUi />;
+  }
+
+  return <>{shouldRenderExpandedUi ? <ExpandedUi /> : <HhdQamState />}</>;
 });
 
 function useVerifyTokenRedirect(
