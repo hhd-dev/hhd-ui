@@ -19,11 +19,21 @@ import { ControllerButton } from "./Controller";
 import ErrorBoundary from "./ErrorBoundary";
 import ContainerComponent from "./elements/ContainerComponent";
 import { CONTENT_WIDTH } from "./theme";
+import {
+  useShouldRenderChild,
+  useShouldRenderParent,
+} from "../hooks/conditionalRender";
 
 const TabbedState = () => {
   const sectionNames = useSelector(selectSectionNames);
   const controller = useSelector(selectHasController);
-  const settings = useSelector(selectSettings);
+  const fullSettings = useSelector(selectSettings);
+  const shouldRenderParent = useShouldRenderParent(false);
+  const shouldRenderChild = useShouldRenderChild(false);
+
+  const settings = Object.fromEntries(
+    Object.entries(fullSettings).filter((c) => shouldRenderParent(c[1]))
+  );
 
   const { currentIndex, setCurrentIndex } = useSectionNav(
     "tab",
@@ -74,6 +84,7 @@ const TabbedState = () => {
               <Box key={section}>
                 {Object.entries(containers)
                   .filter(([_, s]) => s.type === "container")
+                  .filter(([_, s]) => shouldRenderChild(s))
                   .map(([name, settings]) => {
                     // const navigationCounter = useNavigationCounter();
                     const path = `${section}.${name}`;

@@ -1,11 +1,6 @@
 import { useSelector } from "react-redux";
-import {
-  SettingsType,
-  selectTagFilter,
-  selectUiType,
-  selectHhdSettings,
-} from "../model/slice";
 import { ContainerSetting, Setting } from "../model/common";
+import { selectTagFilter } from "../model/slice";
 
 export const DEFAULT_HIDDEN = [
   "hidden",

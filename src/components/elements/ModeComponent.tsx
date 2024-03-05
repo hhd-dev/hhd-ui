@@ -63,18 +63,19 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
           ></Divider>
         </Center>
         <Stack flexGrow="1">
-          {mode &&
-            shouldRenderChild(mode) &&
-            Object.entries(mode.children).map(([childName, childSet], idx) => {
-              return (
-                <ErrorBoundary title={title} key={idx}>
-                  <SettingComponent
-                    path={`${path}.${state}.${childName}`}
-                    settings={childSet}
-                  />
-                </ErrorBoundary>
-              );
-            })}
+          {mode && shouldRenderChild(mode) &&
+            Object.entries(mode.children)
+              .filter((c) => shouldRenderChild(c[1]))
+              .map(([childName, childSet], idx) => {
+                return (
+                  <ErrorBoundary title={title} key={idx}>
+                    <SettingComponent
+                      path={`${path}.${state}.${childName}`}
+                      settings={childSet}
+                    />
+                  </ErrorBoundary>
+                );
+              })}
         </Stack>
       </Flex>
     </>

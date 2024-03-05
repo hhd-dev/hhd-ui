@@ -13,7 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { useShouldRenderParent } from "../hooks/conditionalRender";
+import {
+  useShouldRenderChild,
+  useShouldRenderParent,
+} from "../hooks/conditionalRender";
 import hhdSlice, {
   selectAppType,
   selectHasController,
@@ -33,8 +36,13 @@ const QamState = () => {
   const controller = useSelector(selectHasController);
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
-  const settings = useSelector(selectSettings);
+  const fullSettings = useSelector(selectSettings);
   const shouldRenderParent = useShouldRenderParent(true);
+  const shouldRenderChild = useShouldRenderChild(true);
+
+  const settings = Object.fromEntries(
+    Object.entries(fullSettings).filter((c) => shouldRenderParent(c[1]))
+  );
 
   const isOpen = appType === "overlay" && uiType === "qam";
 
@@ -99,10 +107,6 @@ const QamState = () => {
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
               {Object.entries(settings).map(([section, containers]) => {
-                if (!shouldRenderParent(containers)) {
-                  return null;
-                }
-
                 let label = section.split("_").map(capitalize).join("\u00a0");
                 if (sectionNames && sectionNames[section]) {
                   label = sectionNames[section];
@@ -121,6 +125,7 @@ const QamState = () => {
                     </Heading>
                     {Object.entries(containers)
                       .filter(([_, s]) => s.type === "container")
+                      .filter(([_, s]) => shouldRenderChild(s))
                       .map(([name, settings]) => {
                         const path = `${section}.${name}`;
 

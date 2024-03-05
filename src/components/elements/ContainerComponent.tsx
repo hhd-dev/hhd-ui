@@ -28,8 +28,9 @@ const ContainerComponent: FC<ContainerProps> = ({
           </Flex>
         )}
         <Stack spacing="3">
-          {shouldRenderChild(set) &&
-            Object.entries(children).map(([childName, childSet], idx) => {
+          {Object.entries(children)
+            .filter(([_, s]) => shouldRenderChild(s))
+            .map(([childName, childSet], idx) => {
               const { type } = childSet;
               return (
                 <ErrorBoundary title={title} key={idx}>
