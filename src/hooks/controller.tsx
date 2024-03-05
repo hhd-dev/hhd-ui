@@ -12,6 +12,7 @@ export function useSettingState<A>(path: string) {
 
   const setState = (value: any) => {
     const action = updateHhdState({ path, value });
+    console.log(path, value);
     return dispatch(action);
   };
 

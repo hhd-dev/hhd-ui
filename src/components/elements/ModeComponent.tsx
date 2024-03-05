@@ -32,12 +32,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
       <Box>
         <FormLabel htmlFor={path}>{title}</FormLabel>
         <Menu>
-          <MenuButton
-            as={Button}
-            width="100%"
-            rightIcon={<ChevronDownIcon />}
-            onChange={setState}
-          >
+          <MenuButton as={Button} width="100%" rightIcon={<ChevronDownIcon />}>
             {mode?.title}
           </MenuButton>
           <MenuList>
@@ -45,7 +40,11 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
               {Object.entries(modes).map(
                 ([value, { title: label }], idx: number) => {
                   return (
-                    <MenuItemOption key={idx} value={value}>
+                    <MenuItemOption
+                      key={idx}
+                      value={value}
+                      onClick={() => setState(value)}
+                    >
                       {label}
                     </MenuItemOption>
                   );
@@ -70,7 +69,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
               return (
                 <ErrorBoundary title={title} key={idx}>
                   <SettingComponent
-                    path={`${path}.${childName}`}
+                    path={`${path}.${state}.${childName}`}
                     settings={childSet}
                   />
                 </ErrorBoundary>

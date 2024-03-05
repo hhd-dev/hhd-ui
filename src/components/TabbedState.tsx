@@ -38,7 +38,7 @@ const TabbedState = () => {
         orientation="vertical"
         index={currentIndex}
       >
-        <TabList style={{ padding: "1rem 0" }}>
+        <TabList padding="1rem 0">
           {controller && (
             <ControllerButton
               alignSelf="end"
@@ -68,7 +68,7 @@ const TabbedState = () => {
             />
           )}
         </TabList>
-        <TabPanels>
+        <TabPanels padding="0.5rem 0">
           {Object.entries(settings).map(([section, containers]) => {
             return (
               <Box key={section}>

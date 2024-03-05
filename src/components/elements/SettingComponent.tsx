@@ -30,7 +30,11 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path }) => {
     <Flex flexDirection="row">
       <FormLabel htmlFor={path}>{title}</FormLabel>
       <Box flexGrow="1"></Box>
-      <Checkbox id={path} isChecked={Boolean(state)} onChange={setState} />
+      <Checkbox
+        id={path}
+        isChecked={Boolean(state)}
+        onChange={(e) => setState(e.target.checked)}
+      />
     </Flex>
   );
 };
@@ -47,11 +51,11 @@ const DiscreteComponent: FC<SettingProps> = ({ settings: set, path }) => {
           {state}
         </MenuButton>
         <MenuList>
-          <MenuOptionGroup type="radio" onChange={setState}>
-            {options.map((o: any, idx: number) => {
+          <MenuOptionGroup type="radio">
+            {options.map((value) => {
               return (
-                <MenuItemOption key={idx} value={o}>
-                  {o}
+                <MenuItemOption key={value} onClick={() => setState(value)}>
+                  {value}
                 </MenuItemOption>
               );
             })}
@@ -70,18 +74,18 @@ const MultipleComponent: FC<SettingProps> = ({ settings: set, path }) => {
     <Flex flexDirection="column">
       <FormLabel htmlFor={path}>{title}</FormLabel>
       <Menu>
-        <MenuButton
-          as={Button}
-          rightIcon={<ChevronDownIcon />}
-          onChange={setState}
-        >
+        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
           {state && options[state]}
         </MenuButton>
         <MenuList>
           <MenuOptionGroup type="radio">
             {Object.entries(options).map(([value, label], idx: number) => {
               return (
-                <MenuItemOption key={idx} value={value}>
+                <MenuItemOption
+                  key={idx}
+                  value={value}
+                  onClick={() => setState(value)}
+                >
                   {label}
                 </MenuItemOption>
               );
@@ -97,7 +101,7 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title } = set as MultipleSetting;
   const { state, setState: _ } = useSettingState<number>(path);
 
-  if (!state) return <></>
+  if (!state) return <></>;
 
   return (
     <Code padding="1rem">

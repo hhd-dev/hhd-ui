@@ -3,7 +3,8 @@ import { FC } from "react";
 import { useShouldRenderChild } from "../../hooks/conditionalRender";
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
-import { ContainerProps } from "../../model/common";
+import { ContainerProps, ModeSetting } from "../../model/common";
+import ModeComponent from "./ModeComponent";
 
 const ContainerComponent: FC<ContainerProps> = ({
   settings: set,
@@ -29,12 +30,21 @@ const ContainerComponent: FC<ContainerProps> = ({
         <Stack spacing="3">
           {shouldRenderChild(set) &&
             Object.entries(children).map(([childName, childSet], idx) => {
+              const { type } = childSet;
               return (
                 <ErrorBoundary title={title} key={idx}>
-                  <SettingComponent
-                    path={`${path}.${childName}`}
-                    settings={childSet}
-                  />
+                  {type === "mode" ? (
+                    <ModeComponent
+                      path={`${path}.${childName}`}
+                      settings={childSet as ModeSetting}
+                      qam={qam}
+                    />
+                  ) : (
+                    <SettingComponent
+                      path={`${path}.${childName}`}
+                      settings={childSet}
+                    />
+                  )}
                 </ErrorBoundary>
               );
             })}
