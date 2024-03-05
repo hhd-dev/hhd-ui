@@ -25,12 +25,13 @@ import hhdSlice, {
   selectUiType,
 } from "../redux-modules/hhdSlice";
 import ErrorBoundary from "./ErrorBoundary";
-import HhdComponent, { renderChild } from "./HhdComponent";
+import HhdComponent from "./HhdComponent";
 import { QAM_WIDTH } from "./theme";
 import HhdLogo from "./HhdLogo";
 import { capitalize } from "lodash";
 import { CloseIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 import { ControllerButton } from "./Controller";
+import { useNavigationCounter } from "../hooks/navigation";
 
 const HhdQamState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -120,6 +121,9 @@ const HhdQamState = () => {
                   if (sectionNames && sectionNames[topLevelStr]) {
                     label = sectionNames[topLevelStr];
                   }
+
+                  const navigationCounter = useNavigationCounter();
+
                   return (
                     <Box key={topIdx}>
                       <Heading
@@ -141,10 +145,10 @@ const HhdQamState = () => {
                               {...plugin}
                               state={state}
                               childName={pluginName}
-                              renderChild={renderChild}
                               statePath={statePath}
                               updateState={setState}
                               isQam={true}
+                              navigationCounter={navigationCounter}
                             />
                           </ErrorBoundary>
                         );

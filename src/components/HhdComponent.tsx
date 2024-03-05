@@ -11,11 +11,10 @@ import {
   MenuButton,
   MenuList,
   MenuOptionGroup,
-  Select,
   Stack,
 } from "@chakra-ui/react";
 import { get, isEqual } from "lodash";
-import { FC, useRef, memo, useEffect } from "react";
+import { FC, useRef, memo } from "react";
 import { useUpdateHhdStatePending } from "../hooks/controller";
 import {
   SettingType,
@@ -32,7 +31,6 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useSelector } from "react-redux";
 
 interface HhdComponentType extends SettingsType {
-  renderChild?: any;
   depth?: number;
   childName?: string;
   parentType?: SettingType;
@@ -42,6 +40,7 @@ interface HhdComponentType extends SettingsType {
   // e.g.such as lodash.get(state, 'xinput.ds5e.led_support')
   statePath?: string;
   isQam: boolean;
+  navigationCounter: () => number;
 }
 
 const HhdComponent: FC<HhdComponentType> = memo(
@@ -54,7 +53,6 @@ const HhdComponent: FC<HhdComponentType> = memo(
     statePath,
     children,
     options,
-    renderChild,
     modes,
     depth = 0,
     state,
@@ -64,6 +62,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
     tags,
     updateState,
     isQam,
+    navigationCounter,
     default: defaultValue,
   }) => {
     const updating = useUpdateHhdStatePending();
@@ -95,18 +94,23 @@ const HhdComponent: FC<HhdComponentType> = memo(
     const renderChildren = () => {
       if (children)
         return Object.entries(children).map(([childName, child], idx) => {
-          return renderChild({
-            childName,
-            child,
-            childOrder: idx,
-            depth: depth + 1,
-            parentType: type,
-            state,
-            updateState,
-            tags,
-            statePath: statePath ? `${statePath}.${childName}` : `${childName}`,
-            isQam,
-          });
+          return (
+            <HhdComponent
+              key={idx}
+              childName={childName}
+              depth={depth + 1}
+              parentType={parentType}
+              statePath={
+                statePath ? `${statePath}.${childName}` : `${childName}`
+              }
+              state={state}
+              tags={tags}
+              updateState={updateState}
+              isQam={isQam}
+              navigationCounter={navigationCounter}
+              {...child}
+            />
+          );
         });
       return;
     };
@@ -132,11 +136,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
               </Flex>
             )}
             <Stack spacing="3">
-              <ErrorBoundary title={title}>
-                {renderChild &&
-                  typeof renderChild === "function" &&
-                  renderChildren()}
-              </ErrorBoundary>
+              <ErrorBoundary title={title}>{renderChildren()}</ErrorBoundary>
             </Stack>
           </CardBody>
         </>
@@ -157,7 +157,6 @@ const HhdComponent: FC<HhdComponentType> = memo(
             statePath={statePath}
             updateState={updateState}
             hint={hint}
-            renderChild={renderChild}
             updating={updating}
             isQam={isQam}
           />
@@ -303,39 +302,5 @@ const HhdComponent: FC<HhdComponentType> = memo(
     return isEqual(prevProps, nextProps);
   }
 );
-
-interface HhdChildComponentType extends HhdComponentType {
-  child: SettingsType;
-  childOrder: number;
-}
-
-export const renderChild = ({
-  childName,
-  child,
-  childOrder,
-  parentType,
-  statePath,
-  state,
-  tags,
-  updateState,
-  depth,
-  isQam,
-}: HhdChildComponentType) => {
-  return (
-    <HhdComponent
-      key={childOrder}
-      childName={childName}
-      renderChild={renderChild}
-      depth={depth}
-      parentType={parentType}
-      statePath={statePath}
-      state={state}
-      tags={tags}
-      updateState={updateState}
-      isQam={isQam}
-      {...child}
-    />
-  );
-};
 
 export default HhdComponent;

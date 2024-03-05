@@ -31,3 +31,9 @@ export const useElementNav = (section: string, idx: number) => {
   };
   return { isFocused, setFocus };
 };
+
+export const useNavigationCounter = () => {
+  let val = 0;
+
+  return () => val++;
+};

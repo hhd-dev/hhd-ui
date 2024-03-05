@@ -5,7 +5,7 @@ import {
   selectSectionNames,
   selectHasController,
 } from "../redux-modules/hhdSlice";
-import HhdComponent, { renderChild } from "./HhdComponent";
+import HhdComponent from "./HhdComponent";
 import { useSetHhdState } from "../hooks/controller";
 import ErrorBoundary from "./ErrorBoundary";
 import {
@@ -20,9 +20,8 @@ import {
 import { capitalize } from "lodash";
 import { CONTENT_WIDTH } from "./theme";
 import { ControllerButton } from "./Controller";
-import { useEffect, useState } from "react";
 import { useFilteredSettings } from "../hooks/conditionalRender";
-import { useSectionNav } from "../hooks/navigation";
+import { useNavigationCounter, useSectionNav } from "../hooks/navigation";
 
 const HhdTabbedState = () => {
   const state = useSelector(selectHhdSettingsState);
@@ -83,6 +82,7 @@ const HhdTabbedState = () => {
                 {Object.keys(plugins).map((pluginName, idx) => {
                   const plugin = plugins[pluginName] as SettingsType;
                   const statePath = `${topLevelStr}.${pluginName}`;
+                  const navigationCounter = useNavigationCounter();
 
                   return (
                     <TabPanel tabIndex={-1} key={`${statePath}${topIdx}${idx}`}>
@@ -91,10 +91,10 @@ const HhdTabbedState = () => {
                           {...plugin}
                           state={state}
                           childName={pluginName}
-                          renderChild={renderChild}
                           statePath={statePath}
                           updateState={setState}
                           isQam={false}
+                          navigationCounter={navigationCounter}
                         />
                       </ErrorBoundary>
                     </TabPanel>

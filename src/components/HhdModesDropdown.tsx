@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { FC, useEffect, useRef } from "react";
 import { useShouldRenderChild } from "../hooks/conditionalRender";
+import HhdComponent from "./HhdComponent";
 
 type DropdownProps = {
   modes: { [value: string]: any };
@@ -26,9 +27,9 @@ type DropdownProps = {
   statePath: string;
   updateState: any;
   hint?: string;
-  renderChild: any;
   updating: boolean;
   isQam: boolean;
+  navigationCounter: () => number;
 };
 
 const HhdModesDropdown: FC<DropdownProps> = ({
@@ -41,15 +42,17 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   state,
   statePath,
   updateState,
-  renderChild,
   updating,
   isQam,
+  navigationCounter,
 }) => {
   const ref = useRef<HTMLElement>(null);
   const currentMode = modes[selectedValue];
   const modeTags = currentMode ? currentMode.tags : null;
   const type = currentMode ? currentMode.type : null;
-  const children = currentMode ? Object.entries(currentMode.children) : [];
+  const children: any[] = currentMode
+    ? Object.entries(currentMode.children)
+    : [];
   const shouldRenderChild = useShouldRenderChild(isQam);
 
   // useEffect(() => {
@@ -110,16 +113,20 @@ const HhdModesDropdown: FC<DropdownProps> = ({
             children &&
             children.length > 0 &&
             children.map(([childName, child], idx) => {
-              return renderChild({
-                childName,
-                child,
-                childOrder: idx,
-                depth: depth + 1,
-                parentType: type,
-                state,
-                updateState,
-                statePath: `${statePath}.${selectedValue}.${childName}`,
-              });
+              return (
+                <HhdComponent
+                  key={idx}
+                  childName={childName}
+                  depth={depth + 1}
+                  parentType={type}
+                  statePath={`${statePath}.${selectedValue}.${childName}`}
+                  state={state}
+                  updateState={updateState}
+                  isQam={isQam}
+                  navigationCounter={navigationCounter}
+                  {...child}
+                />
+              );
             })}
         </Stack>
       </Flex>
