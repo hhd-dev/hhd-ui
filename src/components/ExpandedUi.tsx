@@ -37,7 +37,7 @@ const FadeBox: FC<Props> = ({ shouldFadeOpen, isOpen, children }) => {
   if (shouldFadeOpen) {
     return (
       <Box w="fit-content" margin="0 auto">
-        <ScaleFade initialScale={0.7} in={isOpen}>
+        <ScaleFade initialScale={0.7} in={isOpen} unmountOnExit>
           {children}
         </ScaleFade>
       </Box>

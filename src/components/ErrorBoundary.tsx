@@ -30,7 +30,7 @@ class ErrorBoundary extends Component<PropsType, StateType> {
       return (
         <Alert status="error">
           <AlertIcon />
-          Error while trying to render {this.props.title}
+          Error while loading {this.props.title}
         </Alert>
       );
     }

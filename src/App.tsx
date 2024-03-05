@@ -21,9 +21,6 @@ setupGamepadEventListener();
 
 const App = memo(() => {
   useInitialFetch();
-  const appType = useSelector(selectAppType);
-  const uiType = useSelector(selectUiType);
-  const prevUiType = useSelector(selectPrevUiType);
 
   const settingsLoading = useSelector(selectHhdSettingsLoading);
   const stateLoading = useSelector(selectHhdSettingsStateLoading);
@@ -35,18 +32,13 @@ const App = memo(() => {
     return null; // TODO: Implement spinner
   }
 
-  if (
-    // Non-overlay apps always show expanded ui
-    appType !== "overlay" ||
-    // Expanded ui should show expanded
-    uiType === "expanded" ||
-    // When closing the ui expanded, show expanded UI too
-    (prevUiType === "expanded" && uiType === "closed")
-  )
-    return <ExpandedUi />;
-
   // Otherwise QAM is correct
-  return <HhdQamState />;
+  return (
+    <>
+      <HhdQamState />
+      <ExpandedUi />
+    </>
+  );
 });
 
 function useVerifyTokenRedirect(

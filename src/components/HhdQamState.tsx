@@ -8,8 +8,7 @@ import {
   Flex,
   Stack,
   StackDivider,
-  useColorMode,
-  Slide,
+  SlideFade,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -44,17 +43,11 @@ const HhdQamState = () => {
   const uiType = useSelector(selectUiType);
   const shouldRenderParent = useShouldRenderParent(true);
 
-  const isOpen = appType !== "overlay" || uiType === "qam";
-  const { colorMode, toggleColorMode: _ } = useColorMode();
+  const isOpen = appType === "overlay" && uiType === "qam";
+  // const { colorMode, toggleColorMode: _ } = useColorMode();
 
   return (
-    <Slide
-      in={isOpen}
-      onClick={(e) => {
-        if (e.currentTarget != e.target) return;
-        dispatch(hhdSlice.actions.setUiType("closed"));
-      }}
-    >
+    <SlideFade in={isOpen} offsetX="100px" unmountOnExit>
       <Flex
         top="0"
         right="0"
@@ -164,7 +157,7 @@ const HhdQamState = () => {
           </CardBody>
         </Card>
       </Flex>
-    </Slide>
+    </SlideFade>
   );
 };
 
