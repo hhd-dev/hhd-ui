@@ -75,16 +75,15 @@ export const setupGamepadEventListener = () => {
     }
   }
 
-  window.addEventListener("gamepadconnected", function (event) {
+  window.addEventListener("gamepadconnected", function () {
     store.dispatch(hhdSlice.actions.setController(true));
 
-    console.log(navigator.getGamepads()[event.gamepad.index]);
     updateLoop();
     interval = setInterval(updateLoop, 75);
     // if (!animationFrameId) animationFrameId = requestAnimationFrame(updateLoop);
   });
 
-  window.addEventListener("gamepaddisconnected", function (event) {
+  window.addEventListener("gamepaddisconnected", function () {
     if (navigator.getGamepads()) return;
 
     // If there are no gamepads, remove animation frame id
