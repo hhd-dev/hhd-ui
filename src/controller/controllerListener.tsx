@@ -4,10 +4,10 @@ import { store } from "../model/store";
 const BUTTON_MAP = {
   lb: 4,
   rb: 5,
-  dpad_up: 12,
-  dpad_down: 13,
-  dpad_left: 14,
-  dpad_right: 15,
+  up: 12,
+  down: 13,
+  left: 14,
+  right: 15,
   a: 0,
   b: 1,
   x: 2,
@@ -74,6 +74,14 @@ export const setupGamepadEventListener = () => {
       const appType = selectAppType(store.getState());
       for (const ev of evs) {
         switch (ev) {
+          case "up":
+            break;
+          case "down":
+            break;
+          case "left":
+            break;
+          case "right":
+            break;
           case "lb":
             store.dispatch(hhdSlice.actions.goPrev({ section: "tab" }));
             break;
