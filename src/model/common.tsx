@@ -18,8 +18,8 @@ export interface DiscreteSetting extends Setting {
 
 export interface MultipleSetting extends Setting {
   type: "multiple";
-  options: number[];
-  default: Record<string, string>;
+  options: Record<string, string>;
+  default: string | undefined;
 }
 
 export interface NumberSetting<A, T extends string> extends Setting {

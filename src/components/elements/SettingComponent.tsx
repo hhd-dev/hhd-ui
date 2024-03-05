@@ -53,10 +53,14 @@ const DiscreteComponent: FC<SettingProps> = ({ settings: set, path }) => {
           {state}
         </MenuButton>
         <MenuList>
-          <MenuOptionGroup type="radio">
+          <MenuOptionGroup type="radio" value={String(state)}>
             {options.map((value) => {
               return (
-                <MenuItemOption key={value} onClick={() => setState(value)}>
+                <MenuItemOption
+                  key={value}
+                  value={String(value)}
+                  onClick={() => setState(value)}
+                >
                   {value}
                 </MenuItemOption>
               );
@@ -70,7 +74,7 @@ const DiscreteComponent: FC<SettingProps> = ({ settings: set, path }) => {
 
 const MultipleComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title, options } = set as MultipleSetting;
-  const { state, setState } = useSettingState<number>(path);
+  const { state, setState } = useSettingState<string>(path);
 
   return (
     <Flex flexDirection="column">
@@ -80,11 +84,11 @@ const MultipleComponent: FC<SettingProps> = ({ settings: set, path }) => {
           {state && options[state]}
         </MenuButton>
         <MenuList>
-          <MenuOptionGroup type="radio">
-            {Object.entries(options).map(([value, label], idx: number) => {
+          <MenuOptionGroup type="radio" value={state}>
+            {Object.entries(options).map(([value, label]) => {
               return (
                 <MenuItemOption
-                  key={idx}
+                  key={value}
                   value={value}
                   onClick={() => setState(value)}
                 >
