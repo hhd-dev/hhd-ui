@@ -72,22 +72,24 @@ const TabbedState = () => {
           {Object.entries(settings).map(([section, containers]) => {
             return (
               <Box key={section}>
-                {Object.entries(containers).map(([name, settings]) => {
-                  // const navigationCounter = useNavigationCounter();
-                  const path = `${section}.${name}`;
+                {Object.entries(containers)
+                  .filter(([_, s]) => s.type === "container")
+                  .map(([name, settings]) => {
+                    // const navigationCounter = useNavigationCounter();
+                    const path = `${section}.${name}`;
 
-                  return (
-                    <TabPanel tabIndex={-1} key={path}>
-                      <ErrorBoundary>
-                        <ContainerComponent
-                          path={path}
-                          settings={settings}
-                          qam={false}
-                        />
-                      </ErrorBoundary>
-                    </TabPanel>
-                  );
-                })}
+                    return (
+                      <TabPanel tabIndex={-1} key={path}>
+                        <ErrorBoundary>
+                          <ContainerComponent
+                            path={path}
+                            settings={settings}
+                            qam={false}
+                          />
+                        </ErrorBoundary>
+                      </TabPanel>
+                    );
+                  })}
               </Box>
             );
           })}

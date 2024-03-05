@@ -119,20 +119,22 @@ const QamState = () => {
                     >
                       {label}
                     </Heading>
-                    {Object.entries(containers).map(([name, settings]) => {
-                      const path = `${section}.${name}`;
+                    {Object.entries(containers)
+                      .filter(([_, s]) => s.type === "container")
+                      .map(([name, settings]) => {
+                        const path = `${section}.${name}`;
 
-                      return (
-                        <ErrorBoundary key={path}>
-                          <ContainerComponent
-                            key={path}
-                            path={path}
-                            settings={settings}
-                            qam={true}
-                          />
-                        </ErrorBoundary>
-                      );
-                    })}
+                        return (
+                          <ErrorBoundary key={path}>
+                            <ContainerComponent
+                              key={path}
+                              path={path}
+                              settings={settings}
+                              qam={true}
+                            />
+                          </ErrorBoundary>
+                        );
+                      })}
                   </Box>
                 );
               })}
