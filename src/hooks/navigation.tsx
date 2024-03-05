@@ -3,31 +3,30 @@ import { useDispatch, useSelector } from "react-redux";
 import hhdSlice from "../model/slice";
 import { AppDispatch, RootState } from "../model/store";
 
-export const useSectionNav = (section: string, max: number) => {
+export const useSectionNav = (section: string, choices: string[]) => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(hhdSlice.actions.goMax({ section, max }));
-  }, [max]);
+    dispatch(hhdSlice.actions.goSet({ section, choices }));
+  }, [choices]);
 
-  const currentIndex = useSelector(
-    (state: RootState) => state.hhd.navigation.idx[section] || 0
+  const curr = useSelector(
+    (state: RootState) => state.hhd.navigation.curr[section]
   );
-  const setCurrentIndex = (idx: number) => {
-    dispatch(hhdSlice.actions.goto({ section, idx }));
+  const setCurr = (curr: string) => {
+    dispatch(hhdSlice.actions.goto({ section, curr }));
   };
 
-  return { currentIndex, setCurrentIndex };
+  return { curr, setCurr };
 };
 
-export const useElementNav = (section: string, idx: number) => {
+export const useElementNav = (section: string, choice: string) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const isFocused =
-    useSelector(
-      (state: RootState) => state.hhd.navigation.idx[section] || 0
-    ) === idx;
+  const isFocused = useSelector(
+    (state: RootState) => state.hhd.navigation.curr[section] === choice
+  );
   const setFocus = () => {
-    dispatch(hhdSlice.actions.goto({ section, idx }));
+    dispatch(hhdSlice.actions.goto({ section, curr: choice }));
   };
   return { isFocused, setFocus };
 };

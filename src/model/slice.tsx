@@ -48,8 +48,8 @@ export type AppType = "web" | "app" | "overlay";
 export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
 
 interface NavigationState {
-  idx: Record<string, number>;
-  len: Record<string, number>;
+  curr: Record<string, string>;
+  choices: Record<string, string[]>;
 }
 
 interface AppState {
@@ -82,8 +82,8 @@ const initialState = {
   sectionNames: {},
   tagFilter: "advanced",
   navigation: {
-    idx: {},
-    len: {},
+    curr: {},
+    choices: {},
   },
 } as AppState;
 
@@ -141,29 +141,41 @@ const slice = createSlice({
 
     goPrev: (store, action: PayloadAction<{ section: string }>) => {
       const { section } = action.payload;
-      if (!store.navigation.len[section]) return;
-      if (store.navigation.idx[section] > 0) store.navigation.idx[section] -= 1;
+      if (!store.navigation.choices[section]) return;
+      const idx = store.navigation.choices[section].indexOf(
+        store.navigation.curr[section]
+      );
+      if (idx > 0) {
+        store.navigation.curr[section] =
+          store.navigation.choices[section][idx - 1];
+      }
     },
     goNext: (store, action: PayloadAction<{ section: string }>) => {
       const { section } = action.payload;
-      const l = store.navigation.len[section];
-      if (!l) return;
-      if (store.navigation.idx[section] < l - 1)
-        store.navigation.idx[section] += 1;
+      if (!store.navigation.choices[section]) return;
+      const idx = store.navigation.choices[section].indexOf(
+        store.navigation.curr[section]
+      );
+      if (idx !== -1 && idx < store.navigation.choices[section].length - 1) {
+        store.navigation.curr[section] =
+          store.navigation.choices[section][idx + 1];
+      }
     },
-    goto: (store, action: PayloadAction<{ section: string; idx: number }>) => {
-      const { section, idx } = action.payload;
-      const l = store.navigation.len[section];
-      if (!l) return;
-      if (idx >= 0 && idx < l) store.navigation.idx[section] = idx;
+    goto: (store, action: PayloadAction<{ section: string; curr: string }>) => {
+      const { section, curr } = action.payload;
+      store.navigation.curr[section] = curr;
     },
 
-    goMax: (store, action: PayloadAction<{ section: string; max: number }>) => {
-      const { section, max } = action.payload;
-      store.navigation.len[section] = max;
-      const curr = store.navigation.idx[section];
-      if (curr === undefined) store.navigation.idx[section] = 0;
-      if (curr >= max && max) store.navigation.idx[section] = max - 1;
+    goSet: (
+      store,
+      action: PayloadAction<{ section: string; choices: string[] }>
+    ) => {
+      const { section, choices } = action.payload;
+      store.navigation.choices[section] = choices;
+      const curr = store.navigation.curr[section];
+      if (curr === undefined || !choices.includes(curr)) {
+        store.navigation.curr[section] = choices[0];
+      }
     },
   },
   extraReducers: (builder) => {
@@ -215,10 +227,6 @@ export const selectHasController = (state: RootState) => {
   return state.hhd.controller;
 };
 
-export const selectShowHintModal = (state: RootState) => {
-  return state.hhd.appType !== "overlay" || state.hhd.uiType !== "qam";
-};
-
 export const selectSettingsLoading = (state: RootState) =>
   state.hhd.loading.settings;
 
@@ -246,13 +254,6 @@ export const selectLoginErrorMessage = (state: RootState) => {
 export const selectTagFilter = (state: RootState) => state.hhd.tagFilter;
 
 export const selectSectionNames = (state: RootState) => state.hhd.sectionNames;
-
-export const selectVersionHashes = (state: RootState) => {
-  return {
-    state: get(state, "hhd.state.version", ""),
-    settings: get(state, "hhd.settings.hhd.version.value", ""),
-  };
-};
 
 export const selectUiType = (state: RootState) => {
   return state.hhd.uiType;

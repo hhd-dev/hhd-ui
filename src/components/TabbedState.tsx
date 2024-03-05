@@ -34,19 +34,17 @@ const TabbedState = () => {
   const settings = Object.fromEntries(
     Object.entries(fullSettings).filter((c) => shouldRenderParent(c[1]))
   );
+  const keys = Object.keys(settings);
 
-  const { currentIndex, setCurrentIndex } = useSectionNav(
-    "tab",
-    Object.keys(settings).length
-  );
+  const { curr, setCurr } = useSectionNav("tab", keys);
 
   return (
     <Card width={CONTENT_WIDTH}>
       <Tabs
-        onChange={setCurrentIndex}
+        onChange={(e) => setCurr(keys[e])}
         size="md"
         orientation="vertical"
-        index={currentIndex}
+        index={keys.indexOf(curr)}
       >
         <TabList padding="1rem 0">
           {controller && (
