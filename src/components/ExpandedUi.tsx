@@ -25,7 +25,7 @@ import TagFilterDropdown from "./TagFilterDropdown";
 
 import { FC } from "react";
 import { ControllerButton } from "./Controller";
-import { resetSectionElements } from "../controller/sectionsNavigation";
+import SectionHandler from "../controller/SectionHandler";
 
 type Props = {
   shouldFadeOpen: boolean;
@@ -94,7 +94,7 @@ const ExpandedUi = () => {
               <Button
                 margin="0 0 0 1rem"
                 onClick={() => {
-                  resetSectionElements();
+                  SectionHandler.reset();
                   logout();
                 }}
               >

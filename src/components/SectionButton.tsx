@@ -1,6 +1,6 @@
 import { Tab } from "@chakra-ui/react";
 import { FC, useEffect, useRef } from "react";
-import { registerSectionElement } from "../controller/sectionsNavigation";
+import SectionHandler from "../controller/SectionHandler";
 
 type Props = {
   label: string;
@@ -12,7 +12,7 @@ const SectionButton: FC<Props> = ({ label, ...otherProps }) => {
 
   useEffect(() => {
     if (ref.current) {
-      registerSectionElement(ref.current);
+      SectionHandler.register(ref.current);
     }
   }, []);
 

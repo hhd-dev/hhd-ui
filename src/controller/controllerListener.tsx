@@ -1,5 +1,6 @@
 import hhdSlice from "../redux-modules/hhdSlice";
 import { store } from "../redux-modules/store";
+import SectionHandler from "./SectionHandler";
 
 const BUTTON_MAP = {
   lb: 4,
@@ -70,6 +71,14 @@ export const setupGamepadEventListener = () => {
 
       // Handle gamepad events
       for (const ev of evs) {
+        switch (ev) {
+          case "lb":
+            SectionHandler.goPrev();
+            break;
+          case "rb":
+            SectionHandler.goNext();
+            break;
+        }
         console.log(ev);
       }
     }

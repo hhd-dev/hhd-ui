@@ -22,7 +22,7 @@ import { ControllerButton } from "./Controller";
 import SectionButton from "./SectionButton";
 import { useEffect, useState } from "react";
 import { useFilteredSettings } from "../hooks/conditionalRender";
-import { resetSectionElements } from "../controller/sectionsNavigation";
+import SectionHandler from "../controller/SectionHandler";
 
 const HhdTabbedState = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -37,7 +37,7 @@ const HhdTabbedState = () => {
 
   useEffect(() => {
     return () => {
-      resetSectionElements();
+      SectionHandler.reset();
     };
   }, []);
 
