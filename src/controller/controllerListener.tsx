@@ -1,4 +1,4 @@
-import hhdSlice from "../model/slice";
+import hhdSlice, { selectAppType, selectUiType } from "../model/slice";
 import { store } from "../model/store";
 
 const BUTTON_MAP = {
@@ -62,13 +62,16 @@ export const setupGamepadEventListener = () => {
 
         // Update state
         if (!state[gidx]) {
-          state[gidx] = { name: next };
-        } else {
-          state[gidx][name] = next;
+          state[gidx] = {};
         }
+        state[gidx][name] = next;
       }
 
       // Handle gamepad events
+      if (!evs) continue;
+
+      const uiType = selectUiType(store.getState());
+      const appType = selectAppType(store.getState());
       for (const ev of evs) {
         switch (ev) {
           case "lb":
@@ -76,6 +79,24 @@ export const setupGamepadEventListener = () => {
             break;
           case "rb":
             store.dispatch(hhdSlice.actions.goNext({ section: "tab" }));
+            break;
+          case "y":
+            if (appType !== "overlay") break;
+
+            if (uiType === "qam") {
+              store.dispatch(hhdSlice.actions.setUiType("expanded"));
+            } else if (uiType === "expanded") {
+              store.dispatch(hhdSlice.actions.setUiType("qam"));
+            }
+
+            break;
+          case "b":
+            if (appType !== "overlay") break;
+
+            if (uiType !== "closed") {
+              store.dispatch(hhdSlice.actions.setUiType("closed"));
+            }
+
             break;
         }
         console.log(ev);
