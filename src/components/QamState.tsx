@@ -23,7 +23,7 @@ import hhdSlice, {
 } from "../model/slice";
 import { ControllerButton } from "./Controller";
 import ErrorBoundary from "./ErrorBoundary";
-import HhdLogo from "./HhdLogo";
+import HhdLogo from "./Logo";
 import ContainerComponent from "./elements/ContainerComponent";
 import { QAM_WIDTH } from "./theme";
 

@@ -27,8 +27,10 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { state, setState } = useSettingState<number>(path);
 
   return (
-    <Flex flexDirection="row">
-      <FormLabel htmlFor={path}>{title}</FormLabel>
+    <Flex flexDirection="row" alignItems="center">
+      <FormLabel htmlFor={path} margin="0.3rem 0">
+        {title}
+      </FormLabel>
       <Box flexGrow="1"></Box>
       <Checkbox
         id={path}

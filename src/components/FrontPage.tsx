@@ -22,7 +22,7 @@ import {
 import { getToken, getUrl, isLoggedIn, setToken, setUrl } from "../local";
 import { useEffect, useState } from "react";
 import { useLogin } from "../hooks/auth";
-import HhdLogo from "./HhdLogo";
+import HhdLogo from "./Logo";
 
 export default function FrontPage() {
   const navigate = useNavigate();

@@ -9,7 +9,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import HhdLogo from "./HhdLogo";
+import HhdLogo from "./Logo";
 import HhdTabbedState from "./TabbedState";
 
 import { CONTENT_WIDTH } from "./theme";
