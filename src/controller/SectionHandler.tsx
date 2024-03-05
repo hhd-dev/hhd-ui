@@ -22,7 +22,7 @@ class SectionHandler {
     } else {
       this.idx--;
     }
-    this.elements[this.idx].focus();
+    this.elements[this.idx].click();
   }
 
   goNext() {
@@ -31,7 +31,7 @@ class SectionHandler {
     } else {
       this.idx++;
     }
-    this.elements[this.idx].focus();
+    this.elements[this.idx].click();
   }
 }
 
