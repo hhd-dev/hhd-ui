@@ -15,39 +15,36 @@ import {
   TabPanels,
   TabPanel,
   Box,
+  Tab,
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { CONTENT_WIDTH } from "./theme";
 import { ControllerButton } from "./Controller";
-import SectionButton from "./SectionButton";
 import { useEffect, useState } from "react";
 import { useFilteredSettings } from "../hooks/conditionalRender";
-import SectionHandler from "../controller/SectionHandler";
+import { useSectionNav } from "../hooks/navigation";
 
 const HhdTabbedState = () => {
-  const [tabIndex, setTabIndex] = useState(0);
   const state = useSelector(selectHhdSettingsState);
 
   const sectionNames = useSelector(selectSectionNames);
 
   const setState = useSetHhdState();
   const controller = useSelector(selectHasController);
-
   const settings = useFilteredSettings();
 
-  useEffect(() => {
-    return () => {
-      SectionHandler.reset();
-    };
-  }, []);
+  const { currentIndex, setCurrentIndex } = useSectionNav(
+    "tab",
+    Object.keys(settings).length
+  );
 
   return (
     <Card width={CONTENT_WIDTH}>
       <Tabs
-        onChange={(index) => setTabIndex(index)}
+        onChange={setCurrentIndex}
         size="md"
         orientation="vertical"
-        isLazy
+        index={currentIndex}
       >
         <TabList style={{ padding: "1rem 0" }}>
           {controller && (
@@ -65,11 +62,9 @@ const HhdTabbedState = () => {
             }
 
             return (
-              <SectionButton
-                label={label}
-                justifyContent="end"
-                key={`tablist-tab-${idx}`}
-              />
+              <Tab justifyContent="end" key={`tablist-tab-${idx}`}>
+                {label}
+              </Tab>
             );
           })}
           {controller && (
@@ -91,19 +86,17 @@ const HhdTabbedState = () => {
 
                   return (
                     <TabPanel tabIndex={-1} key={`${statePath}${topIdx}${idx}`}>
-                      {topIdx === tabIndex ? (
-                        <ErrorBoundary>
-                          <HhdComponent
-                            {...plugin}
-                            state={state}
-                            childName={pluginName}
-                            renderChild={renderChild}
-                            statePath={statePath}
-                            updateState={setState}
-                            isQam={false}
-                          />
-                        </ErrorBoundary>
-                      ) : null}
+                      <ErrorBoundary>
+                        <HhdComponent
+                          {...plugin}
+                          state={state}
+                          childName={pluginName}
+                          renderChild={renderChild}
+                          statePath={statePath}
+                          updateState={setState}
+                          isQam={false}
+                        />
+                      </ErrorBoundary>
                     </TabPanel>
                   );
                 })}

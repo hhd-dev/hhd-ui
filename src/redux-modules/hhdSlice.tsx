@@ -11,6 +11,8 @@ import {
   TAG_FILTER_CACHE_KEY,
   TagFilterType,
 } from "../components/TagFilterDropdown";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 export enum ErrorStates {
   LoginFailed = "LoginFailed",
@@ -46,6 +48,11 @@ export type AppType = "web" | "app" | "overlay";
 
 export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
 
+interface NavigationState {
+  idx: Record<string, number>;
+  len: Record<string, number>;
+}
+
 interface HhdState {
   uiType: UiType;
   prevUiType: PrevUiType;
@@ -57,6 +64,7 @@ interface HhdState {
   error: { [key: string]: string };
   sectionNames: { [key: string]: string };
   tagFilter: TagFilterType;
+  navigation: NavigationState;
 }
 
 const initialState = {
@@ -74,6 +82,10 @@ const initialState = {
   error: {},
   sectionNames: {},
   tagFilter: "advanced",
+  navigation: {
+    idx: {},
+    len: {},
+  },
 } as HhdState;
 
 const hhdSlice = createSlice({
@@ -126,6 +138,33 @@ const hhdSlice = createSlice({
     },
     overrideSettingsState: (store, action: PayloadAction<any>) => {
       store.settingsState = action.payload;
+    },
+
+    goPrev: (store, action: PayloadAction<{ section: string }>) => {
+      const { section } = action.payload;
+      if (!store.navigation.len[section]) return;
+      if (store.navigation.idx[section] > 0) store.navigation.idx[section] -= 1;
+    },
+    goNext: (store, action: PayloadAction<{ section: string }>) => {
+      const { section } = action.payload;
+      const l = store.navigation.len[section];
+      if (!l) return;
+      if (store.navigation.idx[section] < l - 1)
+        store.navigation.idx[section] += 1;
+    },
+    goto: (store, action: PayloadAction<{ section: string; idx: number }>) => {
+      const { section, idx } = action.payload;
+      const l = store.navigation.len[section];
+      if (!l) return;
+      if (idx >= 0 && idx < l) store.navigation.idx[section] = idx;
+    },
+
+    goMax: (store, action: PayloadAction<{ section: string; max: number }>) => {
+      const { section, max } = action.payload;
+      store.navigation.len[section] = max;
+      const curr = store.navigation.idx[section];
+      if (curr === undefined) store.navigation.idx[section] = 0;
+      if (curr >= max && max) store.navigation.idx[section] = max - 1;
     },
   },
   extraReducers: (builder) => {
