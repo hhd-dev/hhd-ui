@@ -30,11 +30,6 @@ import HhdInt from "./HhdInt";
 import { useShouldRenderChild } from "../hooks/conditionalRender";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useSelector } from "react-redux";
-import {
-  focusCurrentHhdElement,
-  registerHhdElement,
-  resetHhdElements,
-} from "../controller/hhdComponentsNavigation";
 
 interface HhdComponentType extends SettingsType {
   renderChild?: any;
@@ -77,19 +72,19 @@ const HhdComponent: FC<HhdComponentType> = memo(
     const shouldRenderChild = useShouldRenderChild(isQam);
     const showModals = useSelector(selectShowHintModal);
 
-    useEffect(() => {
-      if (componentRef.current) {
-        registerHhdElement(componentRef.current);
-      }
-      if (depth == 0 && type === "container") {
-        focusCurrentHhdElement();
-      }
-      return () => {
-        if (depth === 0 && type === "container") {
-          resetHhdElements();
-        }
-      };
-    }, []);
+    // useEffect(() => {
+    //   if (componentRef.current) {
+    //     registerHhdElement(componentRef.current);
+    //   }
+    //   if (depth == 0 && type === "container") {
+    //     focusCurrentHhdElement();
+    //   }
+    //   return () => {
+    //     if (depth === 0 && type === "container") {
+    //       resetHhdElements();
+    //     }
+    //   };
+    // }, []);
 
     if (tags && !shouldRenderChild(tags)) {
       return null;
@@ -293,7 +288,7 @@ const HhdComponent: FC<HhdComponentType> = memo(
       return (
         <ErrorBoundary title={title}>
           <Button
-            ref={componentRef}
+            // ref={componentRef}
             onClick={() => updateState(`${statePath}`, true)}
           >
             {title}

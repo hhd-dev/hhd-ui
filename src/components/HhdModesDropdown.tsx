@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { FC, useEffect, useRef } from "react";
 import { useShouldRenderChild } from "../hooks/conditionalRender";
-import { registerHhdElement } from "../controller/hhdComponentsNavigation";
 
 type DropdownProps = {
   modes: { [value: string]: any };
@@ -53,11 +52,11 @@ const HhdModesDropdown: FC<DropdownProps> = ({
   const children = currentMode ? Object.entries(currentMode.children) : [];
   const shouldRenderChild = useShouldRenderChild(isQam);
 
-  useEffect(() => {
-    if (ref.current) {
-      registerHhdElement(ref.current);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (ref.current) {
+  //     registerHhdElement(ref.current);
+  //   }
+  // }, []);
 
   const createClickHandler = (value: any) => () => {
     if (updating) {

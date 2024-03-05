@@ -63,7 +63,7 @@ const initialState = {
   uiType: "expanded",
   prevUiType: "init",
   appType: "web",
-  controller: true,
+  controller: false,
   settingsState: {},
   settings: {},
   loading: {
@@ -106,6 +106,7 @@ const hhdSlice = createSlice({
     },
     setAppType: (store, action: PayloadAction<AppType>) => {
       store.appType = action.payload;
+      if (action.payload === "overlay") store.controller = true;
     },
     setError: (
       store,

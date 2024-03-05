@@ -82,10 +82,6 @@ const createMainWindow = async () => {
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
 
-  ipcMain.on("gamepadButtonPress", (_, buttonName) => {
-    handleGamepadButtonPress(mainWindow, buttonName);
-  });
-
   // Handle Overlay Communication
   if (!isOverlayUi) return;
 
@@ -174,55 +170,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-function handleGamepadButtonPress(mainWindow, buttonName) {
-  function sendKeyCode(keyCode) {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode,
-    });
-    mainWindow.webContents.sendInputEvent({ type: "keyUp", keyCode });
-  }
-
-  if (buttonName === "bButton") {
-    sendKeyCode("escape");
-  }
-  if (buttonName === "aButton") {
-    sendKeyCode("space");
-  }
-  if (buttonName === "dPadDown") {
-    sendKeyCode("tab");
-  }
-  if (buttonName === "dPadUp") {
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "shift",
-    });
-    mainWindow.webContents.sendInputEvent({
-      type: "keyDown",
-      keyCode: "tab",
-      modifiers: ["shift"],
-    });
-    mainWindow.webContents.sendInputEvent({
-      type: "keyUp",
-      keyCode: "tab",
-      modifiers: ["shift"],
-    });
-    mainWindow.webContents.sendInputEvent({
-      type: "keyUp",
-      keyCode: "shift",
-    });
-  }
-  if (buttonName == "dPadLeft") {
-    sendKeyCode("left");
-  }
-  if (buttonName == "dPadRight") {
-    sendKeyCode("right");
-  }
-  if (buttonName == "up") {
-    sendKeyCode("up");
-  }
-  if (buttonName == "down") {
-    sendKeyCode("down");
-  }
-}

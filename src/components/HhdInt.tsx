@@ -14,7 +14,6 @@ import {
   Flex,
   Box,
 } from "@chakra-ui/react";
-import { registerHhdElement } from "../controller/hhdComponentsNavigation";
 
 type Props = {
   value?: number;
@@ -40,11 +39,11 @@ const HhdInt: FC<Props> = ({
   const valueProp = value ? { value } : {};
   const ref = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    if (ref.current) {
-      registerHhdElement(ref.current);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (ref.current) {
+  //     registerHhdElement(ref.current);
+  //   }
+  // }, []);
 
   if (tags?.includes("dropdown")) {
     return (
@@ -82,7 +81,7 @@ const HhdInt: FC<Props> = ({
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
-              <SliderThumb ref={ref} />
+              <SliderThumb />
             </Slider>
             <Box w="0.6rem" />
             {value && (
@@ -114,7 +113,7 @@ const HhdInt: FC<Props> = ({
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
-          <SliderThumb ref={ref} />
+          <SliderThumb />
         </Slider>
       </ErrorBoundary>
     </div>
