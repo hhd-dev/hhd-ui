@@ -21,7 +21,7 @@ async function pollState(a: AbortController, reload: boolean) {
       const currHash = get(
         state,
         "hhd.settings.hhd.version.value",
-        get(state, "hhd.settingsState.version", "")
+        get(state, "hhd.state.version", "")
       );
 
       const newState = await fetchFn(
@@ -44,7 +44,7 @@ async function pollState(a: AbortController, reload: boolean) {
       // Apply new state
       if (
         newState &&
-        JSON.stringify(state.hhd.settingsState) !== JSON.stringify(newState)
+        JSON.stringify(state.hhd.state) !== JSON.stringify(newState)
       ) {
         store.dispatch(hhdSlice.actions.overrideSettingsState(newState));
       }
