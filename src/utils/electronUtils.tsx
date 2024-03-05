@@ -1,11 +1,7 @@
 import { clearLoggedIn, setLoggedIn } from "../local";
 import { router } from "../main";
-import hhdSlice, {
-  AppType,
-  ErrorStates,
-  UiType,
-} from "../redux-modules/hhdSlice";
-import { store } from "../redux-modules/store";
+import hhdSlice, { AppType, ErrorStates, UiType } from "../model/slice";
+import { store } from "../model/store";
 
 export const login = (hhdToken: string) => {
   window.localStorage.setItem("hhd_token", `${hhdToken}`);

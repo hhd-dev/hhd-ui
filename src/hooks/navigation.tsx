@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import hhdSlice from "../redux-modules/hhdSlice";
-import { AppDispatch, RootState } from "../redux-modules/store";
+import hhdSlice from "../model/slice";
+import { AppDispatch, RootState } from "../model/store";
 
 export const useSectionNav = (section: string, max: number) => {
   const dispatch = useDispatch<AppDispatch>();

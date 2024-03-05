@@ -3,32 +3,40 @@ import { useSelector } from "react-redux";
 import { useLogout } from "./hooks/auth";
 
 import {
-  LoadingStatusType,
-  selectAppType,
-  selectHhdSettingsLoading,
-  selectHhdSettingsState,
-  selectHhdSettingsStateLoading,
-  selectPrevUiType,
-  selectUiType,
-} from "./redux-modules/hhdSlice";
+  selectHasState,
+  selectSettingsLoading,
+  selectSettingsStateLoading,
+} from "./model/slice";
 
 import ExpandedUi from "./components/ExpandedUi";
-import useInitialFetch from "./hooks/useInitialFetch";
-import HhdQamState from "./components/HhdQamState";
+import HhdQamState from "./components/QamState";
 import { setupGamepadEventListener } from "./controller/controllerListener";
+import useInitialFetch from "./hooks/useInitialFetch";
 
 setupGamepadEventListener();
 
 const App = memo(() => {
   useInitialFetch();
 
-  const settingsLoading = useSelector(selectHhdSettingsLoading);
-  const stateLoading = useSelector(selectHhdSettingsStateLoading);
-  const state = useSelector(selectHhdSettingsState);
+  const settingsLoading = useSelector(selectSettingsLoading);
+  const stateLoading = useSelector(selectSettingsStateLoading);
+  const hasState = useSelector(selectHasState);
 
-  useVerifyTokenRedirect(stateLoading, settingsLoading, state);
+  const logout = useLogout();
 
-  if (!state || stateLoading == "pending" || settingsLoading == "pending") {
+  useEffect(() => {
+    if (
+      stateLoading === "succeeded" &&
+      settingsLoading === "succeeded" &&
+      !hasState
+    ) {
+      logout(
+        "Error while verifying your token. Either the token is incorrect, or Handheld Daemon is not running."
+      );
+    }
+  }, [stateLoading, settingsLoading, hasState]);
+
+  if (!hasState || stateLoading == "pending" || settingsLoading == "pending") {
     return null; // TODO: Implement spinner
   }
 
@@ -40,25 +48,5 @@ const App = memo(() => {
     </>
   );
 });
-
-function useVerifyTokenRedirect(
-  stateLoading: LoadingStatusType,
-  settingsLoading: LoadingStatusType,
-  state: any
-) {
-  const logout = useLogout();
-
-  useEffect(() => {
-    if (
-      stateLoading === "succeeded" &&
-      settingsLoading === "succeeded" &&
-      !state?.hhd?.http
-    ) {
-      logout(
-        "Error while verifying your token. Either the token is incorrect, or the web server is not working."
-      );
-    }
-  }, [stateLoading, settingsLoading, state]);
-}
 
 export default App;

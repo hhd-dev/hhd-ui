@@ -1,18 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
-import { updateHhdState } from "../redux-modules/hhdAsyncThunks";
-import { AppDispatch } from "../redux-modules/store";
-import { selectUpdateHhdStatePending } from "../redux-modules/hhdSlice";
+import { updateHhdState } from "../model/thunks";
+import { AppDispatch } from "../model/store";
+import {
+  selectSettingState,
+  selectUpdateHhdStatePending,
+} from "../model/slice";
 
-export const useSetHhdState = () => {
+export function useSettingState<A>(path: string) {
   const dispatch = useDispatch<AppDispatch>();
+  const state = useSelector(selectSettingState(path)) as A | undefined;
 
-  const setter = (path: string, value: any) => {
+  const setState = (value: any) => {
     const action = updateHhdState({ path, value });
     return dispatch(action);
   };
 
-  return setter;
-};
+  return { state, setState };
+}
 
 export const useUpdateHhdStatePending = () => {
   const loading = useSelector(selectUpdateHhdStatePending);

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import hhdSlice from "./hhdSlice";
+import hhdSlice from "./slice";
 
 export const store = configureStore({
   reducer: {

@@ -1,5 +1,5 @@
-import hhdSlice from "../redux-modules/hhdSlice";
-import { store } from "../redux-modules/store";
+import hhdSlice from "../model/slice";
+import { store } from "../model/store";
 
 const BUTTON_MAP = {
   lb: 4,

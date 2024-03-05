@@ -1,9 +1,5 @@
 import { useEffect } from "react";
-import {
-  selectAppType,
-  selectPrevUiType,
-  selectUiType,
-} from "../redux-modules/hhdSlice";
+import { selectAppType, selectPrevUiType, selectUiType } from "../model/slice";
 import { useSelector } from "react-redux";
 
 const CLOSE_DELAY = 300;

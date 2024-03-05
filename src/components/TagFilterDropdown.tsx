@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import hhdSlice, { selectTagFilter } from "../redux-modules/hhdSlice";
+import hhdSlice, { selectTagFilter } from "../model/slice";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 export const TAG_FILTER_CACHE_KEY = "hhd-ui.tagFilter";
 

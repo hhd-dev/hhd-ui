@@ -11,15 +11,12 @@ import {
 import App from "./App.tsx";
 import FrontPage from "./components/FrontPage.tsx";
 import theme from "./components/theme.tsx";
-import { AppDispatch, store } from "./redux-modules/store.tsx";
+import { AppDispatch, store } from "./model/store.tsx";
 
 import BackgroundDark from "./assets/background_dark.jpg";
 import BackgroundLight from "./assets/background_light.jpg";
 import { useHddRelayEffect } from "./hooks/electron.tsx";
-import hhdSlice, {
-  selectAppType,
-  selectUiType,
-} from "./redux-modules/hhdSlice.tsx";
+import hhdSlice, { selectAppType, selectUiType } from "./model/slice.tsx";
 import * as electronUtils from "./utils/electronUtils.tsx";
 
 declare global {

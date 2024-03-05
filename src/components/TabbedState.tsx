@@ -1,36 +1,29 @@
-import { useSelector } from "react-redux";
 import {
-  SettingsType,
-  selectHhdSettingsState,
-  selectSectionNames,
-  selectHasController,
-} from "../redux-modules/hhdSlice";
-import HhdComponent from "./HhdComponent";
-import { useSetHhdState } from "../hooks/controller";
-import ErrorBoundary from "./ErrorBoundary";
-import {
-  Card,
-  Tabs,
-  TabList,
-  TabPanels,
-  TabPanel,
   Box,
+  Card,
   Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
-import { CONTENT_WIDTH } from "./theme";
+import { useSelector } from "react-redux";
+import { useSectionNav } from "../hooks/navigation";
+import {
+  selectHasController,
+  selectSectionNames,
+  selectSettings,
+} from "../model/slice";
 import { ControllerButton } from "./Controller";
-import { useFilteredSettings } from "../hooks/conditionalRender";
-import { useNavigationCounter, useSectionNav } from "../hooks/navigation";
+import ErrorBoundary from "./ErrorBoundary";
+import ContainerComponent from "./elements/ContainerComponent";
+import { CONTENT_WIDTH } from "./theme";
 
-const HhdTabbedState = () => {
-  const state = useSelector(selectHhdSettingsState);
-
+const TabbedState = () => {
   const sectionNames = useSelector(selectSectionNames);
-
-  const setState = useSetHhdState();
   const controller = useSelector(selectHasController);
-  const settings = useFilteredSettings();
+  const settings = useSelector(selectSettings);
 
   const { currentIndex, setCurrentIndex } = useSectionNav(
     "tab",
@@ -54,7 +47,7 @@ const HhdTabbedState = () => {
               margin="-0.6rem 0.5rem -0.1rem 0"
             />
           )}
-          {Object.entries(settings).map(([name, plugins], idx) => {
+          {Object.keys(settings).map((name, idx) => {
             let label = name.split("_").map(capitalize).join("\u00a0");
             if (sectionNames && sectionNames[name]) {
               label = sectionNames[name];
@@ -76,25 +69,20 @@ const HhdTabbedState = () => {
           )}
         </TabList>
         <TabPanels>
-          {Object.entries(settings).map(([topLevelStr, plugins], topIdx) => {
+          {Object.entries(settings).map(([section, containers]) => {
             return (
-              <Box key={topIdx}>
-                {Object.keys(plugins).map((pluginName, idx) => {
-                  const plugin = plugins[pluginName] as SettingsType;
-                  const statePath = `${topLevelStr}.${pluginName}`;
-                  const navigationCounter = useNavigationCounter();
+              <Box key={section}>
+                {Object.entries(containers).map(([name, settings]) => {
+                  // const navigationCounter = useNavigationCounter();
+                  const path = `${section}.${name}`;
 
                   return (
-                    <TabPanel tabIndex={-1} key={`${statePath}${topIdx}${idx}`}>
+                    <TabPanel tabIndex={-1} key={path}>
                       <ErrorBoundary>
-                        <HhdComponent
-                          {...plugin}
-                          state={state}
-                          childName={pluginName}
-                          statePath={statePath}
-                          updateState={setState}
-                          isQam={false}
-                          navigationCounter={navigationCounter}
+                        <ContainerComponent
+                          path={path}
+                          settings={settings}
+                          qam={false}
                         />
                       </ErrorBoundary>
                     </TabPanel>
@@ -109,4 +97,4 @@ const HhdTabbedState = () => {
   );
 };
 
-export default HhdTabbedState;
+export default TabbedState;

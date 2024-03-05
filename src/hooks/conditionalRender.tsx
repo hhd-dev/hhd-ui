@@ -4,7 +4,8 @@ import {
   selectTagFilter,
   selectUiType,
   selectHhdSettings,
-} from "../redux-modules/hhdSlice";
+} from "../model/slice";
+import { ContainerSetting, Setting } from "../model/common";
 
 export const DEFAULT_HIDDEN = [
   "hidden",
@@ -22,25 +23,18 @@ export const useShouldRenderChild = (isQam: boolean) => {
   const currentFilters = useFilters();
   const actualFilters = isQam ? QAM_FILTERS : currentFilters;
 
-  const shouldRenderChild = (
-    tags: string[] | null,
-    children: any[] | null = null,
-    modes: any[] | null = null
-  ): boolean => {
+  const shouldRenderChild = (set: Setting): boolean => {
+    const tags = set.tags;
+
+    const children =
+      set.type === "container" && (set as ContainerSetting).children;
+
     if (tags && tags.some((v: string) => actualFilters.includes(v))) {
       return false;
     }
 
     if (children) {
-      return Object.values(children).some((c) =>
-        shouldRenderChild(c.tags, c.children, c.modes)
-      );
-    }
-
-    if (modes) {
-      return Object.values(modes).some((c) => {
-        return shouldRenderChild(c.tags, c.children, c.modes);
-      });
+      return Object.values(children).some(shouldRenderChild);
     }
 
     return true;
@@ -60,24 +54,8 @@ function useFilters() {
 export const useShouldRenderParent = (isQam: boolean = false) => {
   const shouldRenderChild = useShouldRenderChild(isQam);
 
-  function parentClosure(plugins: { [key: string]: any }) {
-    return Object.values(plugins).some((p) =>
-      shouldRenderChild(p.tags, p.children, p.modes)
-    );
+  function parentClosure(plugins: Record<string, Setting>) {
+    return Object.values(plugins).some(shouldRenderChild);
   }
   return parentClosure;
-};
-
-export const useFilteredSettings = () => {
-  const settings: { [key: string]: { [key: string]: SettingsType } } =
-    useSelector(selectHhdSettings);
-  const shouldRenderParent = useShouldRenderParent(false);
-
-  Object.entries(settings).forEach(([name, plugins]) => {
-    if (!shouldRenderParent(plugins) && settings[name]) {
-      delete settings[name];
-    }
-  });
-
-  return settings;
 };

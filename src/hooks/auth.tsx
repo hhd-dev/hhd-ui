@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux-modules/store";
-import hhdSlice, { ErrorStates } from "../redux-modules/hhdSlice";
+import { AppDispatch } from "../model/store";
+import hhdSlice, { ErrorStates } from "../model/slice";
 import { useNavigate } from "react-router-dom";
 import { clearLoggedIn, setLoggedIn } from "../local";
 import { useSelector } from "react-redux";
-import { selectLoginErrorMessage } from "../redux-modules/hhdSlice";
+import { selectLoginErrorMessage } from "../model/slice";
 
 export const useResetHhdState = () => {
   const dispatch = useDispatch<AppDispatch>();

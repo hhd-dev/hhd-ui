@@ -1,5 +1,5 @@
-import { fetchFn } from "./hhdAsyncThunks";
-import hhdSlice from "./hhdSlice";
+import { fetchFn } from "./thunks";
+import hhdSlice from "./slice";
 import { store } from "./store";
 
 import { get } from "lodash";

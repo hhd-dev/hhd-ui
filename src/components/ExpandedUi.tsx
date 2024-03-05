@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import HhdLogo from "./HhdLogo";
-import HhdTabbedState from "./HhdTabbedState";
+import HhdTabbedState from "./TabbedState";
 
 import { CONTENT_WIDTH } from "./theme";
 import { useLogout } from "../hooks/auth";
@@ -20,7 +20,7 @@ import hhdSlice, {
   selectAppType,
   selectHasController,
   selectUiType,
-} from "../redux-modules/hhdSlice";
+} from "../model/slice";
 import TagFilterDropdown from "./TagFilterDropdown";
 
 import { FC } from "react";

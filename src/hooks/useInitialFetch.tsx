@@ -8,10 +8,10 @@ import {
   fetchHhdSettings,
   fetchHhdSettingsState,
   fetchSectionNames,
-} from "../redux-modules/hhdAsyncThunks";
-import hhdSlice from "../redux-modules/hhdSlice";
-import { disablePolling, enablePolling } from "../redux-modules/polling";
-import { AppDispatch } from "../redux-modules/store";
+} from "../model/thunks";
+import hhdSlice from "../model/slice";
+import { disablePolling, enablePolling } from "../model/polling";
+import { AppDispatch } from "../model/store";
 import { useEffect } from "react";
 
 document.addEventListener("visibilitychange", () => {
@@ -33,7 +33,7 @@ function useInitialFetch() {
     if (tagFilter && TagFilters[tagFilter]) {
       dispatch(hhdSlice.actions.setTagFilter(tagFilter));
     }
-    
+
     dispatch(fetchHhdSettings());
     dispatch(fetchHhdSettingsState());
     dispatch(fetchSectionNames());

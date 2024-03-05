@@ -1,18 +1,17 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { get, set } from "lodash";
 import {
+  TAG_FILTER_CACHE_KEY,
+  TagFilterType,
+} from "../components/TagFilterDropdown";
+import { Sections, State } from "./common";
+import { RootState } from "./store";
+import {
   fetchHhdSettings,
   fetchHhdSettingsState,
   fetchSectionNames,
   updateHhdState,
-} from "./hhdAsyncThunks";
-import { RootState } from "./store";
-import {
-  TAG_FILTER_CACHE_KEY,
-  TagFilterType,
-} from "../components/TagFilterDropdown";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+} from "./thunks";
 
 export enum ErrorStates {
   LoginFailed = "LoginFailed",
@@ -53,13 +52,13 @@ interface NavigationState {
   len: Record<string, number>;
 }
 
-interface HhdState {
+interface AppState {
   uiType: UiType;
   prevUiType: PrevUiType;
   appType: AppType;
   controller: boolean;
-  settingsState?: any;
-  settings?: any;
+  state: State;
+  settings: Sections;
   loading: { [loadState: string]: LoadingStatusType };
   error: { [key: string]: string };
   sectionNames: { [key: string]: string };
@@ -72,11 +71,11 @@ const initialState = {
   prevUiType: "init",
   appType: "web",
   controller: false,
-  settingsState: {},
+  state: {},
   settings: {},
   loading: {
     settings: "idle",
-    settingsState: "idle",
+    state: "idle",
     updateHhdState: "idle",
   },
   error: {},
@@ -86,9 +85,9 @@ const initialState = {
     idx: {},
     len: {},
   },
-} as HhdState;
+} as AppState;
 
-const hhdSlice = createSlice({
+const slice = createSlice({
   name: "hhd",
   initialState,
   reducers: {
@@ -97,12 +96,12 @@ const hhdSlice = createSlice({
       action: PayloadAction<{ path: string; value: any }>
     ) => {
       const { path, value } = action.payload;
-      set(store.settingsState, path, value);
+      set(store.state, path, value);
     },
-    resetHhdState: (store, action: PayloadAction<void>) => {
+    resetHhdState: (store) => {
       store.loading = initialState.loading;
       store.settings = initialState.settings;
-      store.settingsState = initialState.settingsState;
+      store.state = initialState.state;
     },
     setTagFilter: (store, action: PayloadAction<TagFilterType>) => {
       const tagFilter = action.payload;
@@ -137,7 +136,7 @@ const hhdSlice = createSlice({
       store.settings = action.payload;
     },
     overrideSettingsState: (store, action: PayloadAction<any>) => {
-      store.settingsState = action.payload;
+      store.state = action.payload;
     },
 
     goPrev: (store, action: PayloadAction<{ section: string }>) => {
@@ -176,18 +175,18 @@ const hhdSlice = createSlice({
       state.loading.settings = "succeeded";
     });
     builder.addCase(fetchHhdSettingsState.pending, (state) => {
-      state.loading.settingsState = "pending";
+      state.loading.state = "pending";
     });
     builder.addCase(fetchHhdSettingsState.fulfilled, (state, action) => {
-      state.settingsState = action.payload;
-      state.loading.settingsState = "succeeded";
+      state.state = action.payload;
+      state.loading.state = "succeeded";
     });
 
     builder.addCase(updateHhdState.pending, (state) => {
       state.loading.updateHhdState = "pending";
     });
     builder.addCase(updateHhdState.fulfilled, (state, action) => {
-      state.settingsState = action.payload;
+      state.state = action.payload;
       state.loading.updateHhdState = "succeeded";
     });
     builder.addCase(fetchSectionNames.fulfilled, (state, action) => {
@@ -202,12 +201,14 @@ export const selectAppType = (state: RootState) => {
   return state.hhd.appType;
 };
 
-export const selectHhdSettings = (state: RootState) => {
+export const selectSettings = (state: RootState) => {
   return state.hhd.settings;
 };
 
-export const selectHhdSettingsState = (state: RootState) => {
-  return state.hhd.settingsState;
+export const selectSettingState = (path: string) => {
+  return (state: RootState) => {
+    return get(state.hhd.state, path, null);
+  };
 };
 
 export const selectHasController = (state: RootState) => {
@@ -218,11 +219,14 @@ export const selectShowHintModal = (state: RootState) => {
   return state.hhd.appType !== "overlay" || state.hhd.uiType !== "qam";
 };
 
-export const selectHhdSettingsLoading = (state: RootState) =>
+export const selectSettingsLoading = (state: RootState) =>
   state.hhd.loading.settings;
 
-export const selectHhdSettingsStateLoading = (state: RootState) =>
-  state.hhd.loading.settingsState;
+export const selectSettingsStateLoading = (state: RootState) =>
+  state.hhd.loading.state;
+
+export const selectHasState = (state: RootState) =>
+  Boolean(state.hhd.state.hhd?.http);
 
 export const selectUpdateHhdStatePending = (state: RootState) => {
   return state.hhd.loading.updateHhdState === "pending";
@@ -230,60 +234,13 @@ export const selectUpdateHhdStatePending = (state: RootState) => {
 
 export const selectAllHhdSettingsLoading = (state: RootState) => {
   return (
-    selectHhdSettingsLoading(state) === "pending" ||
-    selectHhdSettingsStateLoading(state) === "pending"
+    selectSettingsLoading(state) === "pending" ||
+    selectSettingsStateLoading(state) === "pending"
   );
 };
 
 export const selectLoginErrorMessage = (state: RootState) => {
   return state.hhd.error[ErrorStates.LoginFailed];
-};
-
-export const selectHints = (state: RootState) => {
-  const settings = state.hhd.settings as {
-    [key: string]: { [key: string]: SettingsType };
-  };
-
-  const hints: { [k: string]: any } = {};
-
-  Object.entries(settings).forEach(([topLevelStr, plugins], idx) => {
-    Object.keys(plugins).forEach((pluginName, idx) => {
-      const extractHints = (
-        setting: SettingsType,
-        hints: { [k: string]: any }
-      ) => {
-        if (setting.hint && setting.title) {
-          hints[setting.title] = setting.hint;
-        }
-        if (setting.children) {
-          hints[setting.title] = {
-            hint: setting.hint,
-            type: setting.type,
-            children: {},
-          };
-          Object.values(setting.children).forEach((s) =>
-            extractHints(s, hints[setting.title].children)
-          );
-        }
-        if (setting.modes) {
-          hints[setting.title] = {
-            hint: setting.hint,
-            type: setting.type,
-            modes: {},
-          };
-          Object.values(setting.modes).forEach((s) =>
-            //@ts-ignore
-            extractHints(s, hints[setting.title].modes)
-          );
-        }
-      };
-      const topLevelSetting = plugins[pluginName] as SettingsType;
-
-      extractHints(topLevelSetting, hints);
-    });
-  });
-
-  return hints;
 };
 
 export const selectTagFilter = (state: RootState) => state.hhd.tagFilter;
@@ -292,7 +249,7 @@ export const selectSectionNames = (state: RootState) => state.hhd.sectionNames;
 
 export const selectVersionHashes = (state: RootState) => {
   return {
-    state: get(state, "hhd.settingsState.version", ""),
+    state: get(state, "hhd.state.version", ""),
     settings: get(state, "hhd.settings.hhd.version.value", ""),
   };
 };
@@ -305,4 +262,4 @@ export const selectPrevUiType = (state: RootState) => {
   return state.hhd.prevUiType;
 };
 
-export default hhdSlice;
+export default slice;
