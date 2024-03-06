@@ -45,7 +45,8 @@ export function useElementNav<T extends HTMLElement>(
 
   useEffect(() => {
     if (focus && ref.current) {
-      ref.current.focus();
+      ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      ref.current.focus({ preventScroll: true });
     }
   }, [focus, ref.current]);
 
