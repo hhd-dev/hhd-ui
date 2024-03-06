@@ -65,73 +65,76 @@ const ExpandedUi = () => {
       : {};
 
   return (
-    <Box margin="0 auto" position="absolute">
-      <Flex
-        padding="2rem 0"
-        flexDirection="column"
-        alignItems="center"
-        overflowX="clip"
-        overflowY="scroll"
-        h="100vh"
-        w="100vw"
-        transition="0.1s ease-in"
-        {...(showClosed && { transform: "scale(80%)", opacity: 0 })}
-        {...scrollCss}
-      >
-        <Flex margin="0.5rem 1rem 1.2rem 1rem">
-          <Flex
-            w={CONTENT_WIDTH}
-            flexDirection="row"
-            alignItems="start"
-            justifyContent="start"
-          >
-            <Heading>
-              <HhdLogo width="7rem" />
-            </Heading>
-            <Box flexGrow="3"></Box>
-
-            <IconButton
-              onClick={toggleColorMode}
-              aria-label="Toggle Darkmode"
-              icon={colorMode == "dark" ? <MoonIcon /> : <SunIcon />}
-            />
-            <TagFilterDropdown />
-            {(!isLocal || appType == "web") && (
-              <Button margin="0 0 0 1rem">Disconnect</Button>
-            )}
-            {appType == "app" && (
-              <Button margin="0 0 0 1rem" onClick={() => window.close()}>
-                Exit
-              </Button>
-            )}
-            {appType == "overlay" && (
-              <Button
-                margin="0 0 0 1rem"
-                onClick={() => dispatch(hhdSlice.actions.setUiType("qam"))}
-              >
-                {controller && (
-                  <ControllerButton
-                    button="y"
-                    margin="0 0.3rem 0 0"
-                    h="1.7rem"
-                    invert
-                  />
-                )}
-                <ArrowRightIcon h="1.7rem" />
-              </Button>
-            )}
-          </Flex>
-        </Flex>
+    <Flex
+      padding="2rem 0"
+      position="absolute"
+      flexDirection="column"
+      alignItems="center"
+      overflowX="clip"
+      overflowY="scroll"
+      h="100vh"
+      w="100vw"
+      transition="0.1s ease-in"
+      {...(showClosed && { transform: "scale(80%)", opacity: 0 })}
+      {...scrollCss}
+      onClick={(e) => {
+        if (e.currentTarget != e.target) return;
+        dispatch(hhdSlice.actions.setUiType("closed"));
+      }}
+    >
+      <Flex margin="0.5rem 1rem 1.2rem 1rem">
         <Flex
           w={CONTENT_WIDTH}
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
+          flexDirection="row"
+          alignItems="start"
+          justifyContent="start"
         >
-          <HhdTabbedState />
+          <Heading>
+            <HhdLogo width="7rem" />
+          </Heading>
+          <Box flexGrow="3"></Box>
+
+          <IconButton
+            onClick={toggleColorMode}
+            aria-label="Toggle Darkmode"
+            icon={colorMode == "dark" ? <MoonIcon /> : <SunIcon />}
+          />
+          <TagFilterDropdown />
+          {(!isLocal || appType == "web") && (
+            <Button margin="0 0 0 1rem">Disconnect</Button>
+          )}
+          {appType == "app" && (
+            <Button margin="0 0 0 1rem" onClick={() => window.close()}>
+              Exit
+            </Button>
+          )}
+          {appType == "overlay" && (
+            <Button
+              margin="0 0 0 1rem"
+              onClick={() => dispatch(hhdSlice.actions.setUiType("qam"))}
+            >
+              {controller && (
+                <ControllerButton
+                  button="y"
+                  margin="0 0.3rem 0 0"
+                  h="1.7rem"
+                  invert
+                />
+              )}
+              <ArrowRightIcon h="1.7rem" />
+            </Button>
+          )}
         </Flex>
       </Flex>
-    </Box>
+      <Flex
+        w={CONTENT_WIDTH}
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <HhdTabbedState />
+      </Flex>
+    </Flex>
   );
 };
 
