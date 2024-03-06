@@ -76,6 +76,7 @@ interface AppState {
   sectionNames: { [key: string]: string };
   tagFilter: TagFilterType;
   navigation: NavigationState;
+  loadCounter: number;
 }
 
 export interface RootState {
@@ -97,6 +98,7 @@ const initialState = {
   error: "",
   sectionNames: {},
   tagFilter: "advanced",
+  loadCounter: 0,
   navigation: {
     curr: {},
     choices: {},
@@ -173,6 +175,10 @@ const slice = createSlice({
     goto: (store, action: PayloadAction<{ section: string; curr: string }>) => {
       const { section, curr } = action.payload;
       store.navigation.curr[section] = curr;
+    },
+
+    incLoadCounter: (store) => {
+      store.loadCounter += 1;
     },
   },
   extraReducers: (builder) => {
@@ -417,6 +423,10 @@ export const selectUiType = (state: RootState) => {
 
 export const selectPrevUiType = (state: RootState) => {
   return state.hhd.prevUiType;
+};
+
+export const selectLoadCounter = (state: RootState) => {
+  return state.hhd.loadCounter;
 };
 
 export default slice;

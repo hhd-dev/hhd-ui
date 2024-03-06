@@ -7,6 +7,7 @@ export const login = (token: string) => {
   store.dispatch(hhdSlice.actions.clearError());
   store.dispatch(local.actions.setToken(token));
   store.dispatch(local.actions.setUrl("http://localhost:5335"));
+  store.dispatch(hhdSlice.actions.incLoadCounter());
 };
 
 export const logout = () => {

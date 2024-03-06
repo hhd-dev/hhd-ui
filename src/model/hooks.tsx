@@ -4,6 +4,7 @@ import hhdSlice, {
   RootState,
   selectAppType,
   selectError,
+  selectLoadCounter,
   selectPrevUiType,
   selectShouldRenderFilters,
   selectUiType,
@@ -207,7 +208,11 @@ export function useIsLocal() {
 export function useInitialLogin() {
   const login = useLogin();
   const canLogIn = useSelector(local.selectors.selectCanLogin);
+
+  // Use load counter so electron can force relogin
+  const loadCounter = useSelector(selectLoadCounter);
+
   useEffect(() => {
     if (canLogIn) login();
-  }, []);
+  }, [loadCounter]);
 }
