@@ -54,17 +54,6 @@ function Wrapper() {
   useRelayEffect();
   useInitialLogin();
 
-  const scrollCss =
-    appType == "overlay"
-      ? {
-          sx: {
-            "::-webkit-scrollbar": {
-              display: "none",
-            },
-          },
-        }
-      : {};
-
   let body = <FrontPage />;
 
   if (loading) {
@@ -98,9 +87,7 @@ function Wrapper() {
       <Box
         h="100vh"
         w="100vw"
-        overflowX="clip"
-        overflowY="scroll"
-        {...scrollCss}
+        overflow="clip"
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
           dispatch(hhdSlice.actions.setUiType("closed"));

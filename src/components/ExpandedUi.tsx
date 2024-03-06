@@ -61,13 +61,28 @@ const ExpandedUi = () => {
   const isOpen = appType !== "overlay" || uiType === "expanded";
   const shouldFadeOpen = appType === "overlay";
 
+  const scrollCss =
+    appType === "overlay"
+      ? {
+          sx: {
+            "::-webkit-scrollbar": {
+              display: "none",
+            },
+          },
+        }
+      : {};
+
   return (
     <FadeBox shouldFadeOpen={shouldFadeOpen} isOpen={isOpen}>
       <Flex
         padding="2rem 0"
-        w="fit-content"
         flexDirection="column"
         alignItems="center"
+        overflowX="clip"
+        overflowY="scroll"
+        h="100vh"
+        w="100vw"
+        {...scrollCss}
       >
         <Flex margin="0.5rem 1rem 1.2rem 1rem">
           <Flex
