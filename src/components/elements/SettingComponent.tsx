@@ -42,6 +42,7 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path }) => {
         id={path}
         isChecked={Boolean(state)}
         onChange={(e) => setState(e.target.checked)}
+        {...(focus && { background: "purple" })}
       />
     </Flex>
   );
@@ -50,12 +51,17 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path }) => {
 const DiscreteComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title, options } = set as DiscreteSetting;
   const { state, setState } = useSettingState<number>(path);
+  const { focus, setFocus } = useElementNav(path);
 
   return (
     <Flex flexDirection="column">
       <FormLabel htmlFor={path}>{title}</FormLabel>
       <Menu>
-        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+          {...(focus && { background: "purple" })}
+        >
           {state}
         </MenuButton>
         <MenuList>
@@ -81,12 +87,17 @@ const DiscreteComponent: FC<SettingProps> = ({ settings: set, path }) => {
 const MultipleComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title, options } = set as MultipleSetting;
   const { state, setState } = useSettingState<string>(path);
+  const { focus, setFocus } = useElementNav(path);
 
   return (
     <Flex flexDirection="column">
       <FormLabel htmlFor={path}>{title}</FormLabel>
       <Menu>
-        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+        <MenuButton
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+          {...(focus && { background: "purple" })}
+        >
           {state && options[state]}
         </MenuButton>
         <MenuList>
@@ -110,7 +121,7 @@ const MultipleComponent: FC<SettingProps> = ({ settings: set, path }) => {
 };
 
 const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
-  const { title } = set as MultipleSetting;
+  const { title } = set;
   const { state, setState: _ } = useSettingState<number>(path);
 
   if (!state) return <></>;
@@ -123,11 +134,16 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
 };
 
 const ActionComponent: FC<SettingProps> = ({ settings: set, path }) => {
-  const { title } = set as MultipleSetting;
+  const { title } = set;
   const { state, setState } = useSettingState<number>(path);
+  const { focus, setFocus } = useElementNav(path);
 
   return (
-    <Button onClick={() => setState(true)} disabled={!state}>
+    <Button
+      onClick={() => setState(true)}
+      disabled={!state}
+      {...(focus && { background: "purple" })}
+    >
       {title}
     </Button>
   );
@@ -137,7 +153,8 @@ const SettingComponent: FC<SettingProps> = ({ settings, path }) => {
   const { type } = settings;
 
   switch (type) {
-    case "number":
+    case "float":
+    case "int":
       return <NumberComponent path={path} settings={settings} />;
     case "bool":
       return <BoolComponent path={path} settings={settings} />;

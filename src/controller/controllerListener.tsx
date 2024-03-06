@@ -73,7 +73,7 @@ export const setupGamepadEventListener = () => {
       const appType = selectAppType(store.getState());
 
       let curr: string | null = store.getState().hhd.navigation.curr["tab"];
-      if (uiType === "closed") {
+      if (uiType === "closed" && appType === "overlay") {
         curr = null;
       } else if (uiType === "qam") {
         curr = "qam";

@@ -19,11 +19,13 @@ import { useSettingState } from "../../hooks/controller";
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
 import { ModeProps } from "../../model/common";
+import { useElementNav } from "../../hooks/navigation";
 
 const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
   const { state, setState } = useSettingState<string>(`${path}.mode`);
   const { title, modes } = set;
   const shouldRenderChild = useShouldRenderChild(qam);
+  const { focus, setFocus } = useElementNav(path);
 
   const mode = state ? set.modes[state] : null;
 
@@ -32,7 +34,12 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
       <Box>
         <FormLabel htmlFor={path}>{title}</FormLabel>
         <Menu>
-          <MenuButton as={Button} width="100%" rightIcon={<ChevronDownIcon />}>
+          <MenuButton
+            as={Button}
+            width="100%"
+            rightIcon={<ChevronDownIcon />}
+            {...(focus && { background: "purple" })}
+          >
             {mode?.title}
           </MenuButton>
           <MenuList>
@@ -63,7 +70,8 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
           ></Divider>
         </Center>
         <Stack flexGrow="1">
-          {mode && shouldRenderChild(mode) &&
+          {mode &&
+            shouldRenderChild(mode) &&
             Object.entries(mode.children)
               .filter((c) => shouldRenderChild(c[1]))
               .map(([childName, childSet], idx) => {

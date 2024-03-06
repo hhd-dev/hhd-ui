@@ -16,6 +16,7 @@ import { FC } from "react";
 import { useSettingState } from "../../hooks/controller";
 import ErrorBoundary from "../ErrorBoundary";
 import { SettingProps, NumberSetting } from "../../model/common";
+import { useElementNav } from "../../hooks/navigation";
 
 const NumberComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { tags, title, min, max, unit } = set as NumberSetting<
@@ -23,12 +24,19 @@ const NumberComponent: FC<SettingProps> = ({ settings: set, path }) => {
     "float" | "int"
   >;
   const { state, setState } = useSettingState<number>(path);
+  const { focus, setFocus } = useElementNav(path);
 
   if (tags?.includes("dropdown")) {
     return (
       <ErrorBoundary title={title}>
         <FormLabel htmlFor={path}>{title}</FormLabel>
-        <NumberInput id={path} onChange={setState} min={min} max={max}>
+        <NumberInput
+          id={path}
+          onChange={setState}
+          min={min}
+          max={max}
+          {...(focus && { background: "purple" })}
+        >
           <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />
@@ -47,7 +55,12 @@ const NumberComponent: FC<SettingProps> = ({ settings: set, path }) => {
           <FormLabel minW="2.4rem" htmlFor={path} textAlign="end">
             {title}
           </FormLabel>
-          <Slider min={min} max={max} onChange={setState}>
+          <Slider
+            min={min}
+            max={max}
+            onChange={setState}
+            {...(focus && { background: "purple" })}
+          >
             <SliderTrack>
               <SliderFilledTrack />
             </SliderTrack>
@@ -77,7 +90,12 @@ const NumberComponent: FC<SettingProps> = ({ settings: set, path }) => {
           </FormLabel>
         )}
       </Flex>
-      <Slider min={min} max={max} onChange={setState}>
+      <Slider
+        min={min}
+        max={max}
+        onChange={setState}
+        {...(focus && { background: "purple" })}
+      >
         <SliderTrack>
           <SliderFilledTrack />
         </SliderTrack>

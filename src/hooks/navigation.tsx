@@ -97,12 +97,16 @@ function getFocusElements(
   switch (type) {
     case "bool":
     case "multiple":
+    case "discrete":
     case "int":
     case "float":
+    case "action":
       return [path];
     case "container":
       for (const [k, v] of Object.entries((set as ContainerSetting).children)) {
-        out.push(...getFocusElements(v, state, `${path}.${k}`, shouldRender));
+        out.push(
+          ...getFocusElements(v, state[k], `${path}.${k}`, shouldRender)
+        );
       }
       return out;
     case "mode":
