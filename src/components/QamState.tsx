@@ -12,7 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { useShouldRenderChild, useShouldRenderParent } from "../model/hooks";
+import { useShouldRenderParent } from "../model/hooks";
+import { useShouldRenderChild } from "../model/hooks";
 import hhdSlice, {
   selectAppType,
   selectHasController,
@@ -25,6 +26,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import HhdLogo from "./Logo";
 import ContainerComponent from "./elements/ContainerComponent";
 import { QAM_WIDTH } from "./theme";
+import { useEffect, useState } from "react";
 
 const QamState = () => {
   const sectionNames = useSelector(selectSectionNames);
@@ -41,6 +43,24 @@ const QamState = () => {
   );
 
   const isOpen = appType === "overlay" && uiType === "qam";
+  
+  const [oldOpen, setOldOpen] = useState(false);
+  useEffect(() => {
+    let timeoutId: number | null = null;
+    timeoutId = setTimeout(
+      () => {
+        setOldOpen(isOpen);
+      },
+      isOpen ? 10 : 500
+    );
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [isOpen]); // Empty dependency array ensures the effect runs only once
+
+  if (!isOpen && !oldOpen) return <></>;
+  const showClosed = (isOpen && !oldOpen) || (!isOpen && oldOpen);
 
   return (
     <Flex
@@ -50,8 +70,10 @@ const QamState = () => {
       position="absolute"
       overflowY="scroll"
       boxShadow="dark-lg"
-      transition="0.1s ease-in"
-      {...(!isOpen && { transform: "translateX(100%)" })}
+      transition="0.075s ease-in-out"
+      {...(showClosed
+        ? { transform: "translateX(100px)", opacity: 0 }
+        : { transform: "translateX(0)" })}
       sx={{
         "::-webkit-scrollbar": {
           display: "none",

@@ -22,6 +22,7 @@ import TagFilterDropdown from "./TagFilterDropdown";
 
 import { useIsLocal } from "../model/hooks";
 import { ControllerButton } from "./Controller";
+import { useEffect, useState } from "react";
 
 const ExpandedUi = () => {
   const appType = useSelector(selectAppType);
@@ -33,6 +34,24 @@ const ExpandedUi = () => {
   const dispatch = useDispatch();
 
   const isOpen = appType !== "overlay" || uiType === "expanded";
+
+  const [oldOpen, setOldOpen] = useState(false);
+  useEffect(() => {
+    let timeoutId: number | null = null;
+    timeoutId = setTimeout(
+      () => {
+        setOldOpen(isOpen);
+      },
+      isOpen ? 10 : 500
+    );
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [isOpen]); // Empty dependency array ensures the effect runs only once
+
+  if (!isOpen && !oldOpen) return <></>;
+  const showClosed = (isOpen && !oldOpen) || (!isOpen && oldOpen);
 
   const scrollCss =
     appType === "overlay"
@@ -56,7 +75,7 @@ const ExpandedUi = () => {
         h="100vh"
         w="100vw"
         transition="0.1s ease-in"
-        {...(!isOpen && { transform: "scale(80%)", opacity: 0 })}
+        {...(showClosed && { transform: "scale(80%)", opacity: 0 })}
         {...scrollCss}
       >
         <Flex margin="0.5rem 1rem 1.2rem 1rem">
