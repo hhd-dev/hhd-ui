@@ -21,13 +21,16 @@ import {
   MultipleSetting,
   SettingProps,
 } from "../../model/common";
-import { useElementNav, useFocusRef } from "../../hooks/navigation";
+import { useElementNav } from "../../hooks/navigation";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   const { title } = set as BoolSetting;
   const { state, setState } = useSettingState<number>(path);
-  const { focus, setFocus } = useElementNav(section, path);
-  const ref = useFocusRef<HTMLInputElement>(focus);
+  const {
+    ref,
+    focus,
+    setFocus,
+  } = useElementNav<HTMLInputElement>(section, path);
 
   return (
     <Flex
@@ -43,8 +46,8 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
         id={path}
         isChecked={Boolean(state)}
         onChange={(e) => setState(e.target.checked)}
-        {...(focus && { background: "purple" })}
         ref={ref}
+        onFocus={setFocus}
       />
     </Flex>
   );
@@ -57,9 +60,7 @@ const DiscreteComponent: FC<SettingProps> = ({
 }) => {
   const { title, options } = set as DiscreteSetting;
   const { state, setState } = useSettingState<number>(path);
-  const { focus, setFocus } = useElementNav(section, path);
-
-  const ref = useFocusRef(focus);
+  const { ref, focus, setFocus } = useElementNav(section, path);
 
   return (
     <Flex flexDirection="column">
@@ -70,6 +71,7 @@ const DiscreteComponent: FC<SettingProps> = ({
           rightIcon={<ChevronDownIcon />}
           {...(focus && { background: "purple" })}
           ref={ref}
+          onFocus={setFocus}
         >
           {state}
         </MenuButton>
@@ -100,9 +102,11 @@ const MultipleComponent: FC<SettingProps> = ({
 }) => {
   const { title, options } = set as MultipleSetting;
   const { state, setState } = useSettingState<string>(path);
-  const { focus, setFocus } = useElementNav(section, path);
-
-  const ref = useFocusRef(focus);
+  const {
+    ref,
+    focus,
+    setFocus: _,
+  } = useElementNav<HTMLButtonElement>(section, path);
 
   return (
     <Flex flexDirection="column">
@@ -156,8 +160,11 @@ const ActionComponent: FC<SettingProps> = ({
 }) => {
   const { title } = set;
   const { state, setState } = useSettingState<number>(path);
-  const { focus, setFocus } = useElementNav(section, path);
-  const ref = useFocusRef<HTMLButtonElement>(focus);
+  const {
+    ref,
+    focus,
+    setFocus: _,
+  } = useElementNav<HTMLButtonElement>(section, path);
 
   return (
     <Button

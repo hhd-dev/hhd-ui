@@ -14,7 +14,7 @@ export const TAG_FILTER_CACHE_KEY = "hhd-ui.tagFilter";
 
 export type TagFilterType = "advanced" | "expert";
 
-export const TagFilters: { [key: string]: TagFilterType } = {
+export const TAG_FILTERS: { [key: string]: TagFilterType } = {
   advanced: "advanced",
   expert: "expert",
 };

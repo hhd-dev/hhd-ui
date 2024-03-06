@@ -9,7 +9,12 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { useSelector } from "react-redux";
-import { useRootNav, useSectionNav } from "../hooks/navigation";
+import {
+  useShouldRenderChild,
+  useShouldRenderParent,
+} from "../hooks/conditionalRender";
+import { useSectionNav } from "../hooks/navigation";
+import { ContainerSetting } from "../model/common";
 import {
   selectHasController,
   selectSectionNames,
@@ -19,11 +24,6 @@ import { ControllerButton } from "./Controller";
 import ErrorBoundary from "./ErrorBoundary";
 import ContainerComponent from "./elements/ContainerComponent";
 import { CONTENT_WIDTH } from "./theme";
-import {
-  useShouldRenderChild,
-  useShouldRenderParent,
-} from "../hooks/conditionalRender";
-import { ContainerSetting } from "../model/common";
 
 const TabbedSection = ({
   section,
@@ -33,7 +33,6 @@ const TabbedSection = ({
   containers: Record<string, ContainerSetting>;
 }) => {
   const shouldRenderChild = useShouldRenderChild(false);
-  useRootNav(section);
 
   return (
     <Box>
@@ -71,7 +70,7 @@ const TabbedState = () => {
   );
   const keys = Object.keys(settings);
 
-  const { curr, setCurr } = useSectionNav("tab", keys);
+  const { curr, setCurr } = useSectionNav("tab");
 
   return (
     <Card width={CONTENT_WIDTH}>

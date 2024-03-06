@@ -29,7 +29,6 @@ import ErrorBoundary from "./ErrorBoundary";
 import HhdLogo from "./Logo";
 import ContainerComponent from "./elements/ContainerComponent";
 import { QAM_WIDTH } from "./theme";
-import { useRootNav } from "../hooks/navigation";
 
 const QamState = () => {
   const sectionNames = useSelector(selectSectionNames);
@@ -40,7 +39,6 @@ const QamState = () => {
   const fullSettings = useSelector(selectSettings);
   const shouldRenderParent = useShouldRenderParent(true);
   const shouldRenderChild = useShouldRenderChild(true);
-  useRootNav("qam");
 
   const settings = Object.fromEntries(
     Object.entries(fullSettings).filter((c) => shouldRenderParent(c[1]))

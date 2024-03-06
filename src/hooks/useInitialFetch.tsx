@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import {
   TAG_FILTER_CACHE_KEY,
   TagFilterType,
-  TagFilters,
+  TAG_FILTERS,
 } from "../components/TagFilterDropdown";
 import {
   fetchHhdSettings,
@@ -30,7 +30,7 @@ function useInitialFetch() {
       TAG_FILTER_CACHE_KEY
     ) as TagFilterType | null;
 
-    if (tagFilter && TagFilters[tagFilter]) {
+    if (tagFilter && tagFilter in TAG_FILTERS) {
       dispatch(hhdSlice.actions.setTagFilter(tagFilter));
     }
 

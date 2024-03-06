@@ -1,10 +1,16 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { get, set } from "lodash";
+import { get, set, update } from "lodash";
 import {
   TAG_FILTER_CACHE_KEY,
   TagFilterType,
 } from "../components/TagFilterDropdown";
-import { Sections, State } from "./common";
+import {
+  ContainerSetting,
+  ModeSetting,
+  Sections,
+  Setting,
+  State,
+} from "./common";
 import { RootState } from "./store";
 import {
   fetchHhdSettings,
@@ -16,6 +22,18 @@ import {
 export enum ErrorStates {
   LoginFailed = "LoginFailed",
 }
+
+export const DEFAULT_HIDDEN = [
+  "hidden",
+  "hhd-update-decky",
+  "hhd-version-display-decky",
+];
+export const QAM_FILTERS = [
+  "non-essential",
+  "advanced",
+  "expert",
+  ...DEFAULT_HIDDEN,
+];
 
 export type SettingType =
   | "bool"
@@ -165,18 +183,6 @@ const slice = createSlice({
       const { section, curr } = action.payload;
       store.navigation.curr[section] = curr;
     },
-
-    goSet: (
-      store,
-      action: PayloadAction<{ section: string; choices: string[] }>
-    ) => {
-      const { section, choices } = action.payload;
-      store.navigation.choices[section] = choices;
-      const curr = store.navigation.curr[section];
-      if (curr === undefined || !choices.includes(curr)) {
-        store.navigation.curr[section] = choices[0];
-      }
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchHhdSettings.pending, (state) => {
@@ -184,6 +190,7 @@ const slice = createSlice({
     });
     builder.addCase(fetchHhdSettings.fulfilled, (state, action) => {
       state.settings = action.payload;
+      updateNavigation(state);
       state.loading.settings = "succeeded";
     });
     builder.addCase(fetchHhdSettingsState.pending, (state) => {
@@ -191,6 +198,7 @@ const slice = createSlice({
     });
     builder.addCase(fetchHhdSettingsState.fulfilled, (state, action) => {
       state.state = action.payload;
+      updateNavigation(state);
       state.loading.state = "succeeded";
     });
 
@@ -199,6 +207,7 @@ const slice = createSlice({
     });
     builder.addCase(updateHhdState.fulfilled, (state, action) => {
       state.state = action.payload;
+      updateNavigation(state);
       state.loading.updateHhdState = "succeeded";
     });
     builder.addCase(fetchSectionNames.fulfilled, (state, action) => {
@@ -207,7 +216,152 @@ const slice = createSlice({
   },
 });
 
+function updateNavigation(state: AppState) {
+  if (!Object.keys(state.state).length || !Object.keys(state.settings).length)
+    return;
+
+  // QAM
+  const shouldRenderQam = (c: Setting) => shouldRenderChild(c, QAM_FILTERS);
+  const choices = getSectionElements(
+    state.settings,
+    state.state,
+    shouldRenderQam
+  );
+  state.navigation.choices["qam"] = choices;
+  if (!choices.includes(state.navigation.curr["qam"])) {
+    state.navigation.curr["qam"] = choices[0];
+  }
+
+  // Tabs
+  const shouldRender = (c: Setting) =>
+    shouldRenderChild(c, getFilters(state.tagFilter));
+
+  for (const [s, v] of Object.entries(state.settings)) {
+    const newS: Sections = {};
+    newS[s] = v;
+    const choices = getSectionElements(newS, state.state, shouldRender);
+    state.navigation.choices[s] = choices;
+    if (!choices.includes(state.navigation.curr[s])) {
+      state.navigation.curr[s] = choices[0];
+    }
+  }
+
+  // Tab Headers
+  function shouldRenderParent(containers: Record<string, Setting>) {
+    return Object.values(containers).some(shouldRender);
+  }
+  const keys = Object.entries(state.settings)
+    .filter(([_, data]) => shouldRenderParent(data))
+    .map(([name, _]) => name);
+
+  state.navigation.choices["tab"] = keys;
+  if (!keys.includes(state.navigation.curr["tab"]))
+    state.navigation.curr["tab"] = keys[0];
+}
+
 // selectors
+
+function getSectionElements(
+  set: Sections,
+  state: State,
+  shouldRender: (s: Setting) => boolean
+) {
+  let out = [];
+  for (const [section, cs] of Object.entries(set)) {
+    for (const [name, v] of Object.entries(cs).filter(
+      (c) => c[1].type === "container"
+    )) {
+      out.push(
+        ...getFocusElements(
+          v,
+          state[section][name],
+          `${section}.${name}`,
+          shouldRender
+        )
+      );
+    }
+  }
+  return out;
+}
+
+function getFocusElements(
+  set: Setting,
+  state: State,
+  path: string,
+  shouldRender: (s: Setting) => boolean
+) {
+  if (!shouldRender(set)) return [];
+
+  const type = set.type;
+
+  let out: string[] = [];
+  switch (type) {
+    case "bool":
+    case "multiple":
+    case "discrete":
+    case "int":
+    case "float":
+    case "action":
+      return [path];
+    case "container":
+      for (const [k, v] of Object.entries((set as ContainerSetting).children)) {
+        out.push(
+          ...getFocusElements(v, state[k], `${path}.${k}`, shouldRender)
+        );
+      }
+      return out;
+    case "mode":
+      out = [path];
+      const mode = state["mode"] as unknown as string;
+      const data = (set as ModeSetting).modes[mode];
+      if (data) {
+        out.push(
+          ...getFocusElements(
+            data,
+            state[mode],
+            `${path}.${mode}`,
+            shouldRender
+          )
+        );
+      }
+      return out;
+  }
+
+  return [];
+}
+
+export const shouldRenderChild = (set: Setting, filters: string[]): boolean => {
+  const tags = set.tags;
+
+  const children =
+    set.type === "container" && (set as ContainerSetting).children;
+
+  if (tags && tags.some((v: string) => filters.includes(v))) {
+    return false;
+  }
+
+  if (children) {
+    return Object.values(children).some((c) => shouldRenderChild(c, filters));
+  }
+
+  return true;
+};
+
+const getFilters = (tagFilter: string) => {
+  return tagFilter === "advanced"
+    ? ["expert", ...DEFAULT_HIDDEN]
+    : DEFAULT_HIDDEN;
+};
+
+const selectFilters = (state: RootState) => {
+  const tagFilter = selectTagFilter(state);
+
+  return getFilters(tagFilter);
+};
+
+export const selectShouldRenderFilters = (qam: boolean) => {
+  return (state: RootState) => (qam ? QAM_FILTERS : selectFilters(state));
+};
 
 export const selectAppType = (state: RootState) => {
   return state.hhd.appType;

@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLogout } from "./hooks/auth";
 
@@ -15,7 +15,7 @@ import useInitialFetch from "./hooks/useInitialFetch";
 
 setupGamepadEventListener();
 
-const App = memo(() => {
+const App = () => {
   useInitialFetch();
 
   const settingsLoading = useSelector(selectSettingsLoading);
@@ -47,6 +47,6 @@ const App = memo(() => {
       <ExpandedUi />
     </>
   );
-});
+};
 
 export default App;
