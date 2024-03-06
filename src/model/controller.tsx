@@ -14,6 +14,9 @@ const BUTTON_MAP = {
   y: 3,
 };
 
+const REPEAT_INITIAL = 500;
+const REPEAT_INTERVAL = 200;
+
 const AXIS_MAP: [string, number, boolean][] = [
   ["left", 0, true],
   ["right", 0, false],
@@ -23,9 +26,11 @@ const AXIS_MAP: [string, number, boolean][] = [
 
 export const setupGamepadEventListener = () => {
   let interval: number | null = null;
-  let state: Record<string, Record<string, boolean>> = {};
+  let state: Record<string, Record<string, number | null>> = {};
 
   function updateLoop() {
+    const time = new Date().getTime();
+
     for (const [gidx, gp] of navigator.getGamepads().entries()) {
       if (!gp) continue;
 
@@ -34,36 +39,54 @@ export const setupGamepadEventListener = () => {
       // Handle buttons
       for (const [name, idx] of Object.entries(BUTTON_MAP)) {
         // Grab data
-        const curr = state[gidx] ? state[gidx][name] : null;
+        const curr = state[gidx] ? Boolean(state[gidx][name]) : null;
         const next = gp.buttons[idx].pressed;
-
-        // Push event
-        if (curr !== next && next) {
-          evs.push(name);
-        }
 
         // Update state
         if (!state[gidx]) {
           state[gidx] = {};
         }
-        state[gidx][name] = next;
+
+        // Push event
+        if (curr !== next) {
+          if (next) {
+            evs.push(name);
+            state[gidx][name] = time + REPEAT_INITIAL;
+          } else {
+            state[gidx][name] = null;
+          }
+        }
       }
 
       // Handle Axis events
       for (const [name, ax, neg] of AXIS_MAP) {
-        const curr = state[gidx] ? state[gidx][name] : null;
+        const curr = state[gidx] ? Boolean(state[gidx][name]) : null;
         const next = neg ? gp.axes[ax] < -0.6 : gp.axes[ax] > 0.6;
-
-        // Push event
-        if (curr !== next && next) {
-          evs.push(name);
-        }
 
         // Update state
         if (!state[gidx]) {
           state[gidx] = {};
         }
-        state[gidx][name] = next;
+
+        // Push event
+        if (curr !== next) {
+          if (next) {
+            evs.push(name);
+            state[gidx][name] = time + REPEAT_INITIAL;
+          } else {
+            state[gidx][name] = null;
+          }
+        }
+      }
+
+      // Allow repeats
+      for (const [gidx, gps] of Object.entries(state)) {
+        for (const [name, start] of Object.entries(gps)) {
+          if (!start) continue;
+          if (time < start) continue;
+          evs.push(name);
+          state[gidx][name] = time + REPEAT_INTERVAL;
+        }
       }
 
       // Handle gamepad events
