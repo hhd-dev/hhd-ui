@@ -1,5 +1,5 @@
-import hhdSlice, { selectAppType, selectUiType } from "../model/slice";
-import { store } from "../model/store";
+import hhdSlice, { selectAppType, selectUiType } from "./slice";
+import { store } from "./store";
 
 const BUTTON_MAP = {
   lb: 4,

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { get, set, update } from "lodash";
+import { get, set } from "lodash";
 import {
   TAG_FILTER_CACHE_KEY,
   TagFilterType,
@@ -11,17 +11,12 @@ import {
   Setting,
   State,
 } from "./common";
-import { RootState } from "./store";
 import {
-  fetchHhdSettings,
-  fetchHhdSettingsState,
+  fetchSettings,
+  fetchState,
   fetchSectionNames,
-  updateHhdState,
+  updateSettingValue,
 } from "./thunks";
-
-export enum ErrorStates {
-  LoginFailed = "LoginFailed",
-}
 
 export const DEFAULT_HIDDEN = [
   "hidden",
@@ -34,6 +29,7 @@ export const QAM_FILTERS = [
   "expert",
   ...DEFAULT_HIDDEN,
 ];
+export const EXPERT_HIDDEN = ["expert", ...DEFAULT_HIDDEN];
 
 export type SettingType =
   | "bool"
@@ -63,8 +59,6 @@ export type UiType = "expanded" | "notification" | "qam" | "closed";
 export type PrevUiType = UiType | "init";
 export type AppType = "web" | "app" | "overlay";
 
-export type LoadingStatusType = "idle" | "pending" | "succeeded" | "failed";
-
 interface NavigationState {
   curr: Record<string, string>;
   choices: Record<string, string[]>;
@@ -77,11 +71,15 @@ interface AppState {
   controller: boolean;
   state: State;
   settings: Sections;
-  loading: { [loadState: string]: LoadingStatusType };
-  error: { [key: string]: string };
+  loading: { [loadState: string]: boolean };
+  error: string;
   sectionNames: { [key: string]: string };
   tagFilter: TagFilterType;
   navigation: NavigationState;
+}
+
+export interface RootState {
+  hhd: AppState;
 }
 
 const initialState = {
@@ -92,11 +90,11 @@ const initialState = {
   state: {},
   settings: {},
   loading: {
-    settings: "idle",
-    state: "idle",
-    updateHhdState: "idle",
+    settings: false,
+    state: false,
+    update: false,
   },
-  error: {},
+  error: "",
   sectionNames: {},
   tagFilter: "advanced",
   navigation: {
@@ -116,7 +114,7 @@ const slice = createSlice({
       const { path, value } = action.payload;
       set(store.state, path, value);
     },
-    resetHhdState: (store) => {
+    clearState: (store) => {
       store.loading = initialState.loading;
       store.settings = initialState.settings;
       store.state = initialState.state;
@@ -137,18 +135,11 @@ const slice = createSlice({
       store.appType = action.payload;
       if (action.payload === "overlay") store.controller = true;
     },
-    setError: (
-      store,
-      action: PayloadAction<{ errorName: string; errorMessage: string }>
-    ) => {
-      const { errorName, errorMessage } = action.payload;
-
-      set(store.error, errorName, errorMessage);
+    setError: (store, action: PayloadAction<string>) => {
+      store.error = action.payload;
     },
-    clearError: (store, action: PayloadAction<string>) => {
-      const errorName = action.payload;
-
-      delete store.error[errorName];
+    clearError: (store) => {
+      store.error = "";
     },
     overrideSettings: (store, action: PayloadAction<any>) => {
       store.settings = action.payload;
@@ -185,33 +176,39 @@ const slice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchHhdSettings.pending, (state) => {
-      state.loading.settings = "pending";
+    builder.addCase(fetchSettings.pending, (state) => {
+      state.loading.settings = true;
     });
-    builder.addCase(fetchHhdSettings.fulfilled, (state, action) => {
-      state.settings = action.payload;
+    builder.addCase(fetchSettings.fulfilled, (state, action) => {
+      if (action.payload.data) state.settings = action.payload.data;
+      if (action.payload.error)
+        state.error = "Could not fetch data. Is Handheld Daemon running?";
       updateNavigation(state);
-      state.loading.settings = "succeeded";
+      state.loading.settings = false;
     });
-    builder.addCase(fetchHhdSettingsState.pending, (state) => {
-      state.loading.state = "pending";
+    builder.addCase(fetchState.pending, (state) => {
+      state.loading.state = true;
     });
-    builder.addCase(fetchHhdSettingsState.fulfilled, (state, action) => {
-      state.state = action.payload;
+    builder.addCase(fetchState.fulfilled, (state, action) => {
+      if (action.payload.data) state.state = action.payload.data;
+      if (action.payload.error)
+        state.error = "Could not fetch data. Is Handheld Daemon running?";
       updateNavigation(state);
-      state.loading.state = "succeeded";
+      state.loading.state = false;
     });
 
-    builder.addCase(updateHhdState.pending, (state) => {
-      state.loading.updateHhdState = "pending";
+    builder.addCase(updateSettingValue.pending, (state) => {
+      state.loading.update = true;
     });
-    builder.addCase(updateHhdState.fulfilled, (state, action) => {
-      state.state = action.payload;
+    builder.addCase(updateSettingValue.fulfilled, (state, action) => {
+      if (action.payload.data) state.state = action.payload.data;
+      if (action.payload.error)
+        state.error = "Could not fetch data. Is Handheld Daemon running?";
       updateNavigation(state);
-      state.loading.updateHhdState = "succeeded";
+      state.loading.update = false;
     });
     builder.addCase(fetchSectionNames.fulfilled, (state, action) => {
-      state.sectionNames = action.payload || {};
+      state.sectionNames = action.payload.data || {};
     });
   },
 });
@@ -220,7 +217,7 @@ function updateNavigation(state: AppState) {
   if (!Object.keys(state.state).length || !Object.keys(state.settings).length)
     return;
 
-  // QAM
+  // QAMs
   const shouldRenderQam = (c: Setting) => shouldRenderChild(c, QAM_FILTERS);
   const choices = getSectionElements(
     state.settings,
@@ -258,8 +255,6 @@ function updateNavigation(state: AppState) {
   if (!keys.includes(state.navigation.curr["tab"]))
     state.navigation.curr["tab"] = keys[0];
 }
-
-// selectors
 
 function getSectionElements(
   set: Sections,
@@ -348,15 +343,33 @@ export const shouldRenderChild = (set: Setting, filters: string[]): boolean => {
 };
 
 const getFilters = (tagFilter: string) => {
-  return tagFilter === "advanced"
-    ? ["expert", ...DEFAULT_HIDDEN]
-    : DEFAULT_HIDDEN;
+  return tagFilter === "advanced" ? EXPERT_HIDDEN : DEFAULT_HIDDEN;
 };
 
 const selectFilters = (state: RootState) => {
   const tagFilter = selectTagFilter(state);
 
   return getFilters(tagFilter);
+};
+
+export const selectIsLoggedIn = (state: RootState) => {
+  return (
+    !state.hhd.loading.settings &&
+    !state.hhd.loading.state &&
+    selectHasState(state)
+  );
+};
+
+export const selectIsLoading = (state: RootState) => {
+  return (
+    !selectHasState(state) ||
+    state.hhd.loading.settings ||
+    state.hhd.loading.state
+  );
+};
+
+export const selectError = (state: RootState) => {
+  return state.hhd.error;
 };
 
 export const selectShouldRenderFilters = (qam: boolean) => {
@@ -393,21 +406,6 @@ export const selectSettingsStateLoading = (state: RootState) =>
 
 export const selectHasState = (state: RootState) =>
   Boolean(state.hhd.state.hhd?.http);
-
-export const selectUpdateHhdStatePending = (state: RootState) => {
-  return state.hhd.loading.updateHhdState === "pending";
-};
-
-export const selectAllHhdSettingsLoading = (state: RootState) => {
-  return (
-    selectSettingsLoading(state) === "pending" ||
-    selectSettingsStateLoading(state) === "pending"
-  );
-};
-
-export const selectLoginErrorMessage = (state: RootState) => {
-  return state.hhd.error[ErrorStates.LoginFailed];
-};
 
 export const selectTagFilter = (state: RootState) => state.hhd.tagFilter;
 

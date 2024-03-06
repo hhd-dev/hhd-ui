@@ -13,7 +13,7 @@ import {
   MenuOptionGroup,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { useSettingState } from "../../hooks/controller";
+import { useSettingState } from "../../model/hooks";
 import NumberComponent from "./NumberComponent";
 import {
   BoolSetting,
@@ -21,16 +21,15 @@ import {
   MultipleSetting,
   SettingProps,
 } from "../../model/common";
-import { useElementNav } from "../../hooks/navigation";
+import { useElementNav } from "../../model/hooks";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   const { title } = set as BoolSetting;
   const { state, setState } = useSettingState<number>(path);
-  const {
-    ref,
-    focus,
-    setFocus,
-  } = useElementNav<HTMLInputElement>(section, path);
+  const { ref, focus, setFocus } = useElementNav<HTMLInputElement>(
+    section,
+    path
+  );
 
   return (
     <Flex

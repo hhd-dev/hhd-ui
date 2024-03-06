@@ -13,8 +13,8 @@ import {
   SliderTrack,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { useSettingState } from "../../hooks/controller";
-import { useElementNav } from "../../hooks/navigation";
+import { useSettingState } from "../../model/hooks";
+import { useElementNav } from "../../model/hooks";
 import { NumberSetting, SettingProps } from "../../model/common";
 
 const NumberComponent: FC<SettingProps> = ({
@@ -55,7 +55,7 @@ const NumberComponent: FC<SettingProps> = ({
     );
   }
 
-  ref.current?.focus()
+  ref.current?.focus();
 
   if (tags?.includes("slim")) {
     // TODO: Fix style boundary

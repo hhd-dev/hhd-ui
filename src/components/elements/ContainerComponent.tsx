@@ -1,6 +1,6 @@
 import { CardBody, Flex, Heading, Stack } from "@chakra-ui/react";
 import { FC } from "react";
-import { useShouldRenderChild } from "../../hooks/conditionalRender";
+import { useShouldRenderChild } from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
 import { ContainerProps, ModeSetting } from "../../model/common";

@@ -1,40 +1,30 @@
-import { useNavigate } from "react-router-dom";
 import {
-  Heading,
-  Button,
-  Input,
-  Text,
-  Box,
-  Flex,
-  Center,
-  CardHeader,
-  Card,
-  CardBody,
-  Stack,
-  StackDivider,
-  Code,
-  FormControl,
   Alert,
   AlertIcon,
-  AbsoluteCenter,
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
+  Code,
+  Flex,
+  Input,
+  Stack,
+  StackDivider,
+  Text,
 } from "@chakra-ui/react";
 
-import { getToken, getUrl, isLoggedIn, setToken, setUrl } from "../local";
-import { useEffect, useState } from "react";
-import { useLogin } from "../hooks/auth";
+import { useError, useLogin } from "../model/hooks";
 import HhdLogo from "./Logo";
+import { useToken } from "../model/hooks";
+import { useUrl } from "../model/hooks";
 
 export default function FrontPage() {
-  const navigate = useNavigate();
-  const [url, setUrlState] = useState(getUrl());
-  const [token, setTokenState] = useState(getToken());
-  const { login, errorMessage } = useLogin();
-
-  useEffect(() => {
-    if (isLoggedIn()) {
-      navigate("/ui");
-    }
-  }, []);
+  const { url, setUrl } = useUrl();
+  const { token, setToken } = useToken();
+  const { error } = useError();
+  const login = useLogin();
 
   return (
     // TODO: Figure out on small displays why scrolling is weird
@@ -72,7 +62,6 @@ export default function FrontPage() {
                     value={url}
                     onChange={(e) => {
                       setUrl(e.target.value);
-                      setUrlState(e.target.value);
                     }}
                     borderRightRadius="0"
                     placeholder="URL"
@@ -80,8 +69,7 @@ export default function FrontPage() {
                   <Button
                     w="5rem"
                     onClick={() => {
-                      setUrl("");
-                      setUrlState("");
+                      setUrl(null);
                     }}
                     borderLeftRadius="0"
                   >
@@ -96,7 +84,6 @@ export default function FrontPage() {
                     id="token-input"
                     onChange={(e) => {
                       setToken(e.target.value);
-                      setTokenState(e.target.value);
                     }}
                     value={token}
                     borderRightRadius="0"
@@ -106,7 +93,6 @@ export default function FrontPage() {
                     w="5rem"
                     onClick={() => {
                       setToken("");
-                      setTokenState("");
                     }}
                     borderLeftRadius="0"
                   >
@@ -120,10 +106,10 @@ export default function FrontPage() {
                 >
                   Connect
                 </Button>
-                {errorMessage && (
+                {error && (
                   <Alert status="error">
                     <AlertIcon />
-                    {errorMessage}
+                    {error}
                   </Alert>
                 )}
               </Stack>

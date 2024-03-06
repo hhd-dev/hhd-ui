@@ -13,10 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  useShouldRenderChild,
-  useShouldRenderParent,
-} from "../hooks/conditionalRender";
+import { useShouldRenderParent } from "../model/hooks";
+import { useShouldRenderChild } from "../model/hooks";
 import hhdSlice, {
   selectAppType,
   selectHasController,

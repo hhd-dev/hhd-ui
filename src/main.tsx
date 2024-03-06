@@ -2,22 +2,24 @@ import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import {
-  Route,
-  RouterProvider,
-  Routes,
-  createHashRouter,
-} from "react-router-dom";
-import App from "./App.tsx";
 import FrontPage from "./components/FrontPage.tsx";
 import theme from "./components/theme.tsx";
-import { AppDispatch, store } from "./model/store.tsx";
 
+import { PersistGate } from "redux-persist/integration/react";
 import BackgroundDark from "./assets/background_dark.jpg";
 import BackgroundLight from "./assets/background_light.jpg";
-import { useHddRelayEffect } from "./hooks/electron.tsx";
-import hhdSlice, { selectAppType, selectUiType } from "./model/slice.tsx";
-import * as electronUtils from "./utils/electronUtils.tsx";
+import ExpandedUi from "./components/ExpandedUi.tsx";
+import QamState from "./components/QamState.tsx";
+import { useInitialLogin, useRelayEffect } from "./model/hooks.tsx";
+import hhdSlice, {
+  selectAppType,
+  selectIsLoading,
+  selectIsLoggedIn,
+  selectUiType,
+} from "./model/slice.tsx";
+import * as electronUtils from "./model/electron.tsx";
+import { persistor, store } from "./model/store.tsx";
+import { setupGamepadEventListener } from "./model/controller.tsx";
 
 declare global {
   interface Window {
@@ -29,11 +31,16 @@ declare global {
 // Inject electron utils
 window.electronUtils = electronUtils;
 
+// Setup gamepad listener
+setupGamepadEventListener();
+
 function Wrapper() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
   const uiType = useSelector(selectUiType);
   const appType = useSelector(selectAppType);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
+  const loading = useSelector(selectIsLoading);
+  const loggedIn = useSelector(selectIsLoggedIn);
 
   let background;
   if (appType === "web" || appType === "app") {
@@ -44,7 +51,8 @@ function Wrapper() {
     background = "0%";
   }
 
-  useHddRelayEffect();
+  useRelayEffect();
+  useInitialLogin();
 
   const scrollCss =
     appType == "overlay"
@@ -56,6 +64,20 @@ function Wrapper() {
           },
         }
       : {};
+
+  let body = <FrontPage />;
+
+  if (loading) {
+    // TODO: Implement spinner
+  }
+
+  if (loggedIn)
+    body = (
+      <>
+        <QamState />
+        <ExpandedUi />
+      </>
+    );
 
   return (
     <>
@@ -85,10 +107,9 @@ function Wrapper() {
         }}
         css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
       >
-        <Routes>
-          <Route path="/" Component={FrontPage} />
-          <Route path="/ui" Component={App} />
-        </Routes>
+        <PersistGate loading={null} persistor={persistor}>
+          {body}
+        </PersistGate>
       </Box>
     </>
   );
@@ -106,8 +127,4 @@ function Main() {
   );
 }
 
-export const router = createHashRouter([{ path: "*", element: <Main /> }]);
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<Main />);

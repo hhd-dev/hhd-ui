@@ -1,8 +1,9 @@
 import { fetchFn } from "./thunks";
-import hhdSlice from "./slice";
+import hhdSlice, { selectIsLoading } from "./slice";
 import { store } from "./store";
 
 import { get } from "lodash";
+import local from "./local";
 
 let abort: AbortController | undefined;
 
@@ -10,12 +11,23 @@ const LEGACY_DELAY = 100;
 const MIN_WAITTIME_NEW = 250;
 const MIN_WAITTIME_OLD = 1000;
 const ERROR_WAITTIME = 3000;
+const LOAD_DELAY = 100;
 
 async function pollState(a: AbortController, reload: boolean) {
   let start = Date.now();
   let initial = reload;
   try {
     while (!a.signal.aborted) {
+      // Check the backend is not loading
+      // If yes, wait a bit
+      if (selectIsLoading(store.getState())) {
+        const p = new Promise((r) =>
+          setTimeout(r, LOAD_DELAY, { signal: a.signal })
+        );
+        await p;
+        continue;
+      }
+
       // Fetch
       const state = store.getState();
       const currHash = get(
@@ -24,19 +36,24 @@ async function pollState(a: AbortController, reload: boolean) {
         get(state, "hhd.state.version", "")
       );
 
-      const newState = await fetchFn(
-        initial ? "state" : "state?poll",
-        {
+      const url = local.selectors.selectUrl(store.getState());
+      const token = local.selectors.selectToken(store.getState());
+
+      const newState = (
+        await fetchFn(url, token, initial ? "state" : "state?poll", {
           signal: a.signal,
-        },
-        true
-      );
+        })
+      ).data;
       const newHash = get(newState, "version", "");
       initial = false;
 
       // If settings changed reload them
       if (newState && newHash !== currHash) {
-        const settings = await fetchFn("settings", { signal: a.signal }, true);
+        const settings = (
+          await fetchFn(url, token, "settings", {
+            signal: a.signal,
+          })
+        ).data;
         if (settings)
           store.dispatch(hhdSlice.actions.overrideSettings(settings));
       }

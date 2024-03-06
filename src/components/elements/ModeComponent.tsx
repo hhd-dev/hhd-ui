@@ -14,12 +14,12 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { useShouldRenderChild } from "../../hooks/conditionalRender";
-import { useSettingState } from "../../hooks/controller";
+import { useShouldRenderChild } from "../../model/hooks";
+import { useSettingState } from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
 import { ModeProps } from "../../model/common";
-import { useElementNav } from "../../hooks/navigation";
+import { useElementNav } from "../../model/hooks";
 
 const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { state, setState } = useSettingState<string>(`${path}.mode`);

@@ -13,8 +13,6 @@ import HhdLogo from "./Logo";
 import HhdTabbedState from "./TabbedState";
 
 import { CONTENT_WIDTH } from "./theme";
-import { useLogout } from "../hooks/auth";
-import { getUrl } from "../local";
 
 import hhdSlice, {
   selectAppType,
@@ -25,6 +23,7 @@ import TagFilterDropdown from "./TagFilterDropdown";
 
 import { FC } from "react";
 import { ControllerButton } from "./Controller";
+import { useIsLocal } from "../model/hooks";
 
 type Props = {
   shouldFadeOpen: boolean;
@@ -51,12 +50,11 @@ const FadeBox: FC<Props> = ({ shouldFadeOpen, isOpen, children }) => {
 };
 
 const ExpandedUi = () => {
-  const logout = useLogout();
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
   const controller = useSelector(selectHasController);
+  const isLocal = useIsLocal();
 
-  const isLocalhost = getUrl().includes("localhost");
   const { colorMode, toggleColorMode } = useColorMode();
   const dispatch = useDispatch();
 
@@ -89,7 +87,7 @@ const ExpandedUi = () => {
               icon={colorMode == "dark" ? <MoonIcon /> : <SunIcon />}
             />
             <TagFilterDropdown />
-            {(!isLocalhost || appType == "web") && (
+            {(!isLocal || appType == "web") && (
               <Button margin="0 0 0 1rem">Disconnect</Button>
             )}
             {appType == "app" && (

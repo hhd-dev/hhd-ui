@@ -1,14 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { set } from "lodash";
-import { getToken, getUrl } from "../local";
+
+export type Credentials = { endpoint: string; token: string };
 
 export const fetchFn = async (
+  endpoint: string,
+  token: string,
   url: string,
-  options?: { [s: string]: any },
-  mute: boolean = false
+  options?: { [s: string]: any }
 ) => {
   const authHeaders = {
-    Authorization: `Bearer ${getToken()}`,
+    Authorization: `Bearer ${token}`,
   };
   if (!options) {
     options = {
@@ -18,35 +20,43 @@ export const fetchFn = async (
 
   options.headers = { ...options?.headers, ...authHeaders };
 
-  return fetch(`${getUrl()}/api/v1/${url}`, options)
-    .then((r) => {
-      if (r.ok) {
-        return r.json();
-      }
-    })
-    .catch(mute ? () => {} : console.log);
+  try {
+    const resp = await fetch(`${endpoint}/api/v1/${url}`, options);
+    if (resp.ok) {
+      return { data: await resp.json(), error: null };
+    } else {
+      return { data: null, error: await resp.text() };
+    }
+  } catch (e) {
+    return { data: null, error: String(e) };
+  }
 };
 
-export const fetchHhdSettings = createAsyncThunk(
-  "hhd/fetchHhdSettings",
-  async () => {
-    const response = await fetchFn("settings");
-    return response;
+export const fetchSettings = createAsyncThunk(
+  "hhd/fetchSettings",
+  async ({ endpoint, token }: Credentials) => {
+    return await fetchFn(endpoint, token, "settings");
   }
 );
 
-export const fetchHhdSettingsState = createAsyncThunk(
-  "hhd/fetchHhdSettingsState",
-  async () => {
-    const response = await fetchFn("state");
-
-    return response;
+export const fetchState = createAsyncThunk(
+  "hhd/fetchState",
+  async ({ endpoint, token }: Credentials) => {
+    return await fetchFn(endpoint, token, "state");
   }
 );
 
-export const updateHhdState = createAsyncThunk(
-  "hhd/updateHhdState",
-  async ({ path, value }: { path: string; value: any }, thunkApi) => {
+export const updateSettingValue = createAsyncThunk(
+  "hhd/updateSettingValue",
+  async ({
+    path,
+    value,
+    cred,
+  }: {
+    path: string;
+    value: any;
+    cred: Credentials;
+  }) => {
     const body = set({}, path, value);
 
     const options = {
@@ -54,17 +64,14 @@ export const updateHhdState = createAsyncThunk(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     };
-    const response = await fetchFn("state", options);
 
-    return response;
+    return await fetchFn(cred.endpoint, cred.token, "state", options);
   }
 );
 
 export const fetchSectionNames = createAsyncThunk(
   "hhd/fetchSectionNames",
-  async () => {
-    const response = await fetchFn("sections");
-
-    return response;
+  async ({ endpoint, token }: Credentials) => {
+    return await fetchFn(endpoint, token, "sections");
   }
 );
