@@ -69,10 +69,11 @@ const QamState = () => {
       height="100vh"
       position="absolute"
       overflowY="scroll"
+      overflowX="hidden"
       boxShadow="dark-lg"
       transition="0.075s ease-in-out"
       {...(showClosed
-        ? { transform: "translateX(100px)", opacity: 0 }
+        ? { transform: "translateX(70px)", opacity: 0 }
         : { transform: "translateX(0)" })}
       sx={{
         "::-webkit-scrollbar": {

@@ -87,8 +87,7 @@ function Wrapper() {
       <Box
         h="100vh"
         w="100vw"
-        overflowX="hidden"
-        overflowY="hidden"
+        overflow="hidden"
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
           dispatch(hhdSlice.actions.setUiType("closed"));
