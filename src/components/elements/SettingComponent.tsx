@@ -104,7 +104,7 @@ const MultipleComponent: FC<SettingProps> = ({
   const {
     ref,
     focus,
-    setFocus: _,
+    setFocus,
   } = useElementNav<HTMLButtonElement>(section, path);
 
   return (
@@ -116,6 +116,7 @@ const MultipleComponent: FC<SettingProps> = ({
           rightIcon={<ChevronDownIcon />}
           {...(focus && { background: "purple" })}
           ref={ref}
+          onFocus={setFocus}
         >
           {state && options[state]}
         </MenuButton>
@@ -162,7 +163,7 @@ const ActionComponent: FC<SettingProps> = ({
   const {
     ref,
     focus,
-    setFocus: _,
+    setFocus,
   } = useElementNav<HTMLButtonElement>(section, path);
 
   return (
@@ -171,6 +172,7 @@ const ActionComponent: FC<SettingProps> = ({
       disabled={!state}
       {...(focus && { background: "purple" })}
       ref={ref}
+      onFocus={setFocus}
     >
       {title}
     </Button>
