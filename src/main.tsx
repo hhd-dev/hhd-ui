@@ -81,13 +81,14 @@ function Wrapper() {
         backgroundColor="black"
         position="absolute"
         zIndex="-1"
-        transition="0.15s ease-in-out"
+        transition="0.2s ease-in-out"
         opacity={background}
       ></Box>
       <Box
         h="100vh"
         w="100vw"
-        overflow="clip"
+        overflowX="hidden"
+        overflowY="hidden"
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
           dispatch(hhdSlice.actions.setUiType("closed"));

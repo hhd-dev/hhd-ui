@@ -4,7 +4,6 @@ import {
   Button,
   Flex,
   Heading,
-  ScaleFade,
   IconButton,
   useColorMode,
 } from "@chakra-ui/react";
@@ -21,33 +20,8 @@ import hhdSlice, {
 } from "../model/slice";
 import TagFilterDropdown from "./TagFilterDropdown";
 
-import { FC } from "react";
-import { ControllerButton } from "./Controller";
 import { useIsLocal } from "../model/hooks";
-
-type Props = {
-  shouldFadeOpen: boolean;
-  isOpen: boolean;
-  children: any;
-};
-
-const FadeBox: FC<Props> = ({ shouldFadeOpen, isOpen, children }) => {
-  if (shouldFadeOpen) {
-    return (
-      <Box w="fit-content" margin="0 auto">
-        <ScaleFade initialScale={0.7} in={isOpen} unmountOnExit>
-          {children}
-        </ScaleFade>
-      </Box>
-    );
-  } else {
-    return (
-      <Box w="fit-content" margin="0 auto">
-        {children}
-      </Box>
-    );
-  }
-};
+import { ControllerButton } from "./Controller";
 
 const ExpandedUi = () => {
   const appType = useSelector(selectAppType);
@@ -59,7 +33,6 @@ const ExpandedUi = () => {
   const dispatch = useDispatch();
 
   const isOpen = appType !== "overlay" || uiType === "expanded";
-  const shouldFadeOpen = appType === "overlay";
 
   const scrollCss =
     appType === "overlay"
@@ -73,7 +46,7 @@ const ExpandedUi = () => {
       : {};
 
   return (
-    <FadeBox shouldFadeOpen={shouldFadeOpen} isOpen={isOpen}>
+    <Box margin="0 auto" position="absolute">
       <Flex
         padding="2rem 0"
         flexDirection="column"
@@ -82,6 +55,8 @@ const ExpandedUi = () => {
         overflowY="scroll"
         h="100vh"
         w="100vw"
+        transition="0.1s ease-in"
+        {...(!isOpen && { transform: "scale(80%)", opacity: 0 })}
         {...scrollCss}
       >
         <Flex margin="0.5rem 1rem 1.2rem 1rem">
@@ -137,7 +112,7 @@ const ExpandedUi = () => {
           <HhdTabbedState />
         </Flex>
       </Flex>
-    </FadeBox>
+    </Box>
   );
 };
 

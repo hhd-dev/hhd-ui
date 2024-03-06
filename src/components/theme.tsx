@@ -33,6 +33,7 @@ const theme = extendTheme(
         // styles for the `body`
         body: {
           bg: "transparent",
+          overflow: "hidden",
           // color: "transparent",
         },
       },

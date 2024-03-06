@@ -40,7 +40,7 @@ export const setupGamepadEventListener = () => {
       for (const [name, idx] of Object.entries(BUTTON_MAP)) {
         // Grab data
         const curr = state[gidx] ? Boolean(state[gidx][name]) : null;
-        const next = gp.buttons[idx].pressed;
+        const next = gp.buttons[idx]?.pressed;
 
         // Update state
         if (!state[gidx]) {
@@ -61,7 +61,8 @@ export const setupGamepadEventListener = () => {
       // Handle Axis events
       for (const [name, ax, neg] of AXIS_MAP) {
         const curr = state[gidx] ? Boolean(state[gidx][name]) : null;
-        const next = neg ? gp.axes[ax] < -0.6 : gp.axes[ax] > 0.6;
+        let next = false;
+        if (gp.axes[ax]) next = neg ? gp.axes[ax] < -0.6 : gp.axes[ax] > 0.6;
 
         // Update state
         if (!state[gidx]) {
