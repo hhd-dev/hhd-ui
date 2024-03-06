@@ -45,16 +45,15 @@ export interface ModeSetting extends Setting {
 export interface SettingProps {
   settings: Setting;
   path: string;
+  section: string;
 }
 
 export interface ContainerProps extends SettingProps {
   settings: ContainerSetting;
-  qam: boolean;
 }
 
 export interface ModeProps extends SettingProps {
   settings: ModeSetting;
-  qam: boolean;
 }
 
 export type Sections = Record<string, Record<string, ContainerSetting>>;

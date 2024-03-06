@@ -9,9 +9,10 @@ import ModeComponent from "./ModeComponent";
 const ContainerComponent: FC<ContainerProps> = ({
   settings: set,
   path,
-  qam,
+  section,
 }) => {
   const { title, children, tags } = set;
+  const qam = section === "qam";
   const shouldRenderChild = useShouldRenderChild(qam);
   const showTitle = !qam || !tags?.includes("hide-title");
 
@@ -38,12 +39,13 @@ const ContainerComponent: FC<ContainerProps> = ({
                     <ModeComponent
                       path={`${path}.${childName}`}
                       settings={childSet as ModeSetting}
-                      qam={qam}
+                      section={section}
                     />
                   ) : (
                     <SettingComponent
                       path={`${path}.${childName}`}
                       settings={childSet}
+                      section={section}
                     />
                   )}
                 </ErrorBoundary>

@@ -50,7 +50,7 @@ const TabbedSection = ({
                 <ContainerComponent
                   path={path}
                   settings={settings}
-                  qam={false}
+                  section={section}
                 />
               </ErrorBoundary>
             </TabPanel>
@@ -80,6 +80,7 @@ const TabbedState = () => {
         size="md"
         orientation="vertical"
         index={keys.indexOf(curr)}
+        isLazy
       >
         <TabList padding="1rem 0">
           {controller && (

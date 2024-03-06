@@ -23,10 +23,10 @@ import {
 } from "../../model/common";
 import { useElementNav } from "../../hooks/navigation";
 
-const BoolComponent: FC<SettingProps> = ({ settings: set, path }) => {
+const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   const { title } = set as BoolSetting;
   const { state, setState } = useSettingState<number>(path);
-  const { focus, setFocus } = useElementNav(path);
+  const { focus, setFocus } = useElementNav(section, path);
 
   return (
     <Flex
@@ -48,10 +48,14 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path }) => {
   );
 };
 
-const DiscreteComponent: FC<SettingProps> = ({ settings: set, path }) => {
+const DiscreteComponent: FC<SettingProps> = ({
+  settings: set,
+  path,
+  section,
+}) => {
   const { title, options } = set as DiscreteSetting;
   const { state, setState } = useSettingState<number>(path);
-  const { focus, setFocus } = useElementNav(path);
+  const { focus, setFocus } = useElementNav(section, path);
 
   return (
     <Flex flexDirection="column">
@@ -84,10 +88,14 @@ const DiscreteComponent: FC<SettingProps> = ({ settings: set, path }) => {
   );
 };
 
-const MultipleComponent: FC<SettingProps> = ({ settings: set, path }) => {
+const MultipleComponent: FC<SettingProps> = ({
+  settings: set,
+  path,
+  section,
+}) => {
   const { title, options } = set as MultipleSetting;
   const { state, setState } = useSettingState<string>(path);
-  const { focus, setFocus } = useElementNav(path);
+  const { focus, setFocus } = useElementNav(section, path);
 
   return (
     <Flex flexDirection="column">
@@ -133,10 +141,14 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   );
 };
 
-const ActionComponent: FC<SettingProps> = ({ settings: set, path }) => {
+const ActionComponent: FC<SettingProps> = ({
+  settings: set,
+  path,
+  section,
+}) => {
   const { title } = set;
   const { state, setState } = useSettingState<number>(path);
-  const { focus, setFocus } = useElementNav(path);
+  const { focus, setFocus } = useElementNav(section, path);
 
   return (
     <Button
@@ -149,23 +161,23 @@ const ActionComponent: FC<SettingProps> = ({ settings: set, path }) => {
   );
 };
 
-const SettingComponent: FC<SettingProps> = ({ settings, path }) => {
-  const { type } = settings;
+const SettingComponent: FC<SettingProps> = (props) => {
+  const type = props.settings.type;
 
   switch (type) {
     case "float":
     case "int":
-      return <NumberComponent path={path} settings={settings} />;
+      return <NumberComponent {...props} />;
     case "bool":
-      return <BoolComponent path={path} settings={settings} />;
+      return <BoolComponent {...props} />;
     case "discrete":
-      return <DiscreteComponent path={path} settings={settings} />;
+      return <DiscreteComponent {...props} />;
     case "multiple":
-      return <MultipleComponent path={path} settings={settings} />;
+      return <MultipleComponent {...props} />;
     case "display":
-      return <DisplayComponent path={path} settings={settings} />;
+      return <DisplayComponent {...props} />;
     case "action":
-      return <ActionComponent path={path} settings={settings} />;
+      return <ActionComponent {...props} />;
   }
   return <> </>;
 };

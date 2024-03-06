@@ -18,13 +18,17 @@ import ErrorBoundary from "../ErrorBoundary";
 import { SettingProps, NumberSetting } from "../../model/common";
 import { useElementNav } from "../../hooks/navigation";
 
-const NumberComponent: FC<SettingProps> = ({ settings: set, path }) => {
+const NumberComponent: FC<SettingProps> = ({
+  settings: set,
+  path,
+  section,
+}) => {
   const { tags, title, min, max, unit } = set as NumberSetting<
     number,
     "float" | "int"
   >;
   const { state, setState } = useSettingState<number>(path);
-  const { focus, setFocus } = useElementNav(path);
+  const { focus, setFocus } = useElementNav(section, path);
 
   if (tags?.includes("dropdown")) {
     return (

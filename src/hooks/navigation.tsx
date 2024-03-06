@@ -27,8 +27,7 @@ export const useSectionNav = (section: string, choices: string[]) => {
   return { curr, setCurr };
 };
 
-export const useElementNav = (path: string) => {
-  const section = path.split(".")[0];
+export const useElementNav = (section: string, path: string) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const focus = useSelector(

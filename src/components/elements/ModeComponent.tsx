@@ -21,11 +21,11 @@ import SettingComponent from "./SettingComponent";
 import { ModeProps } from "../../model/common";
 import { useElementNav } from "../../hooks/navigation";
 
-const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
+const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { state, setState } = useSettingState<string>(`${path}.mode`);
   const { title, modes } = set;
-  const shouldRenderChild = useShouldRenderChild(qam);
-  const { focus, setFocus } = useElementNav(path);
+  const shouldRenderChild = useShouldRenderChild(section === "qam");
+  const { focus, setFocus } = useElementNav(section, path);
 
   const mode = state ? set.modes[state] : null;
 
@@ -80,6 +80,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, qam }) => {
                     <SettingComponent
                       path={`${path}.${state}.${childName}`}
                       settings={childSet}
+                      section={section}
                     />
                   </ErrorBoundary>
                 );
