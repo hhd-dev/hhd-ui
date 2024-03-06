@@ -21,13 +21,19 @@ import {
   MultipleSetting,
   SettingProps,
 } from "../../model/common";
+import { useElementNav } from "../../hooks/navigation";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title } = set as BoolSetting;
   const { state, setState } = useSettingState<number>(path);
+  const { focus, setFocus } = useElementNav(path);
 
   return (
-    <Flex flexDirection="row" alignItems="center">
+    <Flex
+      flexDirection="row"
+      alignItems="center"
+      {...(focus && { background: "purple" })}
+    >
       <FormLabel htmlFor={path} margin="0.3rem 0">
         {title}
       </FormLabel>

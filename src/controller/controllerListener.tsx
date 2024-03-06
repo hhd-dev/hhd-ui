@@ -4,10 +4,10 @@ import { store } from "../model/store";
 const BUTTON_MAP = {
   lb: 4,
   rb: 5,
-  up: 12,
-  down: 13,
-  left: 14,
-  right: 15,
+  dpad_up: 12,
+  dpad_down: 13,
+  dpad_left: 14,
+  dpad_right: 15,
   a: 0,
   b: 1,
   x: 2,
@@ -44,10 +44,9 @@ export const setupGamepadEventListener = () => {
 
         // Update state
         if (!state[gidx]) {
-          state[gidx] = { name: next };
-        } else {
-          state[gidx][name] = next;
+          state[gidx] = {};
         }
+        state[gidx][name] = next;
       }
 
       // Handle Axis events
@@ -72,14 +71,30 @@ export const setupGamepadEventListener = () => {
 
       const uiType = selectUiType(store.getState());
       const appType = selectAppType(store.getState());
+
+      let curr: string | null = store.getState().hhd.navigation.curr["tab"];
+      if (uiType === "closed") {
+        curr = null;
+      } else if (uiType === "qam") {
+        curr = "qam";
+      }
+
       for (const ev of evs) {
         switch (ev) {
+          case "dpad_up":
           case "up":
+            if (curr)
+              store.dispatch(hhdSlice.actions.goPrev({ section: curr }));
             break;
+          case "dpad_down":
           case "down":
+            if (curr)
+              store.dispatch(hhdSlice.actions.goNext({ section: curr }));
             break;
+          case "dpad_left":
           case "left":
             break;
+          case "dpad_right":
           case "right":
             break;
           case "lb":

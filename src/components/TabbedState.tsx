@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { useSelector } from "react-redux";
-import { useSectionNav } from "../hooks/navigation";
+import { useRootNav, useSectionNav } from "../hooks/navigation";
 import {
   selectHasController,
   selectSectionNames,
@@ -23,13 +23,48 @@ import {
   useShouldRenderChild,
   useShouldRenderParent,
 } from "../hooks/conditionalRender";
+import { ContainerSetting } from "../model/common";
+
+const TabbedSection = ({
+  section,
+  containers,
+}: {
+  section: string;
+  containers: Record<string, ContainerSetting>;
+}) => {
+  const shouldRenderChild = useShouldRenderChild(false);
+  useRootNav(section);
+
+  return (
+    <Box>
+      {Object.entries(containers)
+        .filter(([_, s]) => s.type === "container")
+        .filter(([_, s]) => shouldRenderChild(s))
+        .map(([name, settings]) => {
+          // const navigationCounter = useNavigationCounter();
+          const path = `${section}.${name}`;
+
+          return (
+            <TabPanel tabIndex={-1} key={path}>
+              <ErrorBoundary>
+                <ContainerComponent
+                  path={path}
+                  settings={settings}
+                  qam={false}
+                />
+              </ErrorBoundary>
+            </TabPanel>
+          );
+        })}
+    </Box>
+  );
+};
 
 const TabbedState = () => {
   const sectionNames = useSelector(selectSectionNames);
   const controller = useSelector(selectHasController);
   const fullSettings = useSelector(selectSettings);
   const shouldRenderParent = useShouldRenderParent(false);
-  const shouldRenderChild = useShouldRenderChild(false);
 
   const settings = Object.fromEntries(
     Object.entries(fullSettings).filter((c) => shouldRenderParent(c[1]))
@@ -77,31 +112,13 @@ const TabbedState = () => {
           )}
         </TabList>
         <TabPanels padding="0.5rem 0">
-          {Object.entries(settings).map(([section, containers]) => {
-            return (
-              <Box key={section}>
-                {Object.entries(containers)
-                  .filter(([_, s]) => s.type === "container")
-                  .filter(([_, s]) => shouldRenderChild(s))
-                  .map(([name, settings]) => {
-                    // const navigationCounter = useNavigationCounter();
-                    const path = `${section}.${name}`;
-
-                    return (
-                      <TabPanel tabIndex={-1} key={path}>
-                        <ErrorBoundary>
-                          <ContainerComponent
-                            path={path}
-                            settings={settings}
-                            qam={false}
-                          />
-                        </ErrorBoundary>
-                      </TabPanel>
-                    );
-                  })}
-              </Box>
-            );
-          })}
+          {Object.entries(settings).map(([section, containers]) => (
+            <TabbedSection
+              key={section}
+              section={section}
+              containers={containers}
+            />
+          ))}
         </TabPanels>
       </Tabs>
     </Card>

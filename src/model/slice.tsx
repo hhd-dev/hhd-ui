@@ -217,6 +217,10 @@ export const selectSettings = (state: RootState) => {
   return state.hhd.settings;
 };
 
+export const selectState = (state: RootState) => {
+  return state.hhd.state;
+};
+
 export const selectSettingState = (path: string) => {
   return (state: RootState) => {
     return get(state.hhd.state, path, null);
