@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import hhdSlice, { selectSettings, selectState } from "../model/slice";
 import { AppDispatch, RootState } from "../model/store";
@@ -126,4 +126,16 @@ function getFocusElements(
   }
 
   return [];
+}
+
+export function useFocusRef<T extends HTMLElement>(focus: boolean) {
+  const ref = useRef<T>(null);
+
+  useEffect(() => {
+    if (focus && ref.current) {
+      ref.current?.focus();
+    }
+  }, [focus]);
+
+  return ref;
 }

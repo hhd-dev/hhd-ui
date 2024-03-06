@@ -16,7 +16,7 @@ import { FC } from "react";
 import { useSettingState } from "../../hooks/controller";
 import ErrorBoundary from "../ErrorBoundary";
 import { SettingProps, NumberSetting } from "../../model/common";
-import { useElementNav } from "../../hooks/navigation";
+import { useElementNav, useFocusRef } from "../../hooks/navigation";
 
 const NumberComponent: FC<SettingProps> = ({
   settings: set,
@@ -29,6 +29,7 @@ const NumberComponent: FC<SettingProps> = ({
   >;
   const { state, setState } = useSettingState<number>(path);
   const { focus, setFocus } = useElementNav(section, path);
+  const ref = useFocusRef<HTMLInputElement>(focus);
 
   if (tags?.includes("dropdown")) {
     return (
@@ -40,6 +41,7 @@ const NumberComponent: FC<SettingProps> = ({
           min={min}
           max={max}
           {...(focus && { background: "purple" })}
+          ref={ref}
         >
           <NumberInputField />
           <NumberInputStepper>
