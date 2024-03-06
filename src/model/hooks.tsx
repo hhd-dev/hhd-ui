@@ -40,7 +40,7 @@ export function useElementNav<T extends HTMLElement>(
     return state.hhd.navigation.curr[section] === path;
   });
   const setFocus = () => {
-    dispatch(hhdSlice.actions.goto({ section, curr: path }));
+    if (!focus) dispatch(hhdSlice.actions.goto({ section, curr: path }));
   };
 
   useEffect(() => {
