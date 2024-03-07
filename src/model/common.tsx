@@ -61,3 +61,45 @@ export type Sections = Record<string, Record<string, ContainerSetting>>;
 export interface State {
   [property: string]: State;
 }
+
+export function getSetting(settings: Sections, path: string) {
+  const idx1 = path.indexOf(".");
+  if (idx1 === -1) return [];
+  const section = path.substring(0, idx1);
+  const idx2 = path.indexOf(".", idx1 + 1);
+  const name = path.substring(idx1 + 1, idx2 !== -1 ? idx2 : undefined);
+  if (!name) return [];
+  const other = idx2 !== -1 ? path.substring(idx2 + 1) : null;
+
+  const set = settings[section][name];
+  if (!other) return [set];
+
+  return [set, ...traverseSetting(set, other)];
+}
+
+function traverseSetting(
+  setting: ContainerSetting | ModeSetting,
+  path: string
+): Setting[] {
+  if (!path) return [setting];
+  const idx = path.indexOf(".");
+
+  const name = path.substring(0, idx !== -1 ? idx : undefined);
+  const next = idx !== -1 ? path.substring(idx + 1) : null;
+
+  let child;
+  if (setting.type === "container") {
+    child = setting.children[name];
+  } else if (setting.type === "mode") {
+    child = setting.modes[name];
+  } else {
+    return [];
+  }
+
+  if (!next) return [child];
+
+  return [
+    child,
+    ...traverseSetting(child as ContainerSetting | ModeSetting, next),
+  ];
+}
