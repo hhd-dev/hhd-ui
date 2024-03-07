@@ -13,6 +13,12 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 import local from "./local";
 import hhdSlice from "./slice";
 
+declare global {
+  interface Window {
+    store: any;
+  }
+}
+
 export const { store, persistor } = (() => {
   const persistConfig = {
     key: "root",
@@ -36,5 +42,6 @@ export const { store, persistor } = (() => {
   });
   let persistor = persistStore(store);
 
+  window.store = store;
   return { store, persistor };
 })();
