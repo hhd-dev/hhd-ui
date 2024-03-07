@@ -30,18 +30,17 @@ export function useElementNav<T extends HTMLElement>(
   const dispatch = useDispatch();
   const ref = useRef<T>(null);
 
-  const [focus, smooth] = useSelector((state: RootState) => {
-    if (!state.hhd.controller) return [false, false];
-    if (section === "qam" && state.hhd.uiType !== "qam") return [false, false];
-    if (section !== "qam" && state.hhd.uiType === "qam") return [false, false];
+  const focus = useSelector((state: RootState) => {
+    if (!state.hhd.controller) return false;
+    if (section === "qam" && state.hhd.uiType !== "qam") return false;
+    if (section !== "qam" && state.hhd.uiType === "qam") return false;
     if (section !== "qam" && state.hhd.navigation.curr["tab"] !== section)
-      return [false, false];
+      return false;
 
-    return [
-      state.hhd.navigation.curr[section] === path,
-      state.hhd.navigation.smooth,
-    ];
+    return state.hhd.navigation.curr[section] === path;
   });
+  const smooth = useSelector((state: RootState) => state.hhd.navigation.smooth);
+
   const setFocus = () => {
     if (!focus) dispatch(hhdSlice.actions.goto({ section, curr: path }));
   };
