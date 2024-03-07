@@ -7,18 +7,46 @@ const readline = require("readline");
 const createMainWindow = async () => {
   const isSteamUi = process.env.SteamGamepadUI;
   const isOverlayUi = process.env.STEAM_OVERLAY;
+  const useNativeRes = process.env.NATIVE_RESOLUTION;
 
   // Get scale factor for steamui
   let scaleFactor;
-  const { width, height } = screen.getPrimaryDisplay().size;
+  let { width, height } = screen.getPrimaryDisplay().size;
+
+  const ZOOM_RATIO = 1.1;
+  const MAX_RATIO = 2;
+  const RESOLUTION_BOOST = 1.3;
 
   if (isSteamUi || isOverlayUi) {
-    // Assume we are on a screen the size of the deck
-    // And add a bit of zoom even for that
-    const SCREEN_RATIO = 1.1;
-    scaleFactor = (SCREEN_RATIO * width) / 1280;
-    scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
-    console.error("Launching in steamui. Zoom factor: " + scaleFactor);
+    if (useNativeRes) {
+      // Assume we are on a screen the size of the deck
+      // And add a bit of zoom even for that
+      // This will launch in the panel's native resolution (laggy)
+      scaleFactor = (ZOOM_RATIO * width) / 1280;
+      scaleFactor = scaleFactor > 3 ? 3 : scaleFactor;
+      console.error(
+        "Launching in native resolution in steamui. Zoom factor: " + scaleFactor
+      );
+    } else {
+      // Scale the display to be 30% more dense than the steam deck
+      // Then apply the rest as scaling
+      // Helps with performance
+      let ratio = width / 1280 / RESOLUTION_BOOST;
+      scaleFactor = ZOOM_RATIO * RESOLUTION_BOOST;
+      if (ratio < 1) {
+        ratio = 1;
+      } else if (ratio > MAX_RATIO) {
+        scaleFactor = (ZOOM_RATIO * ratio) / MAX_RATIO;
+        scaleFactor = Math.round(10 * scaleFactor) / 10;
+        ratio = MAX_RATIO;
+      }
+
+      width = Math.round(width / ratio);
+      height = Math.round(height / ratio);
+      console.error(
+        `Launching in steamui in resolution ${width}x${height}. Zoom factor: ${scaleFactor}.`
+      );
+    }
   } else {
     scaleFactor = 1.0;
   }
