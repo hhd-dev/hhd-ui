@@ -62,6 +62,7 @@ export type AppType = "web" | "app" | "overlay";
 interface NavigationState {
   curr: Record<string, string>;
   choices: Record<string, string[]>;
+  smooth: boolean;
 }
 
 interface AppState {
@@ -102,6 +103,7 @@ const initialState = {
   navigation: {
     curr: {},
     choices: {},
+    smooth: false,
   },
 } as AppState;
 
@@ -160,6 +162,7 @@ const slice = createSlice({
         store.navigation.curr[section] =
           store.navigation.choices[section][idx - 1];
       }
+      store.navigation.smooth = true;
     },
     goNext: (store, action: PayloadAction<{ section: string }>) => {
       const { section } = action.payload;
@@ -171,10 +174,12 @@ const slice = createSlice({
         store.navigation.curr[section] =
           store.navigation.choices[section][idx + 1];
       }
+      store.navigation.smooth = true;
     },
     goto: (store, action: PayloadAction<{ section: string; curr: string }>) => {
       const { section, curr } = action.payload;
       store.navigation.curr[section] = curr;
+      if (section !== "tab") store.navigation.smooth = false;
     },
 
     incLoadCounter: (store) => {

@@ -13,6 +13,7 @@ import hhdSlice, {
 
 import { Setting } from "./common";
 import { local } from "./local";
+import { enablePolling } from "./polling";
 import { selectSettingState } from "./slice";
 import { store } from "./store";
 import {
@@ -21,7 +22,6 @@ import {
   fetchState,
   updateSettingValue,
 } from "./thunks";
-import { enablePolling } from "./polling";
 
 export function useElementNav<T extends HTMLElement>(
   section: string,
@@ -30,25 +30,28 @@ export function useElementNav<T extends HTMLElement>(
   const dispatch = useDispatch();
   const ref = useRef<T>(null);
 
-  const focus = useSelector((state: RootState) => {
-    if (!state.hhd.controller) return false;
-    if (section === "qam" && state.hhd.uiType !== "qam") return false;
-    if (section !== "qam" && state.hhd.uiType === "qam") return false;
+  const [focus, smooth] = useSelector((state: RootState) => {
+    if (!state.hhd.controller) return [false, false];
+    if (section === "qam" && state.hhd.uiType !== "qam") return [false, false];
+    if (section !== "qam" && state.hhd.uiType === "qam") return [false, false];
     if (section !== "qam" && state.hhd.navigation.curr["tab"] !== section)
-      return false;
+      return [false, false];
 
-    return state.hhd.navigation.curr[section] === path;
+    return [
+      state.hhd.navigation.curr[section] === path,
+      state.hhd.navigation.smooth,
+    ];
   });
   const setFocus = () => {
     if (!focus) dispatch(hhdSlice.actions.goto({ section, curr: path }));
   };
 
   useEffect(() => {
-    if (focus && ref.current) {
+    if (smooth && focus && ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
       ref.current.focus({ preventScroll: true });
     }
-  }, [focus, ref.current]);
+  }, [focus, ref.current, smooth]);
 
   return { ref, focus, setFocus };
 }
