@@ -153,9 +153,11 @@ const slice = createSlice({
     },
     overrideSettings: (store, action: PayloadAction<any>) => {
       store.settings = action.payload;
+      updateNavigation(store);
     },
     overrideSettingsState: (store, action: PayloadAction<any>) => {
       store.state = action.payload;
+      updateNavigation(store);
     },
 
     goPrev: (store, action: PayloadAction<{ section: string }>) => {
