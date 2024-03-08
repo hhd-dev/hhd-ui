@@ -106,7 +106,7 @@ const initialState = {
     curr: {},
     choices: {},
     smooth: false,
-    help: true,
+    help: false,
   },
 } as AppState;
 
