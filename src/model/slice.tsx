@@ -10,6 +10,7 @@ import {
   Sections,
   Setting,
   State,
+  getSetting,
 } from "./common";
 import {
   fetchSettings,
@@ -63,6 +64,7 @@ interface NavigationState {
   curr: Record<string, string>;
   choices: Record<string, string[]>;
   smooth: boolean;
+  help: boolean;
 }
 
 interface AppState {
@@ -104,6 +106,7 @@ const initialState = {
     curr: {},
     choices: {},
     smooth: false,
+    help: true,
   },
 } as AppState;
 
@@ -141,6 +144,9 @@ const slice = createSlice({
     },
     setError: (store, action: PayloadAction<string>) => {
       store.error = action.payload;
+    },
+    setShowHint: (store, action: PayloadAction<boolean>) => {
+      store.navigation.help = action.payload;
     },
     clearError: (store) => {
       store.error = "";
@@ -432,6 +438,31 @@ export const selectPrevUiType = (state: RootState) => {
 
 export const selectLoadCounter = (state: RootState) => {
   return state.hhd.loadCounter;
+};
+
+export const selectShowHint = (state: RootState) => {
+  return (
+    state.hhd.controller &&
+    state.hhd.navigation.help &&
+    (state.hhd.appType !== "overlay" || state.hhd.uiType !== "closed")
+  );
+};
+
+export const selectFocusedPath = (state: RootState) => {
+  let section;
+  if (state.hhd.uiType === "qam" && state.hhd.appType === "overlay") {
+    section = "qam";
+  } else {
+    section = state.hhd.navigation.curr["tab"];
+  }
+
+  return state.hhd.navigation.curr[section];
+};
+
+export const selectFocusedSetting = (state: RootState) => {
+  const path = selectFocusedPath(state);
+  if (!path) return [];
+  return getSetting(state.hhd.settings, path);
 };
 
 export default slice;

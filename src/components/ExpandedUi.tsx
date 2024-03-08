@@ -23,6 +23,7 @@ import TagFilterDropdown from "./TagFilterDropdown";
 import { useIsLocal } from "../model/hooks";
 import { ControllerButton } from "./Controller";
 import { useEffect, useState } from "react";
+import { HintModal } from "./elements/HintModal";
 
 const ExpandedUi = () => {
   const appType = useSelector(selectAppType);
@@ -132,6 +133,7 @@ const ExpandedUi = () => {
         alignItems="center"
         justifyContent="center"
       >
+        <HintModal />
         <HhdTabbedState />
       </Flex>
     </Flex>
