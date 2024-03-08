@@ -465,4 +465,9 @@ export const selectFocusedSetting = (state: RootState) => {
   return getSetting(state.hhd.settings, path);
 };
 
+export const selectHasHint = (state: RootState) => {
+  const s = selectFocusedSetting(state);
+  return Boolean(s && s[s.length - 1] && s[s.length - 1].hint);
+};
+
 export default slice;
