@@ -54,16 +54,20 @@ const ExpandedUi = () => {
   if (!isOpen && !oldOpen) return <></>;
   const showClosed = (isOpen && !oldOpen) || (!isOpen && oldOpen);
 
-  const scrollCss =
-    appType === "overlay"
-      ? {
-          sx: {
-            "::-webkit-scrollbar": {
-              display: "none",
-            },
-          },
-        }
-      : {};
+  let scrollCss;
+  if (appType === "overlay") {
+    scrollCss = {
+      sx: {
+        "::-webkit-scrollbar": {
+          display: "none",
+        },
+      },
+    };
+  } else if (colorMode === "dark") {
+    scrollCss = {
+      css: { scrollbarColor: "#333e52 #1a202c" },
+    };
+  }
 
   return (
     <Flex

@@ -43,7 +43,7 @@ const QamState = () => {
   );
 
   const isOpen = appType === "overlay" && uiType === "qam";
-  
+
   const [oldOpen, setOldOpen] = useState(false);
   useEffect(() => {
     let timeoutId: number | null = null;
@@ -68,13 +68,11 @@ const QamState = () => {
       right="0"
       height="100vh"
       position="absolute"
-      overflowY="scroll"
+      overflowY="hidden"
       overflowX="hidden"
       boxShadow="dark-lg"
       transition="0.075s ease-in-out"
-      {...(showClosed
-        ? { transform: "translateX(70px)", opacity: 0 }
-        : { transform: "translateX(0)" })}
+      {...(showClosed && { transform: "translateX(70px)", opacity: 0 })}
       sx={{
         "::-webkit-scrollbar": {
           display: "none",

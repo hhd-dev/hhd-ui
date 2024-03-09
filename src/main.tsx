@@ -92,7 +92,6 @@ function Wrapper() {
           if (e.currentTarget != e.target) return;
           dispatch(hhdSlice.actions.setUiType("closed"));
         }}
-        css={colorMode == "dark" ? { scrollbarColor: "#333e52 #1a202c" } : {}}
       >
         <PersistGate loading={null} persistor={persistor}>
           {body}
