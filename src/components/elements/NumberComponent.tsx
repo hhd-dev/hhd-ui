@@ -22,7 +22,7 @@ const NumberComponent: FC<SettingProps> = ({
   path,
   section,
 }) => {
-  const { tags, title, min, max, unit } = set as NumberSetting<
+  const { tags, title, min, max, unit, step } = set as NumberSetting<
     number,
     "float" | "int"
   >;
@@ -41,6 +41,8 @@ const NumberComponent: FC<SettingProps> = ({
           onChange={setState}
           min={min}
           max={max}
+          step={step}
+          value={state}
           {...(focus && { background: "purple" })}
           ref={ref}
           onFocus={setFocus}
@@ -70,6 +72,8 @@ const NumberComponent: FC<SettingProps> = ({
           onChange={setState}
           {...(focus && { background: "purple" })}
           onFocus={setFocus}
+          step={step}
+          value={state}
           focusThumbOnChange={false}
           ref={ref}
         >
@@ -104,8 +108,11 @@ const NumberComponent: FC<SettingProps> = ({
       <Slider
         min={min}
         max={max}
+        value={state}
+        step={step}
         onChange={setState}
         {...(focus && { background: "purple" })}
+        focusThumbOnChange={false}
         ref={ref}
         onFocus={setFocus}
       >
