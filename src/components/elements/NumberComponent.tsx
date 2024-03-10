@@ -24,10 +24,11 @@ const NumberComponent: FC<SettingProps> = ({
   path,
   section,
 }) => {
-  const { tags, title, min, max, unit, step, hint } = set as NumberSetting<
+  let { tags, title, min, max, unit, step, hint, type } = set as NumberSetting<
     number,
     "float" | "int"
   >;
+  if (type === "int" && !step) step = 1;
   const { state, setState } = useSettingState<number>(path);
   const { ref, sel, focus, setFocus } = useElementNav<HTMLInputElement>(
     section,
@@ -90,7 +91,7 @@ const NumberComponent: FC<SettingProps> = ({
           </SliderTrack>
           <SliderThumb
             transition="all 0.2s ease"
-            {...(sel && {  bg: "brand.300" })}
+            {...(sel && { bg: "brand.300" })}
           />
         </Slider>
         {state && (
