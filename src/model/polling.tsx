@@ -28,6 +28,8 @@ async function pollState(a: AbortController, reload: boolean) {
         continue;
       }
 
+      if (!selectIsLoggedIn(store.getState())) break;
+
       // Fetch
       const state = store.getState();
       const currHash = get(
@@ -111,3 +113,6 @@ export const disablePolling = () => {
     abort = undefined;
   }
 };
+
+window.addEventListener("focus", () => enablePolling(true));
+window.addEventListener("blur", () => disablePolling());
