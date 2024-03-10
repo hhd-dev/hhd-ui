@@ -4,6 +4,7 @@ import hhdSlice, {
   RootState,
   selectAppType,
   selectError,
+  selectIsSelected,
   selectLoadCounter,
   selectPrevUiType,
   selectSelectedSetting,
@@ -41,6 +42,7 @@ export function useElementNav<T extends HTMLElement>(
     return state.hhd.navigation.curr[section] === path;
   });
   const smooth = useSelector((state: RootState) => state.hhd.navigation.smooth);
+  const sel = useSelector(selectIsSelected(path));
 
   const setFocus = () => {
     if (!focus) dispatch(hhdSlice.actions.goto({ section, curr: path }));
@@ -54,7 +56,7 @@ export function useElementNav<T extends HTMLElement>(
     }
   }, [focus, ref.current, smooth]);
 
-  return { ref, focus, setFocus };
+  return { ref, focus, sel, setFocus };
 }
 
 export const useSectionNav = (section: string) => {

@@ -24,6 +24,8 @@ export function EditModal() {
   const dispatch = useDispatch();
   if (!path || !setting) return <></>;
 
+  if (!["mode", "multiple", "discrete"].includes(setting.type)) return <></>;
+
   return (
     <Modal
       isOpen={true}

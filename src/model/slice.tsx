@@ -177,6 +177,7 @@ const slice = createSlice({
     },
 
     goPrev: (store, action: PayloadAction<{ section: string } | undefined>) => {
+      store.navigation.sel = false;
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {
@@ -195,6 +196,7 @@ const slice = createSlice({
       store.navigation.smooth = true;
     },
     goNext: (store, action: PayloadAction<{ section: string } | undefined>) => {
+      store.navigation.sel = false;
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {
@@ -215,6 +217,7 @@ const slice = createSlice({
     goto: (store, action: PayloadAction<{ section: string; curr: string }>) => {
       const { section, curr } = action.payload;
       store.navigation.curr[section] = curr;
+      store.navigation.sel = false;
       if (section !== "tab") store.navigation.smooth = false;
     },
     goIn: (store) => {
@@ -517,6 +520,11 @@ export const selectFocusedSetting = (state: RootState) => {
 export const selectHasHint = (state: RootState) => {
   const s = selectFocusedSetting(state);
   return Boolean(s && s[s.length - 1] && s[s.length - 1].hint);
+};
+
+export const selectIsSelected = (path: string) => {
+  return (state: RootState) =>
+    selectFocusedPath(state) === path && state.hhd.navigation.sel;
 };
 
 export const selectSelectedSetting = (state: RootState) => {

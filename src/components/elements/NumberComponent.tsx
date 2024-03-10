@@ -29,7 +29,7 @@ const NumberComponent: FC<SettingProps> = ({
     "float" | "int"
   >;
   const { state, setState } = useSettingState<number>(path);
-  const { ref, focus, setFocus } = useElementNav<HTMLInputElement>(
+  const { ref, sel, focus, setFocus } = useElementNav<HTMLInputElement>(
     section,
     path
   );
@@ -88,7 +88,10 @@ const NumberComponent: FC<SettingProps> = ({
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
-          <SliderThumb />
+          <SliderThumb
+            transition="all 0.2s ease"
+            {...(sel && {  bg: "brand.300" })}
+          />
         </Slider>
         {state && (
           <FormLabel minW="2.7rem" textAlign="end" margin="0 0 0 0.3rem">
