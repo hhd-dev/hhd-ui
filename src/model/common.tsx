@@ -62,7 +62,7 @@ export interface State {
   [property: string]: State;
 }
 
-export function getSetting(settings: Sections, path: string) {
+export function getSettingChain(settings: Sections, path: string) {
   const idx1 = path.indexOf(".");
   if (idx1 === -1) return [];
   const section = path.substring(0, idx1);
@@ -75,6 +75,11 @@ export function getSetting(settings: Sections, path: string) {
   if (!other) return [set];
 
   return [set, ...traverseSetting(set, other)];
+}
+
+export function getSetting(settings: Sections, path: string) {
+  const s = getSettingChain(settings, path);
+  return s && s.length ? s[s.length - 1] : null;
 }
 
 function traverseSetting(

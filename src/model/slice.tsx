@@ -221,11 +221,14 @@ const slice = createSlice({
       store.navigation.sel = false;
       if (section !== "tab") store.navigation.smooth = false;
     },
-    goIn: (store) => {
-      if (!store.navigation.sel) store.navigation.sel = true;
+    select: (store) => {
+      if (store.navigation.sel) return;
+      const { setting, path } = selectSelectedSetting({ hhd: store });
+      if (path && setting) {
+        store.navigation.sel = true;
+      }
     },
-
-    goOut: (store) => {
+    unselect: (store) => {
       if (store.navigation.sel) {
         store.navigation.sel = false;
         return;
@@ -235,7 +238,6 @@ const slice = createSlice({
       store.prevUiType = store.uiType;
       store.uiType = "closed";
     },
-
     incLoadCounter: (store) => {
       store.loadCounter += 1;
     },
@@ -514,13 +516,13 @@ export const selectFocusedPath = (state: RootState) => {
 
 export const selectFocusedSetting = (state: RootState) => {
   const path = selectFocusedPath(state);
-  if (!path) return [];
+  if (!path) return null;
   return getSetting(state.hhd.settings, path);
 };
 
 export const selectHasHint = (state: RootState) => {
   const s = selectFocusedSetting(state);
-  return Boolean(s && s[s.length - 1] && s[s.length - 1].hint);
+  return Boolean(s && s.hint);
 };
 
 export const selectIsSelected = (path: string) => {
@@ -538,7 +540,7 @@ export const selectSelectedSetting = (state: RootState) => {
     };
 
   return {
-    setting: s[s.length - 1],
+    setting: s,
     path: selectFocusedPath(state),
   };
 };

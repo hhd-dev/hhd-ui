@@ -18,11 +18,8 @@ import { selectFocusedSetting, selectShowHint } from "../../model/slice";
 
 export function HintModal() {
   const show = useSelector(selectShowHint);
-  const settings = useSelector(selectFocusedSetting, shallowEqual);
-
-  if (!show || !settings) return <></>;
-  const setting = settings[settings.length - 1];
-  if (!setting || !setting.hint) return <></>;
+  const setting = useSelector(selectFocusedSetting, shallowEqual);
+  if (!show || !setting || !setting.hint) return <></>;
 
   return (
     <Modal isOpen={true} onClose={() => {}} isCentered>

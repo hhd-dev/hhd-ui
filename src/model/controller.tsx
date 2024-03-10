@@ -1,5 +1,11 @@
-import hhdSlice from "./slice";
+import local from "./local";
+import hhdSlice, {
+  selectFocusedPath,
+  selectFocusedSetting,
+  selectSettingState,
+} from "./slice";
 import { store } from "./store";
+import { updateSettingValue } from "./thunks";
 
 const BUTTON_MAP = {
   lb: 4,
@@ -24,6 +30,44 @@ const AXIS_MAP: [string, number, boolean][] = [
   ["up", 1, true],
   ["down", 1, false],
 ];
+
+const goIn = (s: typeof store) => {
+  const state = s.getState();
+  const setting = selectFocusedSetting(state);
+  const path = selectFocusedPath(state);
+
+  const url = local.selectors.selectUrl(state);
+  const token = local.selectors.selectToken(state);
+
+  if (!setting || !path || !url || !token) {
+    s.dispatch(hhdSlice.actions.select());
+    return;
+  }
+  console.log(setting, path);
+
+  const val = selectSettingState(path)(state) as any;
+
+  switch (setting.type) {
+    case "bool":
+      s.dispatch(
+        updateSettingValue({
+          cred: { token, endpoint: url },
+          path,
+          value: !val,
+        })
+      );
+      break;
+    case "action":
+      s.dispatch(
+        updateSettingValue({
+          cred: { token, endpoint: url },
+          path,
+          value: true,
+        })
+      );
+      break;
+  }
+};
 
 export const setupGamepadEventListener = () => {
   let interval: number | null = null;
@@ -130,10 +174,10 @@ export const setupGamepadEventListener = () => {
             store.dispatch(hhdSlice.actions.setShowHint(false));
             break;
           case "a":
-            store.dispatch(hhdSlice.actions.goIn());
+            goIn(store);
             break;
           case "b":
-            store.dispatch(hhdSlice.actions.goOut());
+            store.dispatch(hhdSlice.actions.unselect());
             break;
           case "y":
             store.dispatch(hhdSlice.actions.toggleUiType());
