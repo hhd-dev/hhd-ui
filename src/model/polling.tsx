@@ -1,5 +1,5 @@
 import { fetchFn } from "./thunks";
-import hhdSlice, { selectIsLoading } from "./slice";
+import hhdSlice, { selectIsLoading, selectIsLoggedIn } from "./slice";
 import { store } from "./store";
 
 import { get } from "lodash";
@@ -36,8 +36,10 @@ async function pollState(a: AbortController, reload: boolean) {
         get(state, "hhd.state.version", "")
       );
 
+      const login = selectIsLoggedIn(store.getState());
       const url = local.selectors.selectUrl(store.getState());
       const token = local.selectors.selectToken(store.getState());
+      if (!login) return;
 
       const newState = (
         await fetchFn(url, token, initial ? "state" : "state?poll", {
@@ -94,7 +96,7 @@ async function pollState(a: AbortController, reload: boolean) {
 }
 
 export const enablePolling = (reload: boolean) => {
-  if (abort) return;
+  if (abort) disablePolling();
   try {
     abort = new AbortController();
     pollState(abort, reload).catch((_) => {});

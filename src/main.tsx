@@ -1,4 +1,10 @@
-import { Box, ChakraProvider, useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  ChakraProvider,
+  Flex,
+  Spinner,
+  useColorMode,
+} from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
@@ -54,19 +60,33 @@ function Wrapper() {
   useRelayEffect();
   useInitialLogin();
 
-  let body = <FrontPage />;
+  let body = null;
 
   if (loading) {
+    body = (
+      <Flex direction="column" alignItems="center" h="100vh" w="100vw">
+        <Spinner
+          size="xl"
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="brand.500"
+          marginTop="15rem"
+          marginBottom="1rem"
+        />
+      </Flex>
+    );
     // TODO: Implement spinner
-  }
-
-  if (loggedIn)
+  } else if (loggedIn) {
     body = (
       <>
         <QamState />
         <ExpandedUi />
       </>
     );
+  } else {
+    body = <FrontPage />;
+  }
 
   return (
     <>

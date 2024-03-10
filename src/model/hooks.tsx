@@ -13,7 +13,7 @@ import hhdSlice, {
 
 import { Setting } from "./common";
 import { local } from "./local";
-import { enablePolling } from "./polling";
+import { disablePolling, enablePolling } from "./polling";
 import { selectSettingState } from "./slice";
 import { store } from "./store";
 import {
@@ -120,22 +120,6 @@ export const useShouldRenderParent = (isQam: boolean = false) => {
   return parentClosure;
 };
 
-export const useClearState = () => {
-  const dispatch = useDispatch();
-
-  return () => dispatch(hhdSlice.actions.clearState());
-};
-
-export const useLogout = () => {
-  const { setError } = useError();
-  const clearState = useClearState();
-  const logout = (errorMessage?: string) => {
-    clearState();
-    setError(errorMessage || "");
-  };
-  return logout;
-};
-
 export const useError = () => {
   const dispatch = useDispatch();
   const error = useSelector(selectError);
@@ -157,10 +141,24 @@ export const useLogin = () => {
     dispatch(fetchSettings({ token, endpoint: url }));
     dispatch(fetchState({ token, endpoint: url }));
     dispatch(fetchSectionNames({ token, endpoint: url }));
+    dispatch(hhdSlice.actions.login());
     enablePolling(false);
   };
 
   return login;
+};
+
+export const useLogout = () => {
+  const dispatch = useDispatch<typeof store.dispatch>();
+
+  const logout = () => {
+    dispatch(hhdSlice.actions.clearState());
+    dispatch(hhdSlice.actions.clearError());
+    dispatch(hhdSlice.actions.logout());
+    disablePolling();
+  };
+
+  return logout;
 };
 
 export function useSettingState<A>(path: string) {

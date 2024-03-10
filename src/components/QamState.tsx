@@ -51,7 +51,7 @@ const QamState = () => {
       () => {
         setOldOpen(isOpen);
       },
-      isOpen ? 10 : 500
+      isOpen ? 100 : 200
     );
 
     return () => {

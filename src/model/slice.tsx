@@ -72,6 +72,7 @@ interface AppState {
   prevUiType: PrevUiType;
   appType: AppType;
   controller: boolean;
+  login: boolean;
   state: State;
   settings: Sections;
   loading: { [loadState: string]: boolean };
@@ -91,6 +92,7 @@ const initialState = {
   prevUiType: "init",
   appType: "web",
   controller: false,
+  login: true,
   state: {},
   settings: {},
   loading: {
@@ -192,6 +194,15 @@ const slice = createSlice({
 
     incLoadCounter: (store) => {
       store.loadCounter += 1;
+    },
+    login: (store) => {
+      store.login = true;
+    },
+    logout: (store) => {
+      store.login = false;
+      store.loading = initialState.loading;
+      store.settings = initialState.settings;
+      store.state = initialState.state;
     },
   },
   extraReducers: (builder) => {
@@ -380,11 +391,7 @@ export const selectIsLoggedIn = (state: RootState) => {
 };
 
 export const selectIsLoading = (state: RootState) => {
-  return (
-    !selectHasState(state) ||
-    state.hhd.loading.settings ||
-    state.hhd.loading.state
-  );
+  return state.hhd.loading.settings || state.hhd.loading.state;
 };
 
 export const selectError = (state: RootState) => {

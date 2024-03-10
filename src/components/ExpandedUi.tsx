@@ -20,7 +20,7 @@ import hhdSlice, {
 } from "../model/slice";
 import TagFilterDropdown from "./TagFilterDropdown";
 
-import { useIsLocal } from "../model/hooks";
+import { useIsLocal, useLogout } from "../model/hooks";
 import { ControllerButton } from "./Controller";
 import { useEffect, useState } from "react";
 import { HintModal } from "./elements/HintModal";
@@ -33,6 +33,7 @@ const ExpandedUi = () => {
 
   const { colorMode, toggleColorMode } = useColorMode();
   const dispatch = useDispatch();
+  const logout = useLogout();
 
   const isOpen = appType !== "overlay" || uiType === "expanded";
 
@@ -43,7 +44,7 @@ const ExpandedUi = () => {
       () => {
         setOldOpen(isOpen);
       },
-      isOpen ? 10 : 500
+      isOpen ? 100 : 200
     );
 
     return () => {
@@ -106,7 +107,9 @@ const ExpandedUi = () => {
           />
           <TagFilterDropdown />
           {(!isLocal || appType == "web") && (
-            <Button margin="0 0 0 1rem">Disconnect</Button>
+            <Button margin="0 0 0 1rem" onClick={logout}>
+              Disconnect
+            </Button>
           )}
           {appType == "app" && (
             <Button margin="0 0 0 1rem" onClick={() => window.close()}>

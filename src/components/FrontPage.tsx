@@ -99,13 +99,7 @@ export default function FrontPage() {
                     Clear
                   </Button>
                 </Flex>
-                <Button
-                  onClick={() => {
-                    login();
-                  }}
-                >
-                  Connect
-                </Button>
+                <Button onClick={login}>Connect</Button>
                 {error && (
                   <Alert status="error">
                     <AlertIcon />
