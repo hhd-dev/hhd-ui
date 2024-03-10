@@ -77,8 +77,8 @@ async function pollState(a: AbortController, reload: boolean) {
           })
         );
 
-        // Refresh immediately if we updated
-        initial = true;
+        // Refresh immediately if settings updated
+        if (newSettings) initial = true;
       }
 
       const del = Date.now() - start;
