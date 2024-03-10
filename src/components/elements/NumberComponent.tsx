@@ -70,7 +70,7 @@ const NumberComponent: FC<SettingProps> = ({
             minW="2.4rem"
             htmlFor={path}
             textAlign="end"
-            margin="0 0.3rem 0 0"
+            margin="0 0.45rem 0 0"
           >
             {title}
           </FormLabel>

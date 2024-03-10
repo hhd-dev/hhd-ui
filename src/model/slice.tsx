@@ -139,8 +139,19 @@ const slice = createSlice({
       store.controller = action.payload;
     },
     setUiType: (store, action: PayloadAction<UiType>) => {
+      if (store.appType !== "overlay") return;
       store.prevUiType = store.uiType;
       store.uiType = action.payload;
+    },
+    toggleUiType: (store) => {
+      if (store.appType !== "overlay") return;
+
+      store.prevUiType = store.uiType;
+      if (store.uiType === "qam") {
+        store.uiType = "expanded";
+      } else if (store.uiType === "expanded") {
+        store.uiType = "qam";
+      }
     },
     setAppType: (store, action: PayloadAction<AppType>) => {
       store.appType = action.payload;
@@ -164,8 +175,14 @@ const slice = createSlice({
       updateNavigation(store);
     },
 
-    goPrev: (store, action: PayloadAction<{ section: string }>) => {
-      const { section } = action.payload;
+    goPrev: (store, action: PayloadAction<{ section: string } | void>) => {
+      if (store.uiType === "closed" && store.appType === "overlay") return;
+      let section;
+      if (action.payload) {
+        section = action.payload.section;
+      } else {
+        section = store.uiType === "qam" ? "qam" : store.navigation.curr["tab"];
+      }
       if (!store.navigation.choices[section]) return;
       const idx = store.navigation.choices[section].indexOf(
         store.navigation.curr[section]
@@ -176,8 +193,14 @@ const slice = createSlice({
       }
       store.navigation.smooth = true;
     },
-    goNext: (store, action: PayloadAction<{ section: string }>) => {
-      const { section } = action.payload;
+    goNext: (store, action: PayloadAction<{ section: string } | void>) => {
+      if (store.uiType === "closed" && store.appType === "overlay") return;
+      let section;
+      if (action.payload) {
+        section = action.payload.section;
+      } else {
+        section = store.uiType === "qam" ? "qam" : store.navigation.curr["tab"];
+      }
       if (!store.navigation.choices[section]) return;
       const idx = store.navigation.choices[section].indexOf(
         store.navigation.curr[section]
@@ -192,6 +215,12 @@ const slice = createSlice({
       const { section, curr } = action.payload;
       store.navigation.curr[section] = curr;
       if (section !== "tab") store.navigation.smooth = false;
+    },
+    goIn: (store) => {},
+    goOut: (store) => {
+      if (store.appType !== "overlay") return;
+      store.prevUiType = store.uiType;
+      store.uiType = "closed";
     },
 
     incLoadCounter: (store) => {

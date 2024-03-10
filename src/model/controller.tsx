@@ -52,11 +52,12 @@ export const setupGamepadEventListener = () => {
         if (curr !== next) {
           if (next) {
             evs.push(name);
-            // Skip repeats for x
-            if (name == "x") state[gidx][name] = time + 1e15;
+            // Skip repeats for x, a, b
+            if (["x", "a", "b"].includes(name)) state[gidx][name] = time + 1e15;
             else state[gidx][name] = time + REPEAT_INITIAL;
           } else {
-            if (name == "x") evs.push("x_down");
+            // Keep when x is released
+            if (name == "x") evs.push("x_up");
             state[gidx][name] = null;
           }
         }
@@ -103,24 +104,15 @@ export const setupGamepadEventListener = () => {
       const uiType = selectUiType(store.getState());
       const appType = selectAppType(store.getState());
 
-      let curr: string | null = store.getState().hhd.navigation.curr["tab"];
-      if (uiType === "closed" && appType === "overlay") {
-        curr = null;
-      } else if (uiType === "qam") {
-        curr = "qam";
-      }
-
       for (const ev of evs) {
         switch (ev) {
           case "dpad_up":
           case "up":
-            if (curr)
-              store.dispatch(hhdSlice.actions.goPrev({ section: curr }));
+            store.dispatch(hhdSlice.actions.goPrev());
             break;
           case "dpad_down":
           case "down":
-            if (curr)
-              store.dispatch(hhdSlice.actions.goNext({ section: curr }));
+            store.dispatch(hhdSlice.actions.goNext());
             break;
           case "dpad_left":
           case "left":
@@ -129,34 +121,25 @@ export const setupGamepadEventListener = () => {
           case "right":
             break;
           case "lb":
-            store.dispatch(hhdSlice.actions.goPrev({ section: "tab" }));
+            store.dispatch(hhdSlice.actions.goPrev());
             break;
           case "rb":
-            store.dispatch(hhdSlice.actions.goNext({ section: "tab" }));
+            store.dispatch(hhdSlice.actions.goNext());
             break;
           case "x":
-            store.dispatch(hhdSlice.actions.setShowHint(true))
+            store.dispatch(hhdSlice.actions.setShowHint(true));
             break;
-          case "x_down":
-            store.dispatch(hhdSlice.actions.setShowHint(false))
+          case "x_up":
+            store.dispatch(hhdSlice.actions.setShowHint(false));
             break;
-          case "y":
-            if (appType !== "overlay") break;
-
-            if (uiType === "qam") {
-              store.dispatch(hhdSlice.actions.setUiType("expanded"));
-            } else if (uiType === "expanded") {
-              store.dispatch(hhdSlice.actions.setUiType("qam"));
-            }
-
+          case "a":
+            store.dispatch(hhdSlice.actions.goIn());
             break;
           case "b":
-            if (appType !== "overlay") break;
-
-            if (uiType !== "closed") {
-              store.dispatch(hhdSlice.actions.setUiType("closed"));
-            }
-
+            store.dispatch(hhdSlice.actions.goOut());
+            break;
+          case "y":
+            store.dispatch(hhdSlice.actions.toggleUiType());
             break;
         }
         console.log(ev);
