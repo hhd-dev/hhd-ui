@@ -65,6 +65,7 @@ interface NavigationState {
   choices: Record<string, string[]>;
   smooth: boolean;
   help: boolean;
+  sel: boolean;
 }
 
 interface AppState {
@@ -175,7 +176,7 @@ const slice = createSlice({
       updateNavigation(store);
     },
 
-    goPrev: (store, action: PayloadAction<{ section: string } | void>) => {
+    goPrev: (store, action: PayloadAction<{ section: string } | undefined>) => {
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {
@@ -193,7 +194,7 @@ const slice = createSlice({
       }
       store.navigation.smooth = true;
     },
-    goNext: (store, action: PayloadAction<{ section: string } | void>) => {
+    goNext: (store, action: PayloadAction<{ section: string } | undefined>) => {
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {
@@ -216,8 +217,16 @@ const slice = createSlice({
       store.navigation.curr[section] = curr;
       if (section !== "tab") store.navigation.smooth = false;
     },
-    goIn: (store) => {},
+    goIn: (store) => {
+      if (!store.navigation.sel) store.navigation.sel = true;
+    },
+
     goOut: (store) => {
+      if (store.navigation.sel) {
+        store.navigation.sel = false;
+        return;
+      }
+
       if (store.appType !== "overlay") return;
       store.prevUiType = store.uiType;
       store.uiType = "closed";
@@ -508,6 +517,21 @@ export const selectFocusedSetting = (state: RootState) => {
 export const selectHasHint = (state: RootState) => {
   const s = selectFocusedSetting(state);
   return Boolean(s && s[s.length - 1] && s[s.length - 1].hint);
+};
+
+export const selectSelectedSetting = (state: RootState) => {
+  const s = selectFocusedSetting(state);
+
+  if (!state.hhd.navigation.sel || !s)
+    return {
+      setting: null,
+      path: null,
+    };
+
+  return {
+    setting: s[s.length - 1],
+    path: selectFocusedPath(state),
+  };
 };
 
 export default slice;

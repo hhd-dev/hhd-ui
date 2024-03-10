@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import hhdSlice, {
   RootState,
   selectAppType,
   selectError,
   selectLoadCounter,
   selectPrevUiType,
+  selectSelectedSetting,
   selectShouldRenderFilters,
   selectUiType,
   shouldRenderChild,
@@ -46,8 +47,9 @@ export function useElementNav<T extends HTMLElement>(
   };
 
   useEffect(() => {
-    if (smooth && focus && ref.current) {
-      ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (focus && ref.current) {
+      if (smooth)
+        ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
       // ref.current.focus({ preventScroll: true });
     }
   }, [focus, ref.current, smooth]);
@@ -216,4 +218,8 @@ export function useInitialLogin() {
   useEffect(() => {
     if (canLogIn) login();
   }, [loadCounter]);
+}
+
+export function useSelectedSetting() {
+  return useSelector(selectSelectedSetting, shallowEqual);
 }

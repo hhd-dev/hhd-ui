@@ -1,4 +1,4 @@
-import hhdSlice, { selectAppType, selectUiType } from "./slice";
+import hhdSlice from "./slice";
 import { store } from "./store";
 
 const BUTTON_MAP = {
@@ -101,9 +101,6 @@ export const setupGamepadEventListener = () => {
       // Ignore guide combos
       if (state[gidx].guide) continue;
 
-      const uiType = selectUiType(store.getState());
-      const appType = selectAppType(store.getState());
-
       for (const ev of evs) {
         switch (ev) {
           case "dpad_up":
@@ -121,10 +118,10 @@ export const setupGamepadEventListener = () => {
           case "right":
             break;
           case "lb":
-            store.dispatch(hhdSlice.actions.goPrev());
+            store.dispatch(hhdSlice.actions.goPrev({ section: "tab" }));
             break;
           case "rb":
-            store.dispatch(hhdSlice.actions.goNext());
+            store.dispatch(hhdSlice.actions.goNext({ section: "tab" }));
             break;
           case "x":
             store.dispatch(hhdSlice.actions.setShowHint(true));

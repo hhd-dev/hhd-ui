@@ -44,7 +44,7 @@ const theme = extendTheme(
       },
     },
     shadows: {
-      outline: "0 0 0 3px var(--chakra-colors-brand-500)",
+      outline: "0 0 0 3px var(--chakra-colors-brand-700)",
     },
   },
   withDefaultColorScheme({ colorScheme: "brand" })

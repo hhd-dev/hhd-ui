@@ -26,6 +26,7 @@ import hhdSlice, {
 import * as electronUtils from "./model/electron.tsx";
 import { persistor, store } from "./model/store.tsx";
 import { setupGamepadEventListener } from "./model/controller.tsx";
+import { EditModal } from "./components/elements/EditModal.tsx";
 
 declare global {
   interface Window {
@@ -80,6 +81,7 @@ function Wrapper() {
   } else if (loggedIn) {
     body = (
       <>
+        <EditModal />
         <QamState />
         <ExpandedUi />
       </>
