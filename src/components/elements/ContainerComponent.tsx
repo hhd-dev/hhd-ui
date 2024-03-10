@@ -1,10 +1,10 @@
-import { CardBody, Flex, Heading, Stack, Tooltip } from "@chakra-ui/react";
+import { CardBody, Flex, Heading, Tooltip } from "@chakra-ui/react";
 import { FC } from "react";
+import { ContainerProps, ModeSetting } from "../../model/common";
 import { useShouldRenderChild } from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
-import SettingComponent from "./SettingComponent";
-import { ContainerProps, ModeSetting } from "../../model/common";
 import ModeComponent from "./ModeComponent";
+import SettingComponent from "./SettingComponent";
 
 const ContainerComponent: FC<ContainerProps> = ({
   settings: set,
@@ -28,7 +28,7 @@ const ContainerComponent: FC<ContainerProps> = ({
             </Heading>
           </Tooltip>
         )}
-        <Stack spacing="3">
+        <Flex direction="column" flexGrow="1">
           {Object.entries(children)
             .filter(([_, s]) => shouldRenderChild(s))
             .map(([childName, childSet], idx) => {
@@ -51,7 +51,7 @@ const ContainerComponent: FC<ContainerProps> = ({
                 </ErrorBoundary>
               );
             })}
-        </Stack>
+        </Flex>
       </CardBody>
     </>
   );

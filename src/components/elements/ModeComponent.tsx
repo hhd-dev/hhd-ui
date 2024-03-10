@@ -11,16 +11,18 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
-  Stack,
   Tooltip,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { useShouldRenderChild } from "../../model/hooks";
-import { useSettingState } from "../../model/hooks";
+import { ModeProps } from "../../model/common";
+import {
+  useElementNav,
+  useSettingState,
+  useShouldRenderChild,
+} from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
-import { ModeProps } from "../../model/common";
-import { useElementNav } from "../../model/hooks";
+import { getFocusStyle } from "./utils";
 
 const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { state, setState } = useSettingState<string>(`${path}.mode`);
@@ -32,7 +34,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
 
   return (
     <>
-      <Box>
+      <Box {...getFocusStyle(focus)}>
         <Tooltip label={hint}>
           <FormLabel htmlFor={path}>{title}</FormLabel>
         </Tooltip>
@@ -44,7 +46,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
               ref={ref}
               onFocus={setFocus}
               rightIcon={<ChevronDownIcon />}
-              {...(focus && { background: "purple" })}
+              marginBottom="0.3rem"
             >
               {mode?.title}
             </MenuButton>
@@ -68,7 +70,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
           </MenuList>
         </Menu>
       </Box>
-      <Flex direction="row">
+      <Flex direction="row" margin="0.2rem 0.1rem 0.4rem 0.3rem">
         <Center>
           <Divider
             orientation="vertical"
@@ -76,7 +78,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
             alignSelf="stretch"
           ></Divider>
         </Center>
-        <Stack flexGrow="1">
+        <Flex direction="column" flexGrow="1">
           {mode &&
             shouldRenderChild(mode) &&
             Object.entries(mode.children)
@@ -92,7 +94,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                   </ErrorBoundary>
                 );
               })}
-        </Stack>
+        </Flex>
       </Flex>
     </>
   );

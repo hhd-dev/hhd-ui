@@ -1,6 +1,5 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Checkbox,
   Code,
@@ -14,15 +13,15 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { useSettingState } from "../../model/hooks";
-import NumberComponent from "./NumberComponent";
 import {
   BoolSetting,
   DiscreteSetting,
   MultipleSetting,
   SettingProps,
 } from "../../model/common";
-import { useElementNav } from "../../model/hooks";
+import { useElementNav, useSettingState } from "../../model/hooks";
+import NumberComponent from "./NumberComponent";
+import { getFocusStyle } from "./utils";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   const { title, hint } = set as BoolSetting;
@@ -33,13 +32,9 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   );
 
   return (
-    <Flex
-      flexDirection="row"
-      alignItems="center"
-      {...(focus && { background: "purple" })}
-    >
+    <Flex flexDirection="row" alignItems="center" {...getFocusStyle(focus)}>
       <Tooltip label={hint}>
-        <FormLabel htmlFor={path} margin="0.3rem 0" flexGrow="1">
+        <FormLabel htmlFor={path} flexGrow="1" margin="0">
           {title}
         </FormLabel>
       </Tooltip>
@@ -64,15 +59,20 @@ const DiscreteComponent: FC<SettingProps> = ({
   const { ref, focus, setFocus } = useElementNav(section, path);
 
   return (
-    <Flex flexDirection="column">
+    <Flex
+      flexDirection="column"
+      {...getFocusStyle(focus)}
+      marginTop="0.2rem"
+      marginBottom="0.2rem"
+    >
       <FormLabel htmlFor={path}>{title}</FormLabel>
       <Menu>
         <MenuButton
           as={Button}
           rightIcon={<ChevronDownIcon />}
-          {...(focus && { background: "purple" })}
           ref={ref}
           onFocus={setFocus}
+          marginBottom="0.35rem"
         >
           {state}
         </MenuButton>
@@ -109,15 +109,15 @@ const MultipleComponent: FC<SettingProps> = ({
   );
 
   return (
-    <Flex flexDirection="column">
+    <Flex flexDirection="column" {...getFocusStyle(focus)} margin="0.2rem 0">
       <FormLabel htmlFor={path}>{title}</FormLabel>
       <Menu>
         <MenuButton
           as={Button}
           rightIcon={<ChevronDownIcon />}
-          {...(focus && { background: "purple" })}
           ref={ref}
           onFocus={setFocus}
+          marginBottom="0.35rem"
         >
           {state && options[state]}
         </MenuButton>
@@ -167,15 +167,17 @@ const ActionComponent: FC<SettingProps> = ({
   );
 
   return (
-    <Button
-      onClick={() => setState(true)}
-      disabled={!state}
-      {...(focus && { background: "purple" })}
-      ref={ref}
-      onFocus={setFocus}
-    >
-      {title}
-    </Button>
+    <Flex {...getFocusStyle(focus)} flexDirection="column" alignItems="stretch">
+      <Button
+        onClick={() => setState(true)}
+        disabled={!state}
+        ref={ref}
+        onFocus={setFocus}
+        margin="0.3rem 0.4rem"
+      >
+        {title}
+      </Button>
+    </Flex>
   );
 };
 

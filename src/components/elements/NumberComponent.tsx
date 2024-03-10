@@ -17,6 +17,7 @@ import { FC } from "react";
 import { useSettingState } from "../../model/hooks";
 import { useElementNav } from "../../model/hooks";
 import { NumberSetting, SettingProps } from "../../model/common";
+import { getFocusStyle } from "./utils";
 
 const NumberComponent: FC<SettingProps> = ({
   settings: set,
@@ -35,7 +36,7 @@ const NumberComponent: FC<SettingProps> = ({
 
   if (tags?.includes("dropdown")) {
     return (
-      <>
+      <Box {...getFocusStyle(focus)}>
         <Tooltip label={hint}>
           <FormLabel htmlFor={path}>{title}</FormLabel>
         </Tooltip>
@@ -46,7 +47,6 @@ const NumberComponent: FC<SettingProps> = ({
           max={max}
           step={step}
           value={state}
-          {...(focus && { background: "purple" })}
           ref={ref}
           onFocus={setFocus}
         >
@@ -56,16 +56,14 @@ const NumberComponent: FC<SettingProps> = ({
             <NumberDecrementStepper />
           </NumberInputStepper>
         </NumberInput>
-      </>
+      </Box>
     );
   }
-
-  ref.current?.focus();
 
   if (tags?.includes("slim")) {
     // TODO: Fix style boundary
     return (
-      <Flex direction="row" alignItems="center">
+      <Flex direction="row" alignItems="center" {...getFocusStyle(focus)}>
         <Tooltip label={hint}>
           <FormLabel minW="2.4rem" htmlFor={path} textAlign="end">
             {title}
@@ -75,7 +73,6 @@ const NumberComponent: FC<SettingProps> = ({
           min={min}
           max={max}
           onChange={setState}
-          {...(focus && { background: "purple" })}
           onFocus={setFocus}
           step={step}
           value={state}
@@ -99,7 +96,7 @@ const NumberComponent: FC<SettingProps> = ({
   }
 
   return (
-    <>
+    <Box {...getFocusStyle(focus)}>
       <Flex direction="row" alignItems="center">
         <Tooltip label={hint}>
           <FormLabel flexGrow="1" htmlFor={path} justifySelf="stretch">
@@ -119,7 +116,6 @@ const NumberComponent: FC<SettingProps> = ({
         value={state}
         step={step}
         onChange={setState}
-        {...(focus && { background: "purple" })}
         focusThumbOnChange={false}
         ref={ref}
         onFocus={setFocus}
@@ -129,7 +125,7 @@ const NumberComponent: FC<SettingProps> = ({
         </SliderTrack>
         <SliderThumb />
       </Slider>
-    </>
+    </Box>
   );
 };
 

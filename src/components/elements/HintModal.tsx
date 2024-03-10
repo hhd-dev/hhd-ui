@@ -24,10 +24,6 @@ export function HintModal() {
 
   if (!settings) return <></>;
   const setting = settings[settings.length - 1];
-  const context = settings.slice(
-    Math.max(settings.length - 3, 0),
-    Math.max(settings.length - 1, 0)
-  );
   if (!setting) return <></>;
 
   return (
