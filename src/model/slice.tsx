@@ -178,7 +178,7 @@ const slice = createSlice({
     },
 
     goPrev: (store, action: PayloadAction<{ section: string } | undefined>) => {
-      store.navigation.sel = false;
+      if (store.navigation.sel) return;
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {
@@ -197,7 +197,7 @@ const slice = createSlice({
       store.navigation.smooth = true;
     },
     goNext: (store, action: PayloadAction<{ section: string } | undefined>) => {
-      store.navigation.sel = false;
+      if (store.navigation.sel) return;
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {

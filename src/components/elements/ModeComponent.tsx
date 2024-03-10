@@ -12,6 +12,7 @@ import {
   MenuList,
   MenuOptionGroup,
   Tooltip,
+  useColorMode,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { ModeProps } from "../../model/common";
@@ -29,12 +30,13 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { title, modes, hint } = set;
   const shouldRenderChild = useShouldRenderChild(section === "qam");
   const { ref, focus, setFocus } = useElementNav(section, path);
+  const { colorMode } = useColorMode();
 
   const mode = state ? set.modes[state] : null;
 
   return (
     <>
-      <Box {...getFocusStyle(focus)}>
+      <Box {...getFocusStyle(focus, colorMode)}>
         <Tooltip label={hint}>
           <FormLabel htmlFor={path}>{title}</FormLabel>
         </Tooltip>

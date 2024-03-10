@@ -12,6 +12,7 @@ import {
   SliderThumb,
   SliderTrack,
   Tooltip,
+  useColorMode,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { useSettingState } from "../../model/hooks";
@@ -34,10 +35,11 @@ const NumberComponent: FC<SettingProps> = ({
     section,
     path
   );
+  const { colorMode } = useColorMode();
 
   if (tags?.includes("dropdown")) {
     return (
-      <Box {...getFocusStyle(focus)}>
+      <Box {...getFocusStyle(focus, colorMode)}>
         <Tooltip label={hint}>
           <FormLabel htmlFor={path}>{title}</FormLabel>
         </Tooltip>
@@ -65,7 +67,11 @@ const NumberComponent: FC<SettingProps> = ({
   if (tags?.includes("slim")) {
     // TODO: Fix style boundary
     return (
-      <Flex direction="row" alignItems="center" {...getFocusStyle(focus)}>
+      <Flex
+        direction="row"
+        alignItems="center"
+        {...getFocusStyle(focus, colorMode)}
+      >
         <Tooltip label={hint}>
           <FormLabel
             minW="2.4rem"
@@ -105,7 +111,7 @@ const NumberComponent: FC<SettingProps> = ({
   }
 
   return (
-    <Box {...getFocusStyle(focus)}>
+    <Box {...getFocusStyle(focus, colorMode)}>
       <Flex direction="row" alignItems="center">
         <Tooltip label={hint}>
           <FormLabel flexGrow="1" htmlFor={path} justifySelf="stretch">
@@ -132,7 +138,10 @@ const NumberComponent: FC<SettingProps> = ({
         <SliderTrack>
           <SliderFilledTrack />
         </SliderTrack>
-        <SliderThumb />
+        <SliderThumb
+          transition="all 0.2s ease"
+          {...(sel && { bg: "brand.300" })}
+        />
       </Slider>
     </Box>
   );

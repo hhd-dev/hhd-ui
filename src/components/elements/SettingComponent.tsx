@@ -11,6 +11,7 @@ import {
   MenuList,
   MenuOptionGroup,
   Tooltip,
+  useColorMode,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import {
@@ -30,9 +31,14 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
     section,
     path
   );
+  const { colorMode } = useColorMode();
 
   return (
-    <Flex flexDirection="row" alignItems="center" {...getFocusStyle(focus)}>
+    <Flex
+      flexDirection="row"
+      alignItems="center"
+      {...getFocusStyle(focus, colorMode)}
+    >
       <Tooltip label={hint}>
         <FormLabel htmlFor={path} flexGrow="1" margin="0">
           {title}
@@ -57,11 +63,12 @@ const DiscreteComponent: FC<SettingProps> = ({
   const { title, options } = set as DiscreteSetting;
   const { state, setState } = useSettingState<number>(path);
   const { ref, focus, setFocus } = useElementNav(section, path);
+  const { colorMode } = useColorMode();
 
   return (
     <Flex
       flexDirection="column"
-      {...getFocusStyle(focus)}
+      {...getFocusStyle(focus, colorMode)}
       marginTop="0.2rem"
       marginBottom="0.2rem"
     >
@@ -107,9 +114,14 @@ const MultipleComponent: FC<SettingProps> = ({
     section,
     path
   );
+  const { colorMode } = useColorMode();
 
   return (
-    <Flex flexDirection="column" {...getFocusStyle(focus)} margin="0.2rem 0">
+    <Flex
+      flexDirection="column"
+      {...getFocusStyle(focus, colorMode)}
+      margin="0.2rem 0"
+    >
       <FormLabel htmlFor={path}>{title}</FormLabel>
       <Menu>
         <MenuButton
@@ -165,9 +177,14 @@ const ActionComponent: FC<SettingProps> = ({
     section,
     path
   );
+  const { colorMode } = useColorMode();
 
   return (
-    <Flex {...getFocusStyle(focus)} flexDirection="column" alignItems="stretch">
+    <Flex
+      {...getFocusStyle(focus, colorMode)}
+      flexDirection="column"
+      alignItems="stretch"
+    >
       <Button
         onClick={() => setState(true)}
         disabled={!state}
