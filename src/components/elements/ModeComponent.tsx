@@ -53,7 +53,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
               {mode?.title}
             </MenuButton>
           </Tooltip>
-          <MenuList>
+          <MenuList zIndex="5">
             <MenuOptionGroup type="radio" value={state}>
               {Object.entries(modes).map(
                 ([value, { title: label }], idx: number) => {

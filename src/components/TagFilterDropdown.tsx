@@ -41,7 +41,7 @@ const TagFilterDropdown: FC = ({}) => {
       >
         {LabelMap[currentTagFilter]}
       </MenuButton>
-      <MenuList>
+      <MenuList zIndex='5'>
         <MenuOptionGroup
           title="Filter"
           type="radio"
