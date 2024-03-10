@@ -30,7 +30,11 @@ export function HintModal() {
   if (!setting) return <></>;
 
   return (
-    <Modal isOpen={Boolean(show && settings && setting.hint)} onClose={onClose}>
+    <Modal
+      isOpen={Boolean(show && settings && setting.hint)}
+      onClose={onClose}
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{setting.title}</ModalHeader>
