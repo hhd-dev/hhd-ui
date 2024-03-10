@@ -223,8 +223,8 @@ const slice = createSlice({
     },
     select: (store) => {
       if (store.navigation.sel) return;
-      const { setting, path } = selectSelectedSetting({ hhd: store });
-      if (path && setting) {
+      const setting = selectFocusedSetting({ hhd: store });
+      if (setting) {
         store.navigation.sel = true;
       }
     },

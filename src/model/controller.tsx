@@ -1,7 +1,9 @@
+import { NumberSetting } from "./common";
 import local from "./local";
 import hhdSlice, {
   selectFocusedPath,
   selectFocusedSetting,
+  selectSelectedSetting,
   selectSettingState,
 } from "./slice";
 import { store } from "./store";
@@ -43,7 +45,6 @@ const goIn = (s: typeof store) => {
     s.dispatch(hhdSlice.actions.select());
     return;
   }
-  console.log(setting, path);
 
   const val = selectSettingState(path)(state) as any;
 
@@ -66,7 +67,40 @@ const goIn = (s: typeof store) => {
         })
       );
       break;
+    default:
+      s.dispatch(hhdSlice.actions.select());
   }
+};
+
+const goSideways = (s: typeof store, left: boolean) => {
+  const state = s.getState();
+  const { setting, path } = selectSelectedSetting(state);
+  if (!setting || !path || !["float", "int"].includes(setting.type)) return;
+  const numSet = setting as NumberSetting<number, "float" | "int">;
+
+  const url = local.selectors.selectUrl(state);
+  const token = local.selectors.selectToken(state);
+
+  if (!setting || !path || !url || !token) {
+    s.dispatch(hhdSlice.actions.select());
+    return;
+  }
+  const val = selectSettingState(path)(state) as unknown as number;
+
+  let newVal = val;
+  if (left) {
+    newVal -= numSet.step || 1;
+  } else {
+    newVal += numSet.step || 1;
+  }
+
+  s.dispatch(
+    updateSettingValue({
+      cred: { token, endpoint: url },
+      path,
+      value: newVal,
+    })
+  );
 };
 
 export const setupGamepadEventListener = () => {
@@ -157,9 +191,11 @@ export const setupGamepadEventListener = () => {
             break;
           case "dpad_left":
           case "left":
+            goSideways(store, true);
             break;
           case "dpad_right":
           case "right":
+            goSideways(store, false);
             break;
           case "lb":
             store.dispatch(hhdSlice.actions.goPrev({ section: "tab" }));
