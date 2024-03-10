@@ -11,6 +11,7 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { useSettingState } from "../../model/hooks";
@@ -24,7 +25,7 @@ import {
 import { useElementNav } from "../../model/hooks";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
-  const { title } = set as BoolSetting;
+  const { title, hint } = set as BoolSetting;
   const { state, setState } = useSettingState<number>(path);
   const { ref, focus, setFocus } = useElementNav<HTMLInputElement>(
     section,
@@ -37,10 +38,11 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
       alignItems="center"
       {...(focus && { background: "purple" })}
     >
-      <FormLabel htmlFor={path} margin="0.3rem 0">
-        {title}
-      </FormLabel>
-      <Box flexGrow="1"></Box>
+      <Tooltip label={hint}>
+        <FormLabel htmlFor={path} margin="0.3rem 0" flexGrow="1">
+          {title}
+        </FormLabel>
+      </Tooltip>
       <Checkbox
         id={path}
         isChecked={Boolean(state)}
@@ -101,11 +103,10 @@ const MultipleComponent: FC<SettingProps> = ({
 }) => {
   const { title, options } = set as MultipleSetting;
   const { state, setState } = useSettingState<string>(path);
-  const {
-    ref,
-    focus,
-    setFocus,
-  } = useElementNav<HTMLButtonElement>(section, path);
+  const { ref, focus, setFocus } = useElementNav<HTMLButtonElement>(
+    section,
+    path
+  );
 
   return (
     <Flex flexDirection="column">
@@ -160,11 +161,10 @@ const ActionComponent: FC<SettingProps> = ({
 }) => {
   const { title } = set;
   const { state, setState } = useSettingState<number>(path);
-  const {
-    ref,
-    focus,
-    setFocus,
-  } = useElementNav<HTMLButtonElement>(section, path);
+  const { ref, focus, setFocus } = useElementNav<HTMLButtonElement>(
+    section,
+    path
+  );
 
   return (
     <Button

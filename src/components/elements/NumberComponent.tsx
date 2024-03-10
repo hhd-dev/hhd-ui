@@ -11,6 +11,7 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { useSettingState } from "../../model/hooks";
@@ -22,7 +23,7 @@ const NumberComponent: FC<SettingProps> = ({
   path,
   section,
 }) => {
-  const { tags, title, min, max, unit, step } = set as NumberSetting<
+  const { tags, title, min, max, unit, step, hint } = set as NumberSetting<
     number,
     "float" | "int"
   >;
@@ -35,7 +36,9 @@ const NumberComponent: FC<SettingProps> = ({
   if (tags?.includes("dropdown")) {
     return (
       <>
-        <FormLabel htmlFor={path}>{title}</FormLabel>
+        <Tooltip label={hint}>
+          <FormLabel htmlFor={path}>{title}</FormLabel>
+        </Tooltip>
         <NumberInput
           id={path}
           onChange={setState}
@@ -63,9 +66,11 @@ const NumberComponent: FC<SettingProps> = ({
     // TODO: Fix style boundary
     return (
       <Flex direction="row" alignItems="center">
-        <FormLabel minW="2.4rem" htmlFor={path} textAlign="end">
-          {title}
-        </FormLabel>
+        <Tooltip label={hint}>
+          <FormLabel minW="2.4rem" htmlFor={path} textAlign="end">
+            {title}
+          </FormLabel>
+        </Tooltip>
         <Slider
           min={min}
           max={max}
@@ -96,8 +101,11 @@ const NumberComponent: FC<SettingProps> = ({
   return (
     <>
       <Flex direction="row" alignItems="center">
-        <FormLabel htmlFor={path}>{title}</FormLabel>
-        <Box flexGrow="1" minW="2rem" />
+        <Tooltip label={hint}>
+          <FormLabel flexGrow="1" htmlFor={path} justifySelf="stretch">
+            {title}
+          </FormLabel>
+        </Tooltip>
         {state && (
           <FormLabel>
             {state}

@@ -12,6 +12,7 @@ import {
   MenuList,
   MenuOptionGroup,
   Stack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { useShouldRenderChild } from "../../model/hooks";
@@ -23,7 +24,7 @@ import { useElementNav } from "../../model/hooks";
 
 const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { state, setState } = useSettingState<string>(`${path}.mode`);
-  const { title, modes } = set;
+  const { title, modes, hint } = set;
   const shouldRenderChild = useShouldRenderChild(section === "qam");
   const { ref, focus, setFocus } = useElementNav(section, path);
 
@@ -32,18 +33,22 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   return (
     <>
       <Box>
-        <FormLabel htmlFor={path}>{title}</FormLabel>
+        <Tooltip label={hint}>
+          <FormLabel htmlFor={path}>{title}</FormLabel>
+        </Tooltip>
         <Menu>
-          <MenuButton
-            as={Button}
-            width="100%"
-            ref={ref}
-            onFocus={setFocus}
-            rightIcon={<ChevronDownIcon />}
-            {...(focus && { background: "purple" })}
-          >
-            {mode?.title}
-          </MenuButton>
+          <Tooltip label={mode?.hint}>
+            <MenuButton
+              as={Button}
+              width="100%"
+              ref={ref}
+              onFocus={setFocus}
+              rightIcon={<ChevronDownIcon />}
+              {...(focus && { background: "purple" })}
+            >
+              {mode?.title}
+            </MenuButton>
+          </Tooltip>
           <MenuList>
             <MenuOptionGroup type="radio" value={state}>
               {Object.entries(modes).map(

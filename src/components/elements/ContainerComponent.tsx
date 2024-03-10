@@ -1,4 +1,4 @@
-import { CardBody, Flex, Heading, Stack } from "@chakra-ui/react";
+import { CardBody, Flex, Heading, Stack, Tooltip } from "@chakra-ui/react";
 import { FC } from "react";
 import { useShouldRenderChild } from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
@@ -11,7 +11,7 @@ const ContainerComponent: FC<ContainerProps> = ({
   path,
   section,
 }) => {
-  const { title, children, tags } = set;
+  const { title, children, tags, hint } = set;
   const qam = section === "qam";
   const shouldRenderChild = useShouldRenderChild(qam);
   const showTitle = !qam || !tags?.includes("hide-title");
@@ -22,11 +22,11 @@ const ContainerComponent: FC<ContainerProps> = ({
         style={{ display: "flex", flexDirection: "column", padding: 0 }}
       >
         {showTitle && (
-          <Flex direction="row" marginBottom="1rem" alignItems="center">
-            <Heading as="h1" fontSize="xl">
+          <Tooltip label={hint}>
+            <Heading as="h1" fontSize="xl" marginBottom="1rem">
               {title}
             </Heading>
-          </Flex>
+          </Tooltip>
         )}
         <Stack spacing="3">
           {Object.entries(children)
