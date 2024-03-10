@@ -13,9 +13,9 @@ import {
   getSetting,
 } from "./common";
 import {
+  fetchSectionNames,
   fetchSettings,
   fetchState,
-  fetchSectionNames,
   updateSettingValue,
 } from "./thunks";
 
@@ -66,6 +66,7 @@ interface NavigationState {
   smooth: boolean;
   help: boolean;
   sel: boolean;
+  sel_choice: any | null;
 }
 
 interface AppState {
@@ -111,6 +112,7 @@ const initialState = {
     smooth: false,
     help: false,
     sel: false,
+    sel_choice: null,
   },
 } as AppState;
 
@@ -223,10 +225,16 @@ const slice = createSlice({
     },
     select: (store) => {
       if (store.navigation.sel) return;
+      const path = selectFocusedPath({ hhd: store });
       const setting = selectFocusedSetting({ hhd: store });
-      if (setting) {
-        store.navigation.sel = true;
+      if (!setting || !path) {
+        return;
       }
+      const val = selectSettingState(
+        path + (setting.type === "mode" ? ".mode" : "")
+      )({ hhd: store });
+      store.navigation.sel = true;
+      store.navigation.sel_choice = val;
     },
     unselect: (store) => {
       if (store.navigation.sel) {
@@ -528,6 +536,10 @@ export const selectHasHint = (state: RootState) => {
 export const selectIsSelected = (path: string) => {
   return (state: RootState) =>
     selectFocusedPath(state) === path && state.hhd.navigation.sel;
+};
+
+export const selectSelectedChoice = (state: RootState) => {
+  return state.hhd.navigation.sel_choice;
 };
 
 export const selectSelectedSetting = (state: RootState) => {
