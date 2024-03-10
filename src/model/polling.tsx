@@ -38,10 +38,13 @@ async function pollState(a: AbortController, reload: boolean) {
         get(state, "hhd.state.version", "")
       );
 
-      const login = selectIsLoggedIn(store.getState());
-      const url = local.selectors.selectUrl(store.getState());
-      const token = local.selectors.selectToken(store.getState());
-      if (!login) return;
+      const login = selectIsLoggedIn(state);
+      const url = local.selectors.selectUrl(state);
+      const token = local.selectors.selectToken(state);
+      if (!login) {
+        abort = undefined;
+        return;
+      }
 
       const newState = (
         await fetchFn(url, token, initial ? "state" : "state?poll", {
@@ -52,22 +55,30 @@ async function pollState(a: AbortController, reload: boolean) {
       initial = false;
 
       // If settings changed reload them
+      let newSettings = null;
       if (newState && newHash !== currHash) {
-        const settings = (
+        newSettings = (
           await fetchFn(url, token, "settings", {
             signal: a.signal,
           })
         ).data;
-        if (settings)
-          store.dispatch(hhdSlice.actions.overrideSettings(settings));
       }
 
       // Apply new state
       if (
-        newState &&
-        JSON.stringify(state.hhd.state) !== JSON.stringify(newState)
+        (newState &&
+          JSON.stringify(state.hhd.state) !== JSON.stringify(newState)) ||
+        newSettings
       ) {
-        store.dispatch(hhdSlice.actions.overrideSettingsState(newState));
+        store.dispatch(
+          hhdSlice.actions.replaceState({
+            state: newState,
+            settings: newSettings,
+          })
+        );
+
+        // Refresh immediately if we updated
+        initial = true;
       }
 
       const del = Date.now() - start;
@@ -114,5 +125,10 @@ export const disablePolling = () => {
   }
 };
 
-window.addEventListener("focus", () => enablePolling(true));
-window.addEventListener("blur", () => disablePolling());
+window.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    enablePolling(true);
+  } else {
+    disablePolling();
+  }
+});

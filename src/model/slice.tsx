@@ -167,12 +167,13 @@ const slice = createSlice({
     clearError: (store) => {
       store.error = "";
     },
-    overrideSettings: (store, action: PayloadAction<any>) => {
-      store.settings = action.payload;
-      updateNavigation(store);
-    },
-    overrideSettingsState: (store, action: PayloadAction<any>) => {
-      store.state = action.payload;
+    replaceState: (
+      store,
+      action: PayloadAction<{ state: any; settings: any }>
+    ) => {
+      const { state, settings } = action.payload;
+      if (settings) store.settings = settings;
+      if (state) store.state = state;
       updateNavigation(store);
     },
 
