@@ -14,6 +14,7 @@ import {
 import { Fragment } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import slice, { selectFocusedSetting, selectShowHint } from "../../model/slice";
+import { ModeSetting } from "../../model/common";
 
 export function HintModal() {
   const show = useSelector(selectShowHint);
@@ -43,32 +44,41 @@ export function HintModal() {
           {/* <Heading size="md" marginBottom="1rem">
             Part Of
           </Heading> */}
-          <Flex direction="row" marginBottom="1rem">
-            <Center>
-              <Divider
-                orientation="vertical"
-                margin="0 0.75rem 0 0.2rem"
-                alignSelf="stretch"
-              ></Divider>
-            </Center>
-            <Box color="gray.500">
-              {context.reverse().map((s, i) => (
-                <Fragment key={i}>
-                  <Heading
-                    size="sm"
-                    marginTop="0.7rem"
-                    marginBottom="0.3rem"
-                    marginLeft={`${0.5 * i}rem`}
-                  >
-                    {s.title}
-                  </Heading>
-                  <Text marginBottom="0.3rem" marginLeft={`${0.5 * i}rem`}>
-                    {s.hint}
-                  </Text>
-                </Fragment>
-              ))}
-            </Box>
-          </Flex>
+          {setting.type == "mode" &&
+            Object.values((setting as ModeSetting).modes).some(
+              (s) => s.hint
+            ) && (
+              <>
+                <Heading size="md" marginTop="0.7rem" marginBottom="0.7rem">
+                  Modes
+                </Heading>
+                <Flex direction="row" marginBottom="1rem">
+                  <Center>
+                    <Divider
+                      orientation="vertical"
+                      margin="0 0.75rem 0 0.2rem"
+                      alignSelf="stretch"
+                    ></Divider>
+                  </Center>
+                  <Box>
+                    {Object.values((setting as ModeSetting).modes).map(
+                      (s, i) => (
+                        <Fragment key={i}>
+                          <Heading
+                            size="sm"
+                            marginTop="0.7rem"
+                            marginBottom="0.3rem"
+                          >
+                            {s.title}
+                          </Heading>
+                          <Text marginBottom="0.3rem">{s.hint || "..."}</Text>
+                        </Fragment>
+                      )
+                    )}
+                  </Box>
+                </Flex>
+              </>
+            )}
         </ModalBody>
       </ModalContent>
     </Modal>
