@@ -52,8 +52,11 @@ export const setupGamepadEventListener = () => {
         if (curr !== next) {
           if (next) {
             evs.push(name);
-            state[gidx][name] = time + REPEAT_INITIAL;
+            // Skip repeats for x
+            if (name == "x") state[gidx][name] = time + 1e15;
+            else state[gidx][name] = time + REPEAT_INITIAL;
           } else {
+            if (name == "x") evs.push("x_down");
             state[gidx][name] = null;
           }
         }
@@ -130,6 +133,12 @@ export const setupGamepadEventListener = () => {
             break;
           case "rb":
             store.dispatch(hhdSlice.actions.goNext({ section: "tab" }));
+            break;
+          case "x":
+            store.dispatch(hhdSlice.actions.setShowHint(true))
+            break;
+          case "x_down":
+            store.dispatch(hhdSlice.actions.setShowHint(false))
             break;
           case "y":
             if (appType !== "overlay") break;

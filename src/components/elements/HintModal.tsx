@@ -1,4 +1,3 @@
-import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Center,
@@ -7,28 +6,19 @@ import {
   Heading,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
   Text,
 } from "@chakra-ui/react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import slice, {
-  selectFocusedSetting,
-  selectHasController,
-  selectShowHint,
-} from "../../model/slice";
-import { ControllerButton } from "../Controller";
 import { Fragment } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import slice, { selectFocusedSetting, selectShowHint } from "../../model/slice";
 
 export function HintModal() {
   const show = useSelector(selectShowHint);
   const settings = useSelector(selectFocusedSetting, shallowEqual);
   const dispatch = useDispatch();
-  const controller = useSelector(selectHasController);
   const onClose = () => dispatch(slice.actions.setShowHint(false));
 
   if (!settings) return <></>;
@@ -44,12 +34,6 @@ export function HintModal() {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{setting.title}</ModalHeader>
-        <ModalCloseButton>
-          <CloseIcon h="3rem" />
-          {controller && (
-            <ControllerButton button="b" margin="0 0.5rem 0 0.3rem" h="2rem" />
-          )}
-        </ModalCloseButton>
         <ModalBody textAlign="justify">
           <Text margin="-0.5rem 0 1rem 0">{setting.hint}</Text>
           {/* <Heading size="md" marginBottom="1rem">
