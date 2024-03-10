@@ -22,6 +22,7 @@ import slice, {
   selectShowHint,
 } from "../../model/slice";
 import { ControllerButton } from "../Controller";
+import { Fragment } from "react";
 
 export function HintModal() {
   const show = useSelector(selectShowHint);
@@ -62,9 +63,9 @@ export function HintModal() {
                 alignSelf="stretch"
               ></Divider>
             </Center>
-            <Box color='gray.500'>
+            <Box color="gray.500">
               {context.reverse().map((s, i) => (
-                <>
+                <Fragment key={i}>
                   <Heading
                     size="sm"
                     marginTop="0.7rem"
@@ -76,7 +77,7 @@ export function HintModal() {
                   <Text marginBottom="0.3rem" marginLeft={`${0.5 * i}rem`}>
                     {s.hint}
                   </Text>
-                </>
+                </Fragment>
               ))}
             </Box>
           </Flex>
