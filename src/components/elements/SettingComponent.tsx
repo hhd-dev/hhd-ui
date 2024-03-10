@@ -148,7 +148,7 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   if (!state) return <></>;
 
   return (
-    <Code padding="1rem">
+    <Code padding="1rem" margin="0.5rem 0.7rem" borderRadius="6px">
       {title} - {state}
     </Code>
   );
@@ -173,7 +173,7 @@ const ActionComponent: FC<SettingProps> = ({
         disabled={!state}
         ref={ref}
         onFocus={setFocus}
-        margin="0.3rem 0.4rem"
+        margin="0.3rem 0.1rem"
       >
         {title}
       </Button>

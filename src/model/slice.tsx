@@ -109,7 +109,7 @@ const initialState = {
     choices: {},
     smooth: false,
     help: false,
-    focus: false,
+    sel: false,
   },
 } as AppState;
 
@@ -133,6 +133,7 @@ const slice = createSlice({
       const tagFilter = action.payload;
       window.localStorage.setItem(TAG_FILTER_CACHE_KEY, `${tagFilter}`);
       store.tagFilter = tagFilter;
+      updateNavigation(store);
     },
     setController: (store, action: PayloadAction<boolean>) => {
       store.controller = action.payload;

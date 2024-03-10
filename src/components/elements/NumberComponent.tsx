@@ -49,6 +49,7 @@ const NumberComponent: FC<SettingProps> = ({
           value={state}
           ref={ref}
           onFocus={setFocus}
+          marginBottom="0.4rem"
         >
           <NumberInputField />
           <NumberInputStepper>
@@ -65,7 +66,12 @@ const NumberComponent: FC<SettingProps> = ({
     return (
       <Flex direction="row" alignItems="center" {...getFocusStyle(focus)}>
         <Tooltip label={hint}>
-          <FormLabel minW="2.4rem" htmlFor={path} textAlign="end">
+          <FormLabel
+            minW="2.4rem"
+            htmlFor={path}
+            textAlign="end"
+            margin="0 0.3rem 0 0"
+          >
             {title}
           </FormLabel>
         </Tooltip>
@@ -84,9 +90,8 @@ const NumberComponent: FC<SettingProps> = ({
           </SliderTrack>
           <SliderThumb />
         </Slider>
-        <Box w="0.6rem" />
         {state && (
-          <FormLabel minW="2.7rem" textAlign="end">
+          <FormLabel minW="2.7rem" textAlign="end" margin="0 0 0 0.3rem">
             {state}
             {unit || ""}
           </FormLabel>
