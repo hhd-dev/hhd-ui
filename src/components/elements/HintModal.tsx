@@ -12,34 +12,25 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Fragment } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import slice, { selectFocusedSetting, selectShowHint } from "../../model/slice";
+import { shallowEqual, useSelector } from "react-redux";
 import { ModeSetting } from "../../model/common";
+import { selectFocusedSetting, selectShowHint } from "../../model/slice";
 
 export function HintModal() {
   const show = useSelector(selectShowHint);
   const settings = useSelector(selectFocusedSetting, shallowEqual);
-  const dispatch = useDispatch();
-  const onClose = () => dispatch(slice.actions.setShowHint(false));
 
-  if (!settings) return <></>;
+  if (!show || !settings) return <></>;
   const setting = settings[settings.length - 1];
-  if (!setting) return <></>;
+  if (!setting || !setting.hint) return <></>;
 
   return (
-    <Modal
-      isOpen={Boolean(show && settings && setting.hint)}
-      onClose={onClose}
-      isCentered
-    >
+    <Modal isOpen={true} onClose={() => {}} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{setting.title}</ModalHeader>
         <ModalBody textAlign="justify">
           <Text margin="-0.5rem 0 1rem 0">{setting.hint}</Text>
-          {/* <Heading size="md" marginBottom="1rem">
-            Part Of
-          </Heading> */}
           {setting.type == "mode" &&
             Object.values((setting as ModeSetting).modes).some(
               (s) => s.hint

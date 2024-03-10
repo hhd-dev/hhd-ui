@@ -12,8 +12,8 @@ const config: ThemeConfig = {
 };
 
 const theme = extendTheme(
-  { config },
   {
+    config,
     colors: {
       brand: {
         "50": "#E4BC1B",
@@ -36,7 +36,15 @@ const theme = extendTheme(
           overflow: "hidden",
           // color: "transparent",
         },
+        ":focus": {
+          // remove ugly focus outline on modal
+          outline: "0 !important",
+          // boxShadow: "0 0 0 0 rgba(0, 0, 0, 0) !important",
+        },
       },
+    },
+    shadows: {
+      outline: "0 0 0 3px var(--chakra-colors-brand-500)",
     },
   },
   withDefaultColorScheme({ colorScheme: "brand" })
