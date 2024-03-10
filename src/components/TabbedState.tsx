@@ -1,6 +1,8 @@
+import { InfoIcon } from "@chakra-ui/icons";
 import {
   Box,
   Card,
+  Flex,
   Tab,
   TabList,
   TabPanel,
@@ -9,12 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
 import { useSelector } from "react-redux";
-import { useShouldRenderParent } from "../model/hooks";
-import { useShouldRenderChild } from "../model/hooks";
-import { useSectionNav } from "../model/hooks";
 import { ContainerSetting } from "../model/common";
 import {
+  useSectionNav,
+  useShouldRenderChild,
+  useShouldRenderParent,
+} from "../model/hooks";
+import {
   selectHasController,
+  selectHasHint,
   selectSectionNames,
   selectSettings,
 } from "../model/slice";
@@ -62,6 +67,7 @@ const TabbedState = () => {
   const controller = useSelector(selectHasController);
   const fullSettings = useSelector(selectSettings);
   const shouldRenderParent = useShouldRenderParent(false);
+  const showHint = useSelector(selectHasHint);
 
   const settings = Object.fromEntries(
     Object.entries(fullSettings).filter((c) => shouldRenderParent(c[1]))
@@ -101,12 +107,29 @@ const TabbedState = () => {
             );
           })}
           {controller && (
-            <ControllerButton
-              alignSelf="end"
-              button="rb"
-              w="2.5rem"
-              margin="-0.4rem 0.5rem -0.4rem 0"
-            />
+            <>
+              <ControllerButton
+                alignSelf="end"
+                button="rb"
+                w="2.5rem"
+                margin="-0.4rem 0.5rem 0.3rem 0"
+              />
+              {showHint && (
+                <Flex
+                  direction={"row"}
+                  alignItems="center"
+                  alignSelf="end"
+                  marginRight="0.4rem"
+                >
+                  <InfoIcon h="1.5rem" w="1.3rem" marginRight="0.3rem" />
+                  <ControllerButton
+                    button="x"
+                    margin="0 0.3rem 0 0"
+                    h="1.7rem"
+                  />
+                </Flex>
+              )}
+            </>
           )}
         </TabList>
         <TabPanels padding="0.5rem 0">

@@ -4,6 +4,7 @@ import lb from "../assets/controller/xbox/xbox_lb.svg";
 import rb from "../assets/controller/xbox/xbox_rb.svg";
 import y from "../assets/controller/sd/steamdeck_button_y_outline.svg";
 import b from "../assets/controller/sd/steamdeck_button_b_outline.svg";
+import x from "../assets/controller/sd/steamdeck_button_x.svg";
 
 export const ControllerButton = ({ button, invert, ...props }: any) => {
   let logo = null;
@@ -22,6 +23,9 @@ export const ControllerButton = ({ button, invert, ...props }: any) => {
       break;
     case "b":
       logo = b;
+      break;
+    case "x":
+      logo = x;
       break;
   }
 
