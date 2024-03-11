@@ -5,7 +5,7 @@ import {
   Spinner,
   useColorMode,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { Fragment } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import FrontPage from "./components/FrontPage.tsx";
@@ -42,14 +42,13 @@ window.electronUtils = electronUtils;
 // Setup gamepad listener
 setupGamepadEventListener();
 
-function Wrapper() {
+function App() {
   const { colorMode, toggleColorMode: _ } = useColorMode();
   const uiType = useSelector(selectUiType);
   const appType = useSelector(selectAppType);
   const dispatch = useDispatch();
   const loading = useSelector(selectIsLoading);
   const loggedIn = useSelector(selectIsLoggedIn);
-  const controller = useSelector(selectHasController);
 
   let background;
   if (appType === "web" || appType === "app") {
@@ -93,7 +92,7 @@ function Wrapper() {
   }
 
   return (
-    <ChakraProvider theme={controller ? controllerTheme : theme}>
+    <Fragment>
       <Box
         bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
         h="100vh"
@@ -121,15 +120,22 @@ function Wrapper() {
           {body}
         </PersistGate>
       </Box>
-    </ChakraProvider>
+    </Fragment>
   );
+}
+
+function ThemeSet() {
+  const controller = useSelector(selectHasController);
+  return (
+    <ChakraProvider theme={controller ? controllerTheme : theme}><App />
+    </ChakraProvider>)
 }
 
 function Main() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-          <Wrapper />
+          <ThemeSet />
       </Provider>
     </React.StrictMode>
   );
