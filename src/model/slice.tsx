@@ -75,6 +75,7 @@ interface AppState {
   prevUiType: PrevUiType;
   appType: AppType;
   controller: boolean;
+  visible: boolean;
   login: boolean;
   state: State;
   settings: Sections;
@@ -95,6 +96,7 @@ const initialState = {
   prevUiType: "init",
   appType: "web",
   controller: false,
+  visible: true,
   login: true,
   state: {},
   settings: {},
@@ -167,6 +169,9 @@ const slice = createSlice({
     },
     setShowHint: (store, action: PayloadAction<boolean>) => {
       store.navigation.help = action.payload;
+    },
+    setVisible: (store, action: PayloadAction<boolean>) => {
+      store.visible = action.payload;
     },
     clearError: (store) => {
       store.error = "";
@@ -534,9 +539,14 @@ export const selectLoadCounter = (state: RootState) => {
 
 export const selectShowHint = (state: RootState) => {
   return (
-    state.hhd.controller &&
-    state.hhd.navigation.help &&
-    (state.hhd.appType !== "overlay" || state.hhd.uiType !== "closed")
+    state.hhd.controller && state.hhd.navigation.help && selectIsOpen(state)
+  );
+};
+
+export const selectIsOpen = (state: RootState) => {
+  return (
+    (state.hhd.appType === "overlay" && state.hhd.uiType !== "closed") ||
+    (state.hhd.appType !== "overlay" && state.hhd.visible)
   );
 };
 

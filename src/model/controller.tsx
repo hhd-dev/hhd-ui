@@ -3,6 +3,7 @@ import local from "./local";
 import hhdSlice, {
   selectFocusedPath,
   selectFocusedSetting,
+  selectIsOpen,
   selectIsSelected,
   selectSelectedChoice,
   selectSelectedSetting,
@@ -34,6 +35,12 @@ const AXIS_MAP: [string, number, boolean][] = [
   ["up", 1, true],
   ["down", 1, false],
 ];
+
+declare global {
+  interface Window {
+    controllerInterval: number | undefined;
+  }
+}
 
 const goIn = (s: typeof store) => {
   const state = s.getState();
@@ -143,11 +150,11 @@ const goSideways = (s: typeof store, left: boolean) => {
 };
 
 export const setupGamepadEventListener = () => {
-  let interval: number | null = null;
   let state: Record<string, Record<string, number | null>> = {};
 
   function updateLoop() {
     const time = new Date().getTime();
+    if (!selectIsOpen(store.getState())) return;
 
     for (const [gidx, gp] of navigator.getGamepads().entries()) {
       if (!gp) continue;
@@ -267,7 +274,7 @@ export const setupGamepadEventListener = () => {
     store.dispatch(hhdSlice.actions.setController(true));
 
     updateLoop();
-    interval = setInterval(updateLoop, 75);
+    window.controllerInterval = setInterval(updateLoop, 75);
     // if (!animationFrameId) animationFrameId = requestAnimationFrame(updateLoop);
   });
 
@@ -275,9 +282,9 @@ export const setupGamepadEventListener = () => {
     if (navigator.getGamepads()) return;
 
     // If there are no gamepads, remove animation frame id
-    if (interval) {
-      clearInterval(interval);
-      interval = null;
+    if (window.controllerInterval) {
+      clearInterval(window.controllerInterval);
+      window.controllerInterval = undefined;
     }
   });
 };

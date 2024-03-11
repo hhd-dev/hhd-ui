@@ -128,7 +128,9 @@ export const disablePolling = () => {
 window.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     enablePolling(true);
+    store.dispatch(hhdSlice.actions.setVisible(true));
   } else {
     disablePolling();
+    store.dispatch(hhdSlice.actions.setVisible(false));
   }
 });
