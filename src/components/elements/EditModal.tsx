@@ -10,11 +10,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  DiscreteSetting,
-  ModeSetting,
-  MultipleSetting,
-} from "../../model/common";
+import { getSettingChoices } from "../../model/common";
 import { useSelectedSetting, useSettingState } from "../../model/hooks";
 import slice, { selectSelectedChoice } from "../../model/slice";
 import { ControllerButton } from "../Controller";
@@ -30,27 +26,6 @@ export function EditModal() {
 
   if (!["mode", "multiple", "discrete"].includes(setting.type)) return <></>;
 
-  let choices = {};
-  switch (setting.type) {
-    case "mode":
-      choices = Object.fromEntries(
-        Object.entries((setting as ModeSetting).modes).map(([n, v]) => [
-          n,
-          v.title,
-        ])
-      );
-      break;
-    case "multiple":
-      choices = (setting as MultipleSetting).options;
-      break;
-    case "discrete":
-      choices = Object.fromEntries(
-        (setting as DiscreteSetting).options.map((v) => [v, `${v}`])
-      );
-      break;
-  }
-
-  console.log(state, sel);
   return (
     <Modal
       isOpen={true}
@@ -73,7 +48,7 @@ export function EditModal() {
 
         <ModalBody textAlign="justify">
           <Flex direction="column" marginBottom="1rem">
-            {Object.entries(choices).map(([val, name]) => (
+            {Object.entries(getSettingChoices(setting)).map(([val, name]) => (
               <Button
                 key={val}
                 margin="0.6rem"

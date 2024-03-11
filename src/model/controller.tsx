@@ -3,6 +3,8 @@ import local from "./local";
 import hhdSlice, {
   selectFocusedPath,
   selectFocusedSetting,
+  selectIsSelected,
+  selectSelectedChoice,
   selectSelectedSetting,
   selectSettingState,
 } from "./slice";
@@ -37,6 +39,9 @@ const goIn = (s: typeof store) => {
   const state = s.getState();
   const setting = selectFocusedSetting(state);
   const path = selectFocusedPath(state);
+  const isSel = selectIsSelected(path)(state);
+  const curr = selectSettingState(path)(state);
+  const selChoice = selectSelectedChoice(state);
 
   const url = local.selectors.selectUrl(state);
   const token = local.selectors.selectToken(state);
@@ -66,6 +71,39 @@ const goIn = (s: typeof store) => {
           value: true,
         })
       );
+      break;
+    case "mode":
+      if (isSel) {
+        console.log(path);
+        if (curr !== selChoice)
+          s.dispatch(
+            updateSettingValue({
+              cred: { token, endpoint: url },
+              path: path + ".mode",
+              value: selChoice,
+            })
+          );
+        s.dispatch(hhdSlice.actions.unselect());
+      } else {
+        s.dispatch(hhdSlice.actions.select());
+      }
+      break;
+    case "multiple":
+    case "discrete":
+      if (isSel) {
+        console.log(path);
+        if (curr !== selChoice)
+          s.dispatch(
+            updateSettingValue({
+              cred: { token, endpoint: url },
+              path,
+              value: selChoice,
+            })
+          );
+        s.dispatch(hhdSlice.actions.unselect());
+      } else {
+        s.dispatch(hhdSlice.actions.select());
+      }
       break;
     default:
       s.dispatch(hhdSlice.actions.select());

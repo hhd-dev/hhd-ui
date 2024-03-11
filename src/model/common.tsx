@@ -108,3 +108,25 @@ function traverseSetting(
     ...traverseSetting(child as ContainerSetting | ModeSetting, next),
   ];
 }
+
+
+export const getSettingChoices = (setting: Setting) => {
+  let choices = {};
+  switch (setting.type) {
+    case "mode":
+      return Object.fromEntries(
+        Object.entries((setting as ModeSetting).modes).map(([n, v]) => [
+          n,
+          v.title,
+        ])
+      );
+    case "multiple":
+      choices = (setting as MultipleSetting).options;
+      break;
+    case "discrete":
+      return Object.fromEntries(
+        (setting as DiscreteSetting).options.map((v) => [v, `${v}`])
+      );
+  }
+  return {};
+};

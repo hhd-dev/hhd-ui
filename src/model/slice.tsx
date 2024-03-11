@@ -11,6 +11,7 @@ import {
   Setting,
   State,
   getSetting,
+  getSettingChoices,
 } from "./common";
 import {
   fetchSectionNames,
@@ -131,6 +132,7 @@ const slice = createSlice({
       store.loading = initialState.loading;
       store.settings = initialState.settings;
       store.state = initialState.state;
+      store.navigation = initialState.navigation;
     },
     setTagFilter: (store, action: PayloadAction<TagFilterType>) => {
       const tagFilter = action.payload;
@@ -180,7 +182,20 @@ const slice = createSlice({
     },
 
     goPrev: (store, action: PayloadAction<{ section: string } | undefined>) => {
-      if (store.navigation.sel) return;
+      if (store.navigation.sel) {
+        const { setting } = selectSelectedSetting({ hhd: store });
+        if (!setting) return;
+        const choices = Object.keys(getSettingChoices(setting));
+        if (choices.length) {
+          const idx = choices.indexOf(store.navigation.sel_choice);
+          if (idx === -1 || idx <= 0) return;
+          store.navigation.sel_choice = choices[idx - 1];
+          return;
+        } else {
+          store.navigation.sel = false;
+          store.navigation.sel_choice = null;
+        }
+      }
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {
@@ -199,7 +214,20 @@ const slice = createSlice({
       store.navigation.smooth = true;
     },
     goNext: (store, action: PayloadAction<{ section: string } | undefined>) => {
-      if (store.navigation.sel) return;
+      if (store.navigation.sel) {
+        const { setting } = selectSelectedSetting({ hhd: store });
+        if (!setting) return;
+        const choices = Object.keys(getSettingChoices(setting));
+        if (choices.length) {
+          const idx = choices.indexOf(store.navigation.sel_choice);
+          if (idx === -1 || idx >= choices.length - 1) return;
+          store.navigation.sel_choice = choices[idx + 1];
+          return;
+        } else {
+          store.navigation.sel = false;
+          store.navigation.sel_choice = null;
+        }
+      }
       if (store.uiType === "closed" && store.appType === "overlay") return;
       let section;
       if (action.payload) {
@@ -239,6 +267,7 @@ const slice = createSlice({
     unselect: (store) => {
       if (store.navigation.sel) {
         store.navigation.sel = false;
+        store.navigation.sel_choice = null;
         return;
       }
 
