@@ -1,10 +1,12 @@
+"use strict";
+
 const { app, BrowserWindow, screen, protocol, ipcMain } = require("electron");
 const path = require("path");
 const homeDir = app.getPath("home");
 const fs = require("fs");
 const readline = require("readline");
 
-const createMainWindow = async () => {
+const calculateWindowZoom = () => {
   const isSteamUi = process.env.SteamGamepadUI;
   const isOverlayUi = process.env.STEAM_OVERLAY;
   const useNativeRes = process.env.NATIVE_RESOLUTION;
@@ -50,6 +52,13 @@ const createMainWindow = async () => {
   } else {
     scaleFactor = 1.0;
   }
+
+  return { width, height, scaleFactor, isSteamUi, isOverlayUi };
+};
+
+const createMainWindow = async () => {
+  let { width, height, scaleFactor, isSteamUi, isOverlayUi } =
+    calculateWindowZoom();
 
   let mainWindow = new BrowserWindow({
     ...(isSteamUi || isOverlayUi
