@@ -4,6 +4,7 @@ import hhdSlice, {
   RootState,
   selectAppType,
   selectError,
+  selectIsLoggedIn,
   selectIsSelected,
   selectLoadCounter,
   selectPrevUiType,
@@ -76,12 +77,16 @@ export const useRelayEffect = () => {
   const uiType = useSelector(selectUiType);
   const prevUiType = useSelector(selectPrevUiType);
   const appType = useSelector(selectAppType);
+  const loggedIn = useSelector(selectIsLoggedIn);
 
   const CLOSE_DELAY = 500;
 
   // Inform that Daemon should close the UI
   useEffect(() => {
     if (appType !== "overlay") return;
+
+    // Avoid running command if not logged in yet to not show the UI prematurely.
+    if (!loggedIn) return;
 
     let delay = 0;
     if (uiType === "closed" && prevUiType !== "init") delay = CLOSE_DELAY;
@@ -102,7 +107,7 @@ export const useRelayEffect = () => {
         interval = null;
       }
     };
-  }, [uiType, appType]);
+  }, [uiType, appType, loggedIn]);
 };
 
 export const useShouldRenderChild = (isQam: boolean) => {

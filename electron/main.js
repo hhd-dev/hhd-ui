@@ -62,7 +62,12 @@ const createMainWindow = async () => {
 
   let mainWindow = new BrowserWindow({
     ...(isSteamUi || isOverlayUi
-      ? { width: width, height: height, resizable: false }
+      ? {
+          width: width,
+          height: height,
+          fullscreen: isOverlayUi,
+          resizable: isSteamUi,
+        }
       : { width: 1280, height: 800 }),
     show: false,
     ...(isOverlayUi && { transparent: true }),
