@@ -83,7 +83,7 @@ const DiscreteComponent: FC<SettingProps> = ({
         >
           {state}
         </MenuButton>
-        <MenuList zIndex="5">
+        <MenuList>
           <MenuOptionGroup type="radio" value={String(state)}>
             {options.map((value) => {
               return (
@@ -133,7 +133,7 @@ const MultipleComponent: FC<SettingProps> = ({
         >
           {state && options[state]}
         </MenuButton>
-        <MenuList zIndex="5">
+        <MenuList>
           <MenuOptionGroup type="radio" value={state}>
             {Object.entries(options).map(([value, label]) => {
               return (
