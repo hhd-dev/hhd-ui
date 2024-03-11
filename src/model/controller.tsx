@@ -97,7 +97,8 @@ const goIn = (s: typeof store) => {
             updateSettingValue({
               cred: { token, endpoint: url },
               path,
-              value: selChoice,
+              value:
+                setting.type === "discrete" ? Number(selChoice) : selChoice,
             })
           );
         s.dispatch(hhdSlice.actions.unselect());

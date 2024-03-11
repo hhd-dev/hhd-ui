@@ -219,7 +219,7 @@ const slice = createSlice({
         if (!setting) return;
         const choices = Object.keys(getSettingChoices(setting));
         if (choices.length) {
-          const idx = choices.indexOf(store.navigation.sel_choice);
+          const idx = choices.indexOf(String(store.navigation.sel_choice));
           if (idx === -1 || idx >= choices.length - 1) return;
           store.navigation.sel_choice = choices[idx + 1];
           return;
@@ -262,7 +262,7 @@ const slice = createSlice({
         path + (setting.type === "mode" ? ".mode" : "")
       )({ hhd: store });
       store.navigation.sel = true;
-      store.navigation.sel_choice = val;
+      store.navigation.sel_choice = String(val);
     },
     unselect: (store) => {
       if (store.navigation.sel) {

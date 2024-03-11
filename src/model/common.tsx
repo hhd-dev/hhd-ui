@@ -109,7 +109,6 @@ function traverseSetting(
   ];
 }
 
-
 export const getSettingChoices = (setting: Setting) => {
   let choices = {};
   switch (setting.type) {
@@ -125,7 +124,7 @@ export const getSettingChoices = (setting: Setting) => {
       break;
     case "discrete":
       return Object.fromEntries(
-        (setting as DiscreteSetting).options.map((v) => [v, `${v}`])
+        (setting as DiscreteSetting).options.map((v) => [String(v), String(v)])
       );
   }
   return {};

@@ -18,8 +18,10 @@ import { ControllerButton } from "../Controller";
 export function EditModal() {
   const { path, setting } = useSelectedSetting();
   const dispatch = useDispatch();
-  const { state } = useSettingState(
-    (path || "") + (setting && setting.type === "mode" ? ".mode" : "")
+  const state = String(
+    useSettingState(
+      (path || "") + (setting && setting.type === "mode" ? ".mode" : "")
+    ).state
   );
   const sel = useSelector(selectSelectedChoice);
   if (!path || !setting) return <></>;
