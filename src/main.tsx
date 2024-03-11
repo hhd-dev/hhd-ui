@@ -9,7 +9,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import FrontPage from "./components/FrontPage.tsx";
-import theme from "./components/theme.tsx";
+import theme, { controllerTheme } from "./components/theme.tsx";
 
 import { PersistGate } from "redux-persist/integration/react";
 import BackgroundDark from "./assets/background_dark.jpg";
@@ -19,6 +19,7 @@ import QamState from "./components/QamState.tsx";
 import { useInitialLogin, useRelayEffect } from "./model/hooks.tsx";
 import hhdSlice, {
   selectAppType,
+  selectHasController,
   selectIsLoading,
   selectIsLoggedIn,
   selectUiType,
@@ -48,6 +49,7 @@ function Wrapper() {
   const dispatch = useDispatch();
   const loading = useSelector(selectIsLoading);
   const loggedIn = useSelector(selectIsLoggedIn);
+  const controller = useSelector(selectHasController);
 
   let background;
   if (appType === "web" || appType === "app") {
@@ -91,7 +93,7 @@ function Wrapper() {
   }
 
   return (
-    <>
+    <ChakraProvider theme={controller ? controllerTheme : theme}>
       <Box
         bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
         h="100vh"
@@ -119,7 +121,7 @@ function Wrapper() {
           {body}
         </PersistGate>
       </Box>
-    </>
+    </ChakraProvider>
   );
 }
 
@@ -127,9 +129,7 @@ function Main() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <ChakraProvider theme={theme}>
           <Wrapper />
-        </ChakraProvider>
       </Provider>
     </React.StrictMode>
   );

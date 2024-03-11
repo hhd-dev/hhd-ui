@@ -44,11 +44,16 @@ const theme = extendTheme(
       },
     },
     shadows: {
-      // outline: "0 0 0 3px var(--chakra-colors-brand-700)",
-      outline: 0,
+      outline: "0 0 0 3px var(--chakra-colors-brand-700)",
     },
   },
   withDefaultColorScheme({ colorScheme: "brand" })
 );
+
+export const controllerTheme = extendTheme(theme, {
+  shadows: {
+    outline: 0,
+  },
+});
 
 export default theme;

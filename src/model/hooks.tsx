@@ -29,7 +29,7 @@ export function useElementNav<T extends HTMLElement>(
   section: string,
   path: string
 ) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const ref = useRef<T>(null);
 
   const focus = useSelector((state: RootState) => {
@@ -45,7 +45,7 @@ export function useElementNav<T extends HTMLElement>(
   const sel = useSelector(selectIsSelected(path));
 
   const setFocus = () => {
-    if (!focus) dispatch(hhdSlice.actions.goto({ section, curr: path }));
+    // if (!focus) dispatch(hhdSlice.actions.goto({ section, curr: path }));
   };
 
   useEffect(() => {
