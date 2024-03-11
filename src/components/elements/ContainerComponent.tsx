@@ -1,7 +1,7 @@
 import { CardBody, Flex, Heading, Tooltip } from "@chakra-ui/react";
 import { FC } from "react";
 import { ContainerProps, ModeSetting } from "../../model/common";
-import { useShouldRenderChild } from "../../model/hooks";
+import { useDisabledTooltip, useShouldRenderChild } from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
 import ModeComponent from "./ModeComponent";
 import SettingComponent from "./SettingComponent";
@@ -15,6 +15,7 @@ const ContainerComponent: FC<ContainerProps> = ({
   const qam = section === "qam";
   const shouldRenderChild = useShouldRenderChild(qam);
   const showTitle = !qam || !tags?.includes("hide-title");
+  const isDisabled = useDisabledTooltip();
 
   return (
     <>
@@ -22,7 +23,7 @@ const ContainerComponent: FC<ContainerProps> = ({
         style={{ display: "flex", flexDirection: "column", padding: 0 }}
       >
         {showTitle && (
-          <Tooltip label={hint}>
+          <Tooltip label={hint} isDisabled={isDisabled}>
             <Heading as="h1" fontSize="xl" marginBottom="1rem">
               {title}
             </Heading>

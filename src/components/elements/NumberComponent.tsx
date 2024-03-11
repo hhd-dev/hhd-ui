@@ -15,7 +15,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { useSettingState } from "../../model/hooks";
+import { useDisabledTooltip, useSettingState } from "../../model/hooks";
 import { useElementNav } from "../../model/hooks";
 import { NumberSetting, SettingProps } from "../../model/common";
 import { getFocusStyle } from "./utils";
@@ -36,11 +36,12 @@ const NumberComponent: FC<SettingProps> = ({
     path
   );
   const { colorMode } = useColorMode();
+  const isDisabled = useDisabledTooltip();
 
   if (tags?.includes("dropdown")) {
     return (
       <Box {...getFocusStyle(focus, colorMode)}>
-        <Tooltip label={hint}>
+        <Tooltip label={hint} isDisabled={isDisabled}>
           <FormLabel htmlFor={path}>{title}</FormLabel>
         </Tooltip>
         <NumberInput
@@ -72,7 +73,7 @@ const NumberComponent: FC<SettingProps> = ({
         alignItems="center"
         {...getFocusStyle(focus, colorMode)}
       >
-        <Tooltip label={hint}>
+        <Tooltip label={hint} isDisabled={isDisabled}>
           <FormLabel
             minW="2.4rem"
             htmlFor={path}
@@ -113,7 +114,7 @@ const NumberComponent: FC<SettingProps> = ({
   return (
     <Box {...getFocusStyle(focus, colorMode)}>
       <Flex direction="row" alignItems="center">
-        <Tooltip label={hint}>
+        <Tooltip label={hint} isDisabled={isDisabled}>
           <FormLabel flexGrow="1" htmlFor={path} justifySelf="stretch">
             {title}
           </FormLabel>

@@ -596,4 +596,8 @@ export const selectSelectedSetting = (state: RootState) => {
   };
 };
 
+export const selectDisabledTooltip = (state: RootState) => {
+  return selectAppType(state) !== "overlay" || selectHasController(state);
+};
+
 export default slice;

@@ -3,6 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import hhdSlice, {
   RootState,
   selectAppType,
+  selectDisabledTooltip,
   selectError,
   selectIsLoggedIn,
   selectIsSelected,
@@ -229,4 +230,8 @@ export function useInitialLogin() {
 
 export function useSelectedSetting() {
   return useSelector(selectSelectedSetting, shallowEqual);
+}
+
+export function useDisabledTooltip() {
+  return useSelector(selectDisabledTooltip);
 }

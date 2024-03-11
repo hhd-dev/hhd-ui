@@ -17,6 +17,7 @@ import {
 import { FC } from "react";
 import { ModeProps } from "../../model/common";
 import {
+  useDisabledTooltip,
   useElementNav,
   useSettingState,
   useShouldRenderChild,
@@ -31,17 +32,18 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const shouldRenderChild = useShouldRenderChild(section === "qam");
   const { ref, focus, setFocus } = useElementNav(section, path);
   const { colorMode } = useColorMode();
+  const isDisabled = useDisabledTooltip();
 
   const mode = state ? set.modes[state] : null;
 
   return (
     <>
       <Box {...getFocusStyle(focus, colorMode)}>
-        <Tooltip label={hint}>
+        <Tooltip label={hint} isDisabled={isDisabled}>
           <FormLabel htmlFor={path}>{title}</FormLabel>
         </Tooltip>
         <Menu>
-          <Tooltip label={mode?.hint}>
+          <Tooltip label={mode?.hint} isDisabled={isDisabled}>
             <MenuButton
               as={Button}
               width="100%"

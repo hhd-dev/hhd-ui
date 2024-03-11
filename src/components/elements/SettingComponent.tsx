@@ -20,7 +20,11 @@ import {
   MultipleSetting,
   SettingProps,
 } from "../../model/common";
-import { useElementNav, useSettingState } from "../../model/hooks";
+import {
+  useDisabledTooltip,
+  useElementNav,
+  useSettingState,
+} from "../../model/hooks";
 import NumberComponent from "./NumberComponent";
 import { getFocusStyle } from "./utils";
 
@@ -32,6 +36,7 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
     path
   );
   const { colorMode } = useColorMode();
+  const isDisabled = useDisabledTooltip();
 
   return (
     <Flex
@@ -39,7 +44,7 @@ const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
       alignItems="center"
       {...getFocusStyle(focus, colorMode)}
     >
-      <Tooltip label={hint}>
+      <Tooltip label={hint} isDisabled={isDisabled}>
         <FormLabel htmlFor={path} flexGrow="1" margin="0">
           {title}
         </FormLabel>
