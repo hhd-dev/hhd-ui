@@ -9,7 +9,7 @@ const readline = require("readline");
 const calculateWindowZoom = () => {
   const isSteamUi = process.env.SteamGamepadUI;
   const isOverlayUi = process.env.STEAM_OVERLAY;
-  const useNativeRes = process.env.NATIVE_RESOLUTION;
+  const useNativeRes = process.env.NATIVE_RESOLUTION || true;
 
   // Get scale factor for steamui
   let scaleFactor;
@@ -66,7 +66,7 @@ const createMainWindow = async () => {
           width: width,
           height: height,
           fullscreen: isOverlayUi,
-          resizable: isSteamUi,
+          resizable: false,
         }
       : { width: 1280, height: 800 }),
     show: false,
@@ -80,6 +80,22 @@ const createMainWindow = async () => {
       preload: path.join(__dirname, "./preload.js"),
     },
   });
+  mainWindow.on("will-resize", function () {
+    const size = mainWindow.getSize();
+    const width = size[0];
+    const height = size[1];
+    console.error("width: " + width);
+    console.error("height: " + height);
+  });
+  mainWindow.on("resized", function () {
+    const size = mainWindow.getSize();
+    const width = size[0];
+    const height = size[1];
+    console.error("resized");
+    console.error("width: " + width);
+    console.error("height: " + height);
+  });
+
   mainWindow.setMenu(null);
   if (isOverlayUi) mainWindow.setBackgroundColor("#00000000");
 
