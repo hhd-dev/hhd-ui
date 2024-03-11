@@ -66,12 +66,13 @@ const QamState = () => {
     <Flex
       top="0"
       right="0"
-      height="100vh"
+      h="100vh"
       position="absolute"
-      overflowY="hidden"
-      overflowX="hidden"
       boxShadow="dark-lg"
+      overflowY="scroll"
+      overflowX="hidden"
       transition="0.075s ease-in-out"
+      direction="column"
       {...(showClosed && { transform: "translateX(70px)", opacity: 0 })}
       sx={{
         "::-webkit-scrollbar": {
@@ -81,10 +82,10 @@ const QamState = () => {
     >
       <Card
         width={QAM_WIDTH}
-        minH="100vh"
-        h="fit-content"
+        flexGrow="1"
         margin="0"
         borderRadius="0"
+        paddingBottom="2rem"
       >
         <CardHeader>
           <Flex>
