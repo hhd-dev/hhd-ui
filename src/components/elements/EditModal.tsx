@@ -18,15 +18,20 @@ import { ControllerButton } from "../Controller";
 export function EditModal() {
   const { path, setting } = useSelectedSetting();
   const dispatch = useDispatch();
-  const state = String(
-    useSettingState(
-      (path || "") + (setting && setting.type === "mode" ? ".mode" : "")
-    ).state
+  const { state, setState } = useSettingState(
+    (path || "") + (setting && setting.type === "mode" ? ".mode" : "")
   );
   const sel = useSelector(selectSelectedChoice);
   if (!path || !setting) return <></>;
 
   if (!["mode", "multiple", "discrete"].includes(setting.type)) return <></>;
+
+  const click = (val: string) => {
+    if (val !== String(state)) {
+      setState(setting.type === "discrete" ? Number(val) : val)
+    }
+    dispatch(slice.actions.unselect())
+  }
 
   return (
     <Modal
@@ -56,8 +61,9 @@ export function EditModal() {
                 margin="0.6rem"
                 padding="1.5rem 0"
                 colorScheme={val === sel ? "brand" : "gray"}
-                rightIcon={state === val ? <CheckIcon /> : undefined}
+                rightIcon={String(state) === val ? <CheckIcon /> : undefined}
                 transition="all 0.2s ease"
+                onClick={() => click(val)}
               >
                 {String(name)}
               </Button>
