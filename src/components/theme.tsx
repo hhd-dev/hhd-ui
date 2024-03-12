@@ -30,16 +30,10 @@ const theme = extendTheme(
     },
     styles: {
       global: {
-        // styles for the `body`
         body: {
           bg: "transparent",
           overflow: "hidden",
           // color: "transparent",
-        },
-        ":focus": {
-          // remove ugly focus outline on modal
-          outline: "0 !important",
-          // boxShadow: "0 0 0 0 rgba(0, 0, 0, 0) !important",
         },
       },
     },
@@ -51,6 +45,18 @@ const theme = extendTheme(
 );
 
 export const controllerTheme = extendTheme(theme, {
+  styles: {
+    global: {
+      body: {
+        userSelect: "none",
+      },
+      ":focus": {
+        // remove ugly focus outline on modal
+        outline: "0 !important",
+        // boxShadow: "0 0 0 0 rgba(0, 0, 0, 0) !important",
+      },
+    },
+  },
   shadows: {
     outline: 0,
   },
