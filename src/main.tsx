@@ -16,6 +16,9 @@ import BackgroundDark from "./assets/background_dark.jpg";
 import BackgroundLight from "./assets/background_light.jpg";
 import ExpandedUi from "./components/ExpandedUi.tsx";
 import QamState from "./components/QamState.tsx";
+import { EditModal } from "./components/elements/EditModal.tsx";
+import { setupGamepadEventListener } from "./model/controller.tsx";
+import * as electronUtils from "./model/electron.tsx";
 import { useInitialLogin, useRelayEffect } from "./model/hooks.tsx";
 import hhdSlice, {
   selectAppType,
@@ -24,10 +27,7 @@ import hhdSlice, {
   selectIsLoggedIn,
   selectUiType,
 } from "./model/slice.tsx";
-import * as electronUtils from "./model/electron.tsx";
 import { persistor, store } from "./model/store.tsx";
-import { setupGamepadEventListener } from "./model/controller.tsx";
-import { EditModal } from "./components/elements/EditModal.tsx";
 
 declare global {
   interface Window {
@@ -127,15 +127,17 @@ function App() {
 function ThemeSet() {
   const controller = useSelector(selectHasController);
   return (
-    <ChakraProvider theme={controller ? controllerTheme : theme}><App />
-    </ChakraProvider>)
+    <ChakraProvider theme={controller ? controllerTheme : theme}>
+      <App />
+    </ChakraProvider>
+  );
 }
 
 function Main() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-          <ThemeSet />
+        <ThemeSet />
       </Provider>
     </React.StrictMode>
   );
