@@ -9,7 +9,7 @@ const readline = require("readline");
 const calculateWindowZoom = () => {
   const isSteamUi = process.env.SteamGamepadUI;
   const isOverlayUi = process.env.STEAM_OVERLAY;
-  const useNativeRes = process.env.NATIVE_RESOLUTION || true;
+  const useNativeRes = !process.env.HHDUI_SUBSAMPLE;
 
   // Get scale factor for steamui
   let scaleFactor;
@@ -220,7 +220,6 @@ function fileProtocolRedirect() {
   );
 }
 
-app.disableHardwareAcceleration();
 app.whenReady().then(() => createMainWindow());
 
 app.on("window-all-closed", () => {
