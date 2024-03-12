@@ -25,6 +25,7 @@ import hhdSlice, {
   selectHasController,
   selectIsLoading,
   selectIsLoggedIn,
+  selectPrevUiType,
   selectUiType,
 } from "./model/slice.tsx";
 import { persistor, store } from "./model/store.tsx";
@@ -49,6 +50,7 @@ function App() {
   const dispatch = useDispatch();
   const loading = useSelector(selectIsLoading);
   const loggedIn = useSelector(selectIsLoggedIn);
+  const prevType = useSelector(selectPrevUiType);
 
   let background;
   if (appType === "web" || appType === "app") {
@@ -90,6 +92,10 @@ function App() {
   } else {
     body = <FrontPage />;
   }
+
+  // Prevent showing background on init
+  // TODO: Remove this by finding why it happens
+  if (appType === "overlay" && prevType === "init") return <></>;
 
   return (
     <Fragment>
