@@ -226,9 +226,9 @@ function fileProtocolRedirect() {
     const last = argv[argv.length - 1];
     if (last === "--version") {
       console.log(app.getVersion());
+      app.quit();
+      return;
     }
-    app.quit();
-    return;
   }
 
   app.whenReady().then(() => createMainWindow());
