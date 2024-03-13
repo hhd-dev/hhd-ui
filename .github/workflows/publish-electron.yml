@@ -23,7 +23,8 @@ jobs:
 
       - name: build AppImage
         run: |
-          sed -i "s|"version": "1.0.0"|"version": "$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)"|" "electron/package.json"
+          VERSION=$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)
+          sed -i "s|\"version\": \"1.0.0\"|\"version\": \"$VERSION\"|" "electron/package.json"
           npm ci
           npm run electron-build
           cd electron
