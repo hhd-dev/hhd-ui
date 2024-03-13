@@ -11,6 +11,7 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
+  Text,
   Tooltip,
   useColorMode,
 } from "@chakra-ui/react";
@@ -163,8 +164,23 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title, tags } = set;
   const { state } = useSettingState<number>(path);
   const error = tags?.includes("error");
+  const version = tags?.includes("hhd-version-display");
 
   if (!state) return <></>;
+
+  if (version) {
+    return (
+      <Code padding="1rem" margin="0.5rem 0.7rem" borderRadius="6px">
+        <Flex
+          justifyContent="space-between"
+          {...(error && { colorScheme: "red" })}
+        >
+          <Text as="b">{title}:</Text>
+          <Text>{state}</Text>
+        </Flex>
+      </Code>
+    );
+  }
 
   return (
     <Code
@@ -174,11 +190,7 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
       textAlign="center"
       {...(error && { colorScheme: "red" })}
     >
-      <Heading
-        size="md"
-        textAlign="center"
-        paddingBottom="0.5rem"
-      >
+      <Heading size="md" textAlign="center" paddingBottom="0.5rem">
         {title}
       </Heading>
       {state}
