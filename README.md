@@ -83,3 +83,7 @@ npm ci
 # run dev server, should be on localhost:5173
 npm run dev
 ```
+
+# License
+The Handheld Daemon UI is licensed under THE GNU GPLv3+. See LICENSE for details.
+Versions prior to and excluding 2.0.0 are licensed using MIT.
