@@ -5,6 +5,7 @@ import {
   Code,
   Flex,
   FormLabel,
+  Heading,
   Menu,
   MenuButton,
   MenuItemOption,
@@ -159,14 +160,28 @@ const MultipleComponent: FC<SettingProps> = ({
 };
 
 const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
-  const { title } = set;
-  const { state, setState: _ } = useSettingState<number>(path);
+  const { title, tags } = set;
+  const { state } = useSettingState<number>(path);
+  const error = tags?.includes("error");
 
   if (!state) return <></>;
 
   return (
-    <Code padding="1rem" margin="0.5rem 0.7rem" borderRadius="6px">
-      {title} - {state}
+    <Code
+      padding="1rem"
+      margin="0.5rem 0.7rem"
+      borderRadius="6px"
+      textAlign="center"
+      {...(error && { colorScheme: "red" })}
+    >
+      <Heading
+        size="md"
+        textAlign="center"
+        paddingBottom="0.5rem"
+      >
+        {title}
+      </Heading>
+      {state}
     </Code>
   );
 };
