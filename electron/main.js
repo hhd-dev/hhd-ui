@@ -220,10 +220,22 @@ function fileProtocolRedirect() {
   );
 }
 
-app.whenReady().then(() => createMainWindow());
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+(() => {
+  const argv = process.argv;
+  if (argv && argv.length) {
+    const last = argv[argv.length - 1];
+    if (last === "--version") {
+      console.log(app.getVersion());
+    }
     app.quit();
+    return;
   }
-});
+
+  app.whenReady().then(() => createMainWindow());
+
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
+  });
+})();
