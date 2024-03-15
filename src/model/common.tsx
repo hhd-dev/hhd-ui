@@ -50,6 +50,7 @@ export interface SettingProps {
 
 export interface ContainerProps extends SettingProps {
   settings: ContainerSetting;
+  indent: number
 }
 
 export interface ModeProps extends SettingProps {

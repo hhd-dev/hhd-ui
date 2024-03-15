@@ -155,6 +155,7 @@ const QamState = () => {
                             path={path}
                             settings={settings}
                             section={"qam"}
+                            indent={0}
                           />
                         </ErrorBoundary>
                       );

@@ -164,11 +164,13 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title, tags } = set;
   const { state } = useSettingState<number>(path);
   const error = tags?.includes("error");
-  const version = tags?.includes("hhd-version-display");
+  const slim =
+    tags?.includes("hhd-version-display") ||
+    tags?.includes("slim");
 
   if (!state) return <></>;
 
-  if (version) {
+  if (slim) {
     return (
       <Code padding="1rem" margin="0.5rem 0.7rem" borderRadius="6px">
         <Flex

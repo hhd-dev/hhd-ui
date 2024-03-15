@@ -53,6 +53,7 @@ const TabbedSection = ({
                   path={path}
                   settings={settings}
                   section={section}
+                  indent={0}
                 />
               </ErrorBoundary>
             </TabPanel>

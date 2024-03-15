@@ -94,7 +94,7 @@ const NumberComponent: FC<SettingProps> = ({
           ref={ref}
         >
           <SliderTrack>
-            <SliderFilledTrack />
+            <SliderFilledTrack transition="all 0.2s ease" />
           </SliderTrack>
           <SliderThumb
             transition="all 0.2s ease"
@@ -137,7 +137,7 @@ const NumberComponent: FC<SettingProps> = ({
         onFocus={setFocus}
       >
         <SliderTrack>
-          <SliderFilledTrack />
+          <SliderFilledTrack transition="all 0.2s ease" />
         </SliderTrack>
         <SliderThumb
           transition="all 0.2s ease"
