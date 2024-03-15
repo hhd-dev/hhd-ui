@@ -193,9 +193,19 @@ export function useSettingState<A>(path: string) {
 export function useFilter() {
   const filter = useSelector(local.selectors.selectFilter);
   const dispatch = useDispatch();
-  const setFilter = (filter: "advanced" | "expert") =>
+  const setFilter = (filter: "advanced" | "expert") => {
     dispatch(local.actions.setFilter(filter));
+  };
   return { filter, setFilter };
+}
+
+export function useUpdateFilter() {
+  const dispatch = useDispatch();
+
+  const filter = useSelector(local.selectors.selectFilter);
+  useEffect(() => {
+    dispatch(hhdSlice.actions.setFilter(filter));
+  }, [filter]);
 }
 
 export function useUrl() {

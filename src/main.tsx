@@ -19,7 +19,7 @@ import QamState from "./components/QamState.tsx";
 import { EditModal } from "./components/elements/EditModal.tsx";
 import { setupGamepadEventListener } from "./model/controller.tsx";
 import * as electronUtils from "./model/electron.tsx";
-import { useInitialLogin, useRelayEffect } from "./model/hooks.tsx";
+import { useInitialLogin, useRelayEffect, useUpdateFilter } from "./model/hooks.tsx";
 import hhdSlice, {
   selectAppType,
   selectHasController,
@@ -62,6 +62,7 @@ function App() {
   }
 
   useRelayEffect();
+  useUpdateFilter();
   useInitialLogin();
 
   let body = null;

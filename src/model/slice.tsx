@@ -1,10 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { get, set } from "lodash";
 import {
-  TAG_FILTER_CACHE_KEY,
-  TagFilterType,
-} from "../components/TagFilterDropdown";
-import {
   ContainerSetting,
   ModeSetting,
   Sections,
@@ -82,7 +78,7 @@ interface AppState {
   loading: { [loadState: string]: boolean };
   error: string;
   sectionNames: { [key: string]: string };
-  tagFilter: TagFilterType;
+  tagFilter: "advanced" | "expert";
   navigation: NavigationState;
   loadCounter: number;
 }
@@ -136,10 +132,8 @@ const slice = createSlice({
       store.state = initialState.state;
       store.navigation = initialState.navigation;
     },
-    setTagFilter: (store, action: PayloadAction<TagFilterType>) => {
-      const tagFilter = action.payload;
-      window.localStorage.setItem(TAG_FILTER_CACHE_KEY, `${tagFilter}`);
-      store.tagFilter = tagFilter;
+    setFilter: (store, action: PayloadAction<"advanced" | "expert">) => {
+      store.tagFilter = action.payload;
       updateNavigation(store);
     },
     setController: (store, action: PayloadAction<boolean>) => {

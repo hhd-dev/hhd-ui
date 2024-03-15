@@ -1,4 +1,9 @@
-import { ArrowRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {
+  ArrowRightIcon,
+  MoonIcon,
+  SettingsIcon,
+  SunIcon,
+} from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -18,17 +23,17 @@ import hhdSlice, {
   selectHasController,
   selectUiType,
 } from "../model/slice";
-import TagFilterDropdown from "./TagFilterDropdown";
 
-import { useIsLocal, useLogout } from "../model/hooks";
-import { ControllerButton } from "./Controller";
 import { useEffect, useState } from "react";
+import { useFilter, useIsLocal, useLogout } from "../model/hooks";
+import { ControllerButton } from "./Controller";
 import { HintModal } from "./elements/HintModal";
 
 const ExpandedUi = () => {
   const appType = useSelector(selectAppType);
   const uiType = useSelector(selectUiType);
   const controller = useSelector(selectHasController);
+  const { filter, setFilter } = useFilter();
   const isLocal = useIsLocal();
 
   const { colorMode, toggleColorMode } = useColorMode();
@@ -51,6 +56,11 @@ const ExpandedUi = () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [isOpen]); // Empty dependency array ensures the effect runs only once
+
+  const onTagClick = () => {
+    const newTag = filter === "expert" ? "advanced" : "expert";
+    return setFilter(newTag);
+  };
 
   if (!isOpen && !oldOpen) return <></>;
   const showClosed = (isOpen && !oldOpen) || (!isOpen && oldOpen);
@@ -105,7 +115,13 @@ const ExpandedUi = () => {
             aria-label="Toggle Darkmode"
             icon={colorMode == "dark" ? <MoonIcon /> : <SunIcon />}
           />
-          <TagFilterDropdown />
+          <Button
+            margin="0 0 0 1rem"
+            colorScheme={filter === "expert" ? "purple" : "brand"}
+            onClick={onTagClick}
+          >
+            <SettingsIcon />
+          </Button>
           {(!isLocal || appType == "web") && (
             <Button margin="0 0 0 1rem" onClick={logout}>
               Disconnect
