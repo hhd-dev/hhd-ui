@@ -1,8 +1,11 @@
 import {
   ArrowRightIcon,
+  CloseIcon,
+  LockIcon,
   MoonIcon,
-  SettingsIcon,
   SunIcon,
+  ViewIcon,
+  ViewOffIcon,
 } from "@chakra-ui/icons";
 import {
   Box,
@@ -117,19 +120,19 @@ const ExpandedUi = () => {
           />
           <Button
             margin="0 0 0 1rem"
-            colorScheme={filter === "expert" ? "purple" : "brand"}
+            // colorScheme={filter === "expert" ? "purple" : "brand"}
             onClick={onTagClick}
           >
-            <SettingsIcon />
+            {filter === "expert" ? <ViewIcon /> : <ViewOffIcon />}
           </Button>
           {(!isLocal || appType == "web") && (
             <Button margin="0 0 0 1rem" onClick={logout}>
-              Disconnect
+              <LockIcon />
             </Button>
           )}
           {appType == "app" && (
             <Button margin="0 0 0 1rem" onClick={() => window.close()}>
-              Exit
+              <CloseIcon />
             </Button>
           )}
           {appType == "overlay" && (
