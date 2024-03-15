@@ -23,6 +23,8 @@ const BUTTON_MAP = {
   b: 1,
   x: 2,
   y: 3,
+  select: 8,
+  start: 9,
   guide: 16,
 };
 
@@ -222,8 +224,9 @@ export const setupGamepadEventListener = () => {
       // Handle gamepad events
       if (!evs) continue;
 
-      // Ignore guide combos
-      if (state[gidx].guide) continue;
+      // Ignore guide, start, select combos
+      if (state[gidx].guide || state[gidx].start || state[gidx].select)
+        continue;
 
       for (const ev of evs) {
         switch (ev) {
