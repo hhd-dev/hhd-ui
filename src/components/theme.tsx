@@ -3,8 +3,6 @@ import {
   withDefaultColorScheme,
   type ThemeConfig,
 } from "@chakra-ui/react";
-import BackgroundDark from "../assets/background_dark.jpg";
-import BackgroundLight from "../assets/background_light.jpg";
 import BackgroundMonoDark from "../assets/background_dark_mono.jpg";
 import BackgroundMonoLight from "../assets/background_light_mono.jpg";
 export const CONTENT_WIDTH = "500px";
@@ -135,10 +133,16 @@ export const getScrollbarStyle = (distro: string | null) => {
   switch (distro) {
     case "manjaro":
       colors = "#438959 #19251d";
+      break;
+    case "bazzite":
+      colors = "#6d49b6 #0e0b3c";
+      break;
   }
 
   return {
-    css: { scrollbarColor: colors },
+    css: {
+      scrollbarColor: colors,
+    },
   };
 };
 
@@ -168,9 +172,16 @@ export const getBackground = (colorMode: string, distro: string | null) => {
           filter: "sepia(0.5) saturate(1) hue-rotate(202deg)",
         };
       }
+    default:
+      if (colorMode === "dark") {
+        return {
+          bgImage: BackgroundMonoDark,
+          filter: "sepia(0.6) saturate(1.25) hue-rotate(167deg)",
+        };
+      } else {
+        return {
+          bgImage: BackgroundMonoLight,
+        };
+      }
   }
-
-  return {
-    bgImage: colorMode == "dark" ? BackgroundDark : BackgroundLight,
-  };
 };

@@ -48,6 +48,7 @@ const ExpandedUi = () => {
   const isOpen = appType !== "overlay" || uiType === "expanded";
 
   const [oldOpen, setOldOpen] = useState(false);
+  const [showScroll, setShowScroll] = useState(false);
   useEffect(() => {
     let timeoutId: number | null = null;
     timeoutId = setTimeout(
@@ -57,8 +58,16 @@ const ExpandedUi = () => {
       isOpen ? 100 : 200
     );
 
+    let timeoutScroll = setTimeout(
+      () => {
+        setShowScroll(isOpen);
+      },
+      isOpen ? 400 : 0
+    );
+
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutScroll) clearTimeout(timeoutScroll);
     };
   }, [isOpen]); // Empty dependency array ensures the effect runs only once
 
@@ -79,9 +88,18 @@ const ExpandedUi = () => {
         },
       },
     };
+  } else if (!showScroll) {
+    scrollCss = {
+      sx: {
+        "::-webkit-scrollbar": {
+          opacity: "0",
+        },
+      },
+    };
   } else if (colorMode === "dark") {
     scrollCss = getScrollbarStyle(distro);
   }
+  scrollCss = { ...scrollCss };
 
   return (
     <Flex
