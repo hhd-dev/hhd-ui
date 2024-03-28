@@ -3,6 +3,10 @@ import {
   withDefaultColorScheme,
   type ThemeConfig,
 } from "@chakra-ui/react";
+import BackgroundDark from "../assets/background_dark.jpg";
+import BackgroundLight from "../assets/background_light.jpg";
+import BackgroundMonoDark from "../assets/background_dark_mono.jpg";
+import BackgroundMonoLight from "../assets/background_light_mono.jpg";
 export const CONTENT_WIDTH = "500px";
 export const QAM_WIDTH = "300px";
 
@@ -11,13 +15,11 @@ const config: ThemeConfig = {
   useSystemColorMode: true,
 };
 
-const createTheme = (brand: any) => {
+const createTheme = (colors: any) => {
   const theme = extendTheme(
     {
       config,
-      colors: {
-        brand: brand,
-      },
+      colors: colors,
       styles: {
         global: {
           body: {
@@ -56,31 +58,81 @@ const createTheme = (brand: any) => {
 };
 
 export const { theme, controllerTheme } = createTheme({
-  "50": "#E4BC1B",
-  "100": "#E4BC1B",
-  "200": "#E4BC1B",
-  "300": "#E4BC1B",
-  "400": "#E4BC1B",
-  "500": "#E4BC1B",
-  "600": "#B69616",
-  "700": "#897110",
-  "800": "#5B4B0B",
-  "900": "#2E2605",
+  brand: {
+    "50": "#E4BC1B",
+    "100": "#E4BC1B",
+    "200": "#E4BC1B",
+    "300": "#E4BC1B",
+    "400": "#E4BC1B",
+    "500": "#E4BC1B",
+    "600": "#B69616",
+    "700": "#897110",
+    "800": "#5B4B0B",
+    "900": "#2E2605",
+  },
 });
 
 export default theme;
 
 export const distroThemes: Record<string, any> = {
   manjaro: createTheme({
-    "50": "#35bf5c",
-    "100": "#35bf5c",
-    "200": "#35bf5c",
-    "300": "#35bf5c",
-    "400": "#35bf5c",
-    "500": "#35bf5c",
-    "600": "#31b055",
-    "700": "#289146",
-    "800": "#24823e",
-    "900": "#0f3519",
+    brand: {
+      "50": "#35bf5c",
+      "100": "#35bf5c",
+      "200": "#35bf5c",
+      "300": "#35bf5c",
+      "400": "#35bf5c",
+      "500": "#35bf5c",
+      "600": "#31b055",
+      "700": "#289146",
+      "800": "#24823e",
+      "900": "#0f3519",
+    },
+    gray: {
+      "50": "#EEF7F1",
+      "100": "#CFE8D7",
+      "200": "#B0D9BD",
+      "300": "#91CAA3",
+      "400": "#72BB8A",
+      "500": "#54AB70",
+      "600": "#438959",
+      "700": "#19251d",
+      "800": "#19251d",
+      "900": "#112216",
+    },
   }),
+};
+
+export const getScrollbarStyle = (distro: string | null) => {
+  let colors = "#333e52 #1a202c";
+
+  switch (distro) {
+    case "manjaro":
+      colors = "#438959 #19251d";
+  }
+
+  return {
+    css: { scrollbarColor: colors },
+  };
+};
+
+export const getBackground = (colorMode: string, distro: string | null) => {
+  switch (distro) {
+    case "manjaro":
+      if (colorMode === "dark") {
+        return {
+          bgImage: BackgroundMonoDark,
+          filter: "sepia(1) saturate(0.7) hue-rotate(85deg)",
+        };
+      } else {
+        return {
+          bgImage: BackgroundMonoLight,
+          filter: "sepia(0.3) hue-rotate(85deg)",
+        };
+      }
+  }
+
+  return {
+    bgImage: colorMode == "dark" ? BackgroundDark : BackgroundLight,
+  };
 };

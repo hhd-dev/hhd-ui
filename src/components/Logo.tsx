@@ -1,7 +1,7 @@
 import LogoLight from "../assets/logo_light.svg";
 import LogoDark from "../assets/logo_dark.svg";
-import MonoLight from "../assets/mono_light.svg";
 import MonoDark from "../assets/mono_dark.svg";
+import MonoLight from "../assets/mono_light.svg";
 import Manjaro from "../assets/distro/manjaro.svg";
 import { useColorMode, Img, Flex } from "@chakra-ui/react";
 import { selectCurrentDistro } from "../model/slice";
@@ -21,6 +21,7 @@ const HhdLogo = ({height, qam}: any) => {
               src={colorMode == "dark" ? MonoDark : MonoLight}
               marginLeft="0.8rem"
               height={height}
+              filter="sepia(1) saturate(2.5) hue-rotate(85deg)"
             />
           )}
         </Flex>

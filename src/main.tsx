@@ -12,11 +12,10 @@ import FrontPage from "./components/FrontPage.tsx";
 import defaultTheme, {
   controllerTheme as defaultControllerTheme,
   distroThemes,
+  getBackground,
 } from "./components/theme.tsx";
 
 import { PersistGate } from "redux-persist/integration/react";
-import BackgroundDark from "./assets/background_dark.jpg";
-import BackgroundLight from "./assets/background_light.jpg";
 import ExpandedUi from "./components/ExpandedUi.tsx";
 import QamState from "./components/QamState.tsx";
 import { EditModal } from "./components/elements/EditModal.tsx";
@@ -52,7 +51,8 @@ window.electronUtils = electronUtils;
 setupGamepadEventListener();
 
 function App() {
-  const { colorMode, toggleColorMode: _ } = useColorMode();
+  const { colorMode } = useColorMode();
+  const distro = useSelector(selectCurrentDistro);
   const uiType = useSelector(selectUiType);
   const appType = useSelector(selectAppType);
   const dispatch = useDispatch();
@@ -109,9 +109,9 @@ function App() {
   return (
     <Fragment>
       <Box
-        bgImage={colorMode == "dark" ? BackgroundDark : BackgroundLight}
         h="100vh"
         w="100vw"
+        {...getBackground(colorMode, distro)}
         backgroundAttachment="fixed"
         backgroundPosition="center"
         backgroundRepeat="no-repeat"
