@@ -101,6 +101,32 @@ export const distroThemes: Record<string, any> = {
       "900": "#112216",
     },
   }),
+  bazzite: createTheme({
+    brand: {
+      "50": "#EBE8FD",
+      "100": "#816BF0",
+      "200": "#816BF0",
+      "300": "#816BF0",
+      "400": "#5E42EB",
+      "500": "#3A18E7",
+      "600": "#2F13B9",
+      "700": "#230F8A",
+      "800": "#170A5C",
+      "900": "#0C052E",
+    },
+    gray: {
+      "50": "#ECE6FE",
+      "100": "#C9BAFC",
+      "200": "#A68EFB",
+      "300": "#8362F9",
+      "400": "#4a25cf",
+      "500": "#4a25cf",
+      "600": "#3e1fad",
+      "700": "#0C0231",
+      "800": "#0C0231",
+      "900": "#0C0231",
+    },
+  }),
 };
 
 export const getScrollbarStyle = (distro: string | null) => {
@@ -128,6 +154,18 @@ export const getBackground = (colorMode: string, distro: string | null) => {
         return {
           bgImage: BackgroundMonoLight,
           filter: "sepia(0.3) hue-rotate(85deg)",
+        };
+      }
+    case "bazzite":
+      if (colorMode === "dark") {
+        return {
+          bgImage: BackgroundMonoDark,
+          filter: "sepia(1) saturate(4) hue-rotate(200deg)",
+        };
+      } else {
+        return {
+          bgImage: BackgroundMonoLight,
+          filter: "sepia(0.5) saturate(1) hue-rotate(202deg)",
         };
       }
   }
