@@ -148,6 +148,7 @@ const createMainWindow = async () => {
   });
 
   let currentType = "closed";
+  let qam_preopened = false;
 
   // Inform hhd of the new status
   ipcMain.on("update-status", (_, stat) => {
@@ -162,9 +163,14 @@ const createMainWindow = async () => {
 
     let uiType = null;
     switch (cmd) {
+      case "open_qam_if_closed":
+        // Preopen qam when the qam button is pressed a second
+        // time to minimize delay
+        if (currentType === "closed") uiType = "qam";
+        break;
       case "open_qam":
         // If the user presses QAM again close
-        if (currentType === "qam") {
+        if (currentType === "qam" && !qam_preopened) {
           console.error("QAM is currently open, closing.");
           uiType = "closed";
         } else {
@@ -193,6 +199,10 @@ const createMainWindow = async () => {
         break;
     }
     if (!uiType) return;
+
+    // Remember if qam was pre-opened to avoid
+    // closing it after the button is released
+    qam_preopened = cmd === "open_qam_if_closed";
 
     if (mainWindow) {
       console.error(`Switching ui to '${uiType}'`);
