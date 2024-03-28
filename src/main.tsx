@@ -123,8 +123,8 @@ function App() {
         opacity={background}
       ></Box>
       <Box
-        h="100vh"
-        w="100vw"
+        h="100%"
+        w="100%"
         overflow="hidden"
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
