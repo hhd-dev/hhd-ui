@@ -71,7 +71,7 @@ const QamState = () => {
       boxShadow="dark-lg"
       overflowY="scroll"
       overflowX="hidden"
-      transition="0.075s ease-in-out"
+      transition="0.1s ease-out"
       direction="column"
       {...(showClosed && { transform: "translateX(70px)", opacity: 0 })}
       sx={{
