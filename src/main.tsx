@@ -121,20 +121,14 @@ function App() {
         zIndex="-1"
         transition="0.2s ease-in-out"
         opacity={background}
-      ></Box>
-      <Box
-        h="100%"
-        w="100%"
-        overflow="hidden"
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
           dispatch(hhdSlice.actions.setUiType("closed"));
         }}
-      >
-        <PersistGate loading={null} persistor={persistor}>
-          {body}
-        </PersistGate>
-      </Box>
+      ></Box>
+      <PersistGate loading={null} persistor={persistor}>
+        {body}
+      </PersistGate>
     </Fragment>
   );
 }
