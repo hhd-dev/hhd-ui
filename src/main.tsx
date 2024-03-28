@@ -9,7 +9,10 @@ import React, { Fragment } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import FrontPage from "./components/FrontPage.tsx";
-import theme, { controllerTheme } from "./components/theme.tsx";
+import defaultTheme, {
+  controllerTheme as defaultControllerTheme,
+  distroThemes,
+} from "./components/theme.tsx";
 
 import { PersistGate } from "redux-persist/integration/react";
 import BackgroundDark from "./assets/background_dark.jpg";
@@ -19,9 +22,14 @@ import QamState from "./components/QamState.tsx";
 import { EditModal } from "./components/elements/EditModal.tsx";
 import { setupGamepadEventListener } from "./model/controller.tsx";
 import * as electronUtils from "./model/electron.tsx";
-import { useInitialLogin, useRelayEffect, useUpdateFilter } from "./model/hooks.tsx";
+import {
+  useInitialLogin,
+  useRelayEffect,
+  useUpdateFilter,
+} from "./model/hooks.tsx";
 import hhdSlice, {
   selectAppType,
+  selectCurrentDistro,
   selectHasController,
   selectIsLoading,
   selectIsLoggedIn,
@@ -133,6 +141,15 @@ function App() {
 
 function ThemeSet() {
   const controller = useSelector(selectHasController);
+  const distro = useSelector(selectCurrentDistro);
+  let theme = defaultTheme;
+  let controllerTheme = defaultControllerTheme;
+
+  if (distro && distroThemes[distro]) {
+    theme = distroThemes[distro].theme;
+    controllerTheme = distroThemes[distro].controllerTheme;
+  }
+
   return (
     <ChakraProvider theme={controller ? controllerTheme : theme}>
       <App />

@@ -594,4 +594,11 @@ export const selectDisabledTooltip = (state: RootState) => {
   return selectAppType(state) !== "overlay" || selectHasController(state);
 };
 
+export const selectCurrentDistro = (state: RootState) => {
+  const distro = state.hhd.state?.info?.os;
+  return distro && (distro as unknown as string) !== "ukn"
+    ? (distro as unknown as string)
+    : null;
+};
+
 export default slice;

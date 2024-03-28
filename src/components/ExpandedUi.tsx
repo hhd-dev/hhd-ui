@@ -109,7 +109,7 @@ const ExpandedUi = () => {
           justifyContent="start"
         >
           <Heading>
-            <HhdLogo width="7rem" />
+            <HhdLogo height="2.5rem" />
           </Heading>
           <Box flexGrow="3"></Box>
 

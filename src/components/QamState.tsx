@@ -90,7 +90,7 @@ const QamState = () => {
         <CardHeader>
           <Flex>
             <Heading>
-              <HhdLogo width="9rem" />
+              <HhdLogo height="2.5rem" qam />
             </Heading>
             <Box flexGrow="3"></Box>
             <Button
