@@ -1,6 +1,7 @@
 import { NumberSetting } from "./common";
 import local from "./local";
 import hhdSlice, {
+  selectAppType,
   selectFocusedPath,
   selectFocusedSetting,
   selectIsOpen,
@@ -153,10 +154,13 @@ const goSideways = (s: typeof store, left: boolean) => {
 
 export const setupGamepadEventListener = () => {
   let state: Record<string, Record<string, number | null>> = {};
+  let focused = true;
 
   function updateLoop() {
     const time = new Date().getTime();
-    if (!selectIsOpen(store.getState())) return;
+    const sstate = store.getState();
+    if (!selectIsOpen(sstate)) return;
+    if (selectAppType(sstate) !== "overlay" && !focused) return;
 
     for (const [gidx, gp] of navigator.getGamepads().entries()) {
       if (!gp) continue;
@@ -277,7 +281,8 @@ export const setupGamepadEventListener = () => {
     store.dispatch(hhdSlice.actions.setController(true));
 
     updateLoop();
-    window.controllerInterval = setInterval(updateLoop, 75);
+    if (!window.controllerInterval)
+      window.controllerInterval = setInterval(updateLoop, 75);
     // if (!animationFrameId) animationFrameId = requestAnimationFrame(updateLoop);
   });
 
@@ -290,4 +295,7 @@ export const setupGamepadEventListener = () => {
       window.controllerInterval = undefined;
     }
   });
+
+  window.addEventListener("focus", () => (focused = true));
+  window.addEventListener("blur", () => (focused = false));
 };
