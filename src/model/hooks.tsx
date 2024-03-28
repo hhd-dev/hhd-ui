@@ -80,7 +80,7 @@ export const useRelayEffect = () => {
   const appType = useSelector(selectAppType);
   const loggedIn = useSelector(selectIsLoggedIn);
 
-  const CLOSE_DELAY = 500;
+  const CLOSE_DELAY = 100;
 
   // Inform that Daemon should close the UI
   useEffect(() => {
