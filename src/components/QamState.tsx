@@ -51,7 +51,7 @@ const QamState = () => {
       () => {
         setOldOpen(isOpen);
       },
-      isOpen ? 100 : 200
+      isOpen ? 3 : 200
     );
 
     return () => {
@@ -71,7 +71,7 @@ const QamState = () => {
       boxShadow="dark-lg"
       overflowY="scroll"
       overflowX="hidden"
-      transition="0.1s ease-out"
+      transition="0.06s ease-out"
       direction="column"
       {...(showClosed && { transform: "translateX(70px)", opacity: 0 })}
       sx={{

@@ -55,7 +55,7 @@ const ExpandedUi = () => {
       () => {
         setOldOpen(isOpen);
       },
-      isOpen ? 100 : 200
+      isOpen ? 3 : 200
     );
 
     let timeoutScroll = setTimeout(
@@ -111,7 +111,7 @@ const ExpandedUi = () => {
       overflowY="scroll"
       h="100vh"
       w="100vw"
-      transition="0.1s ease-in"
+      transition="0.07s ease-in"
       {...(showClosed && { transform: "scale(80%)", opacity: 0 })}
       {...scrollCss}
       onClick={(e) => {
