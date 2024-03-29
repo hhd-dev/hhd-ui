@@ -1,3 +1,4 @@
+import { handleGamepadCommands } from "./controller";
 import local from "./local";
 import hhdSlice, { AppType, UiType } from "./slice";
 import { store } from "./store";
@@ -21,4 +22,8 @@ export const setUiType = (uiType: UiType) => {
 
 export const setAppType = (appType: AppType) => {
   store.dispatch(hhdSlice.actions.setAppType(appType));
+};
+
+export const sendGamepadEvent = (ev: string) => {
+  handleGamepadCommands([ev]);
 };

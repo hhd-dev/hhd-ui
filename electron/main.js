@@ -149,18 +149,32 @@ const createMainWindow = async () => {
 
   let currentType = "closed";
   let qam_preopened = false;
+  let grab_interval = null;
+
+  const writeSync = (cmd) => {
+    console.log(cmd);
+  };
 
   // Inform hhd of the new status
   ipcMain.on("update-status", (_, stat) => {
     currentType = stat;
-    console.log(`stat:${stat}`);
+    const should_grab = stat !== "closed";
+    writeSync(`stat:${stat}`);
+
+    if (should_grab) {
+      if (!grab_interval)
+        grab_interval = setInterval(() => writeSync(`grab:enable`), 2000);
+      writeSync(`grab:enable`);
+    } else {
+      if (grab_interval) {
+        clearInterval(grab_interval);
+        grab_interval = null;
+      }
+      writeSync(`grab:disable`);
+    }
   });
 
-  // Receive open and close commands
-  rl.on("line", (line) => {
-    if (!line.startsWith("cmd:")) return;
-    const cmd = line.trim().substring(4);
-
+  const processCmd = (cmd) => {
     let uiType = null;
     switch (cmd) {
       case "open_qam_if_closed":
@@ -195,7 +209,8 @@ const createMainWindow = async () => {
         break;
       case "close_now":
         uiType = "closed";
-        console.log(`stat:closed`);
+        writeSync(`stat:closed`);
+        writeSync(`grab:disable`);
         break;
     }
     if (!uiType) return;
@@ -210,6 +225,22 @@ const createMainWindow = async () => {
         `window.electronUtils.setUiType("${uiType}");`
       );
     }
+  };
+
+  const processAction = (action) => {
+    console.error(action);
+    const cmd = `window.electronUtils.sendGamepadEvent("${encodeURI(
+      action
+    )}");`;
+    mainWindow.webContents.executeJavaScript(cmd);
+  };
+
+  // Receive open and close commands
+  rl.on("line", (line) => {
+    console.error(line);
+    if (line.startsWith("cmd:")) processCmd(line.trim().substring(4));
+    else if (line.startsWith("action:"))
+      processAction(line.trim().substring(7));
   });
 };
 

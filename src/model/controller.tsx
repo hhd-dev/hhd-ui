@@ -152,6 +152,51 @@ const goSideways = (s: typeof store, left: boolean) => {
   );
 };
 
+export const handleGamepadCommands = (evs: string[]) => {
+  for (const ev of evs) {
+    switch (ev) {
+      case "dpad_up":
+      case "up":
+        store.dispatch(hhdSlice.actions.goPrev());
+        break;
+      case "dpad_down":
+      case "down":
+        store.dispatch(hhdSlice.actions.goNext());
+        break;
+      case "dpad_left":
+      case "left":
+        goSideways(store, true);
+        break;
+      case "dpad_right":
+      case "right":
+        goSideways(store, false);
+        break;
+      case "lb":
+        store.dispatch(hhdSlice.actions.goPrev({ section: "tab" }));
+        break;
+      case "rb":
+        store.dispatch(hhdSlice.actions.goNext({ section: "tab" }));
+        break;
+      case "x":
+        store.dispatch(hhdSlice.actions.setShowHint(true));
+        break;
+      case "x_up":
+        store.dispatch(hhdSlice.actions.setShowHint(false));
+        break;
+      case "a":
+        goIn(store);
+        break;
+      case "b":
+        store.dispatch(hhdSlice.actions.unselect());
+        break;
+      case "y":
+        store.dispatch(hhdSlice.actions.toggleUiType());
+        break;
+    }
+    console.log(ev);
+  }
+};
+
 export const setupGamepadEventListener = () => {
   let state: Record<string, Record<string, number | null>> = {};
   let focused = true;
@@ -232,48 +277,8 @@ export const setupGamepadEventListener = () => {
       if (state[gidx].guide || state[gidx].start || state[gidx].select)
         continue;
 
-      for (const ev of evs) {
-        switch (ev) {
-          case "dpad_up":
-          case "up":
-            store.dispatch(hhdSlice.actions.goPrev());
-            break;
-          case "dpad_down":
-          case "down":
-            store.dispatch(hhdSlice.actions.goNext());
-            break;
-          case "dpad_left":
-          case "left":
-            goSideways(store, true);
-            break;
-          case "dpad_right":
-          case "right":
-            goSideways(store, false);
-            break;
-          case "lb":
-            store.dispatch(hhdSlice.actions.goPrev({ section: "tab" }));
-            break;
-          case "rb":
-            store.dispatch(hhdSlice.actions.goNext({ section: "tab" }));
-            break;
-          case "x":
-            store.dispatch(hhdSlice.actions.setShowHint(true));
-            break;
-          case "x_up":
-            store.dispatch(hhdSlice.actions.setShowHint(false));
-            break;
-          case "a":
-            goIn(store);
-            break;
-          case "b":
-            store.dispatch(hhdSlice.actions.unselect());
-            break;
-          case "y":
-            store.dispatch(hhdSlice.actions.toggleUiType());
-            break;
-        }
-        console.log(ev);
-      }
+      // Dispatch
+      handleGamepadCommands(evs);
     }
   }
 
