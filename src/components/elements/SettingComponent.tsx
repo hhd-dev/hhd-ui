@@ -160,13 +160,19 @@ const MultipleComponent: FC<SettingProps> = ({
   );
 };
 
+const CustomComponent: FC<SettingProps> = () => {
+  // if (props.settings.tags?.includes("theme-selector")) {
+  //   return <ThemeSelector {...props} />;
+  // }
+
+  return <></>;
+};
+
 const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title, tags } = set;
   const { state } = useSettingState<number>(path);
   const error = tags?.includes("error");
-  const slim =
-    tags?.includes("hhd-version-display") ||
-    tags?.includes("slim");
+  const slim = tags?.includes("hhd-version-display") || tags?.includes("slim");
 
   if (!state) return <></>;
 
@@ -249,6 +255,8 @@ const SettingComponent: FC<SettingProps> = (props) => {
       return <DisplayComponent {...props} />;
     case "action":
       return <ActionComponent {...props} />;
+    case "custom":
+      return <CustomComponent {...props} />;
   }
   return <> </>;
 };

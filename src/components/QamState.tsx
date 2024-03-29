@@ -11,9 +11,9 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { capitalize } from "lodash";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useShouldRenderParent } from "../model/hooks";
-import { useShouldRenderChild } from "../model/hooks";
+import { useShouldRenderChild, useShouldRenderParent } from "../model/hooks";
 import hhdSlice, {
   selectAppType,
   selectHasController,
@@ -23,10 +23,8 @@ import hhdSlice, {
 } from "../model/slice";
 import { ControllerButton } from "./Controller";
 import ErrorBoundary from "./ErrorBoundary";
-import HhdLogo from "./Logo";
 import ContainerComponent from "./elements/ContainerComponent";
-import { QAM_WIDTH } from "./theme";
-import { useEffect, useState } from "react";
+import { Logo, QAM_WIDTH } from "./theme";
 
 const QamState = () => {
   const sectionNames = useSelector(selectSectionNames);
@@ -90,7 +88,7 @@ const QamState = () => {
         <CardHeader>
           <Flex>
             <Heading>
-              <HhdLogo height="2.5rem" qam />
+              <Logo height="2.5rem" qam />
             </Heading>
             <Box flexGrow="3"></Box>
             <Button

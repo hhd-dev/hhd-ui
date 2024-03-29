@@ -16,14 +16,13 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import HhdLogo from "./Logo";
 import HhdTabbedState from "./TabbedState";
 
-import { CONTENT_WIDTH, getScrollbarStyle } from "./theme";
+import { CONTENT_WIDTH, Logo, getScrollbarStyle } from "./theme";
 
 import hhdSlice, {
   selectAppType,
-  selectCurrentDistro,
+  selectCurrentTheme,
   selectHasController,
   selectUiType,
 } from "../model/slice";
@@ -43,7 +42,7 @@ const ExpandedUi = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const dispatch = useDispatch();
   const logout = useLogout();
-  const distro = useSelector(selectCurrentDistro);
+  const distro = useSelector(selectCurrentTheme);
 
   const isOpen = appType !== "overlay" || uiType === "expanded";
 
@@ -127,7 +126,7 @@ const ExpandedUi = () => {
           justifyContent="start"
         >
           <Heading>
-            <HhdLogo height="2.5rem" />
+            <Logo height="2.5rem" />
           </Heading>
           <Box flexGrow="3"></Box>
 

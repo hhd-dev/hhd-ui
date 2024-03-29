@@ -13,6 +13,7 @@ import defaultTheme, {
   controllerTheme as defaultControllerTheme,
   distroThemes,
   getBackground,
+  getScrollbarStyle,
 } from "./components/theme.tsx";
 
 import { PersistGate } from "redux-persist/integration/react";
@@ -28,7 +29,7 @@ import {
 } from "./model/hooks.tsx";
 import hhdSlice, {
   selectAppType,
-  selectCurrentDistro,
+  selectCurrentTheme,
   selectHasController,
   selectIsLoading,
   selectIsLoggedIn,
@@ -52,7 +53,7 @@ setupGamepadEventListener();
 
 function App() {
   const { colorMode } = useColorMode();
-  const distro = useSelector(selectCurrentDistro);
+  const distro = useSelector(selectCurrentTheme);
   const uiType = useSelector(selectUiType);
   const appType = useSelector(selectAppType);
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ function App() {
   useInitialLogin();
 
   let body = null;
+  let frontPage = false;
 
   if (loading) {
     body = (
@@ -99,6 +101,7 @@ function App() {
       </>
     );
   } else {
+    frontPage = true;
     body = <FrontPage />;
   }
 
@@ -125,6 +128,7 @@ function App() {
       <Box
         h="100vh"
         w="100vw"
+        {...(frontPage && { ...getScrollbarStyle(distro), overflowY: "auto" })}
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
           dispatch(hhdSlice.actions.setUiType("closed"));
@@ -140,7 +144,7 @@ function App() {
 
 function ThemeSet() {
   const controller = useSelector(selectHasController);
-  const distro = useSelector(selectCurrentDistro);
+  const distro = useSelector(selectCurrentTheme);
   let theme = defaultTheme;
   let controllerTheme = defaultControllerTheme;
 

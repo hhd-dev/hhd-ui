@@ -594,7 +594,12 @@ export const selectDisabledTooltip = (state: RootState) => {
   return selectAppType(state) !== "overlay" || selectHasController(state);
 };
 
-export const selectCurrentDistro = (state: RootState) => {
+export const selectCurrentTheme = (state: RootState) => {
+  const theme = state.hhd.state?.hhd?.settings?.theme;
+  console.log(theme);
+  if (theme && (theme as unknown as string) !== "default")
+    return theme as unknown as string;
+
   const distro = state.hhd.state?.info?.os;
   return distro && (distro as unknown as string) !== "ukn"
     ? (distro as unknown as string)
