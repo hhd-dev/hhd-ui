@@ -209,6 +209,10 @@ const createMainWindow = async () => {
         break;
       case "close_now":
         uiType = "closed";
+        if (grab_interval) {
+          clearInterval(grab_interval);
+          grab_interval = null;
+        }
         writeSync(`stat:closed`);
         writeSync(`grab:disable`);
         break;
