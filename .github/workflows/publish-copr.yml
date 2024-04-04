@@ -18,7 +18,7 @@ jobs:
       - name: Create spec file dir
         run: mkdir -p ./pkg/
       - name: Build spec file
-        run: sed "s/REPLACE_VERSION/$(cat pyproject.toml | grep -E 'version = "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)/" hhd-ui.spec > ./pkg/hhd-ui.spec
+        run: sed "s/REPLACE_VERSION/$(cat pyproject.toml | grep -E 'version = "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)/" ./pkg/hhd-ui.spec > ./pkg/hhd-ui.spec
       - name: Publish to COPR repo
         uses: s0/git-publish-subdir-action@develop
         env:

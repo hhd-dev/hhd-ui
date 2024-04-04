@@ -56,6 +56,6 @@ package() {
 	install -vDm644 ./art/icon.png "${pkgdir}/usr/share/applications/${pkgname}/icon.png"
 
   # Install scripts
-	install -vDm644 "./aur/hhd-ui.desktop" -t "${pkgdir}"/usr/share/applications
-	install -vDm755 "./aur/hhd-ui.sh" "${pkgdir}/usr/bin/${_pkgname}"
+	install -vDm644 "./pkg/hhd-ui.desktop" -t "${pkgdir}"/usr/share/applications
+	install -vDm755 "./pkg/hhd-ui.sh" "${pkgdir}/usr/bin/${_pkgname}"
 }

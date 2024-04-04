@@ -43,7 +43,14 @@ chmod +x dist/hhd-ui.AppImage
 mkdir -p %{buildroot}%{_bindir}
 cp -a %{name}-%{version}/electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
 install -Dm644 %{name}-%{version}/LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
-install -Dm644 %{_sourcedir}/hhd-ui.desktop %{buildroot}/usr/share/applications/hhd-ui.desktop
+install -Dm644 %{_sourcedir}/pkg/hhd-ui.desktop %{buildroot}/usr/share/applications/hhd-ui.desktop
+
+mkdir -p %{buildroot}/usr/share/applications/hhd-ui/
+install -Dm644 %{_sourcedir}/art/library_capsule.png %{buildroot}/usr/share/applications/hhd-ui/library_capsule.png
+install -Dm644 %{_sourcedir}/art/library_hero.png %{buildroot}/usr/share/applications/hhd-ui/library_hero.png
+install -Dm644 %{_sourcedir}/art/library_logo.png %{buildroot}/usr/share/applications/hhd-ui/library_logo.png
+install -Dm644 %{_sourcedir}/art/main_capsule.png %{buildroot}/usr/share/applications/hhd-ui/main_capsule.png
+install -Dm644 %{_sourcedir}/art/icon.png %{buildroot}/usr/share/applications/hhd-ui/icon.png
 
 %post
 

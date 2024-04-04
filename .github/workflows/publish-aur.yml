@@ -17,12 +17,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Use proper version in PKGBUILD
         run: >-
-          sed -i "s/pkgver=VERSION/pkgver=$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)/" ./aur/PKGBUILD
+          sed -i "s/pkgver=VERSION/pkgver=$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)/" ./pkg/PKGBUILD
       - name: Publish AUR package
         uses: KSXGitHub/github-actions-deploy-aur@v2.7.0
         with:
           pkgname: hhd-ui
-          pkgbuild: ./aur/PKGBUILD
+          pkgbuild: ./pkg/PKGBUILD
           commit_username: ${{ secrets.AUR_USERNAME }}
           commit_email: ${{ secrets.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
