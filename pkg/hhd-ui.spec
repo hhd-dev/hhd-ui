@@ -1,7 +1,7 @@
 %global __os_install_post %{_rpmconfigdir}/brp-compress %{_rpmconfigdir}/brp-strip-none %{_rpmconfigdir}/brp-strip-static-archive
 
 Name:           hhd-ui
-Version:        2.2.0
+Version:        REPLACE_VERSION
 Release:        1%{?dist}
 Summary:        Configurator interface for Handheld Daemon.
 License:        GPL-3.0-or-later
@@ -43,14 +43,14 @@ chmod +x dist/hhd-ui.AppImage
 mkdir -p %{buildroot}%{_bindir}
 cp -a %{name}-%{version}/electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
 install -Dm644 %{name}-%{version}/LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
-install -Dm644 %{_sourcedir}/pkg/hhd-ui.desktop %{buildroot}/usr/share/applications/hhd-ui.desktop
+install -Dm644 %{_sourcedir}/pkg/hhd-ui.desktop %{buildroot}%{_datadir}/applications/hhd-ui.desktop
 
-mkdir -p %{buildroot}/usr/share/applications/hhd-ui/
-install -Dm644 %{_sourcedir}/art/library_capsule.png %{buildroot}/usr/share/applications/hhd-ui/library_capsule.png
-install -Dm644 %{_sourcedir}/art/library_hero.png %{buildroot}/usr/share/applications/hhd-ui/library_hero.png
-install -Dm644 %{_sourcedir}/art/library_logo.png %{buildroot}/usr/share/applications/hhd-ui/library_logo.png
-install -Dm644 %{_sourcedir}/art/main_capsule.png %{buildroot}/usr/share/applications/hhd-ui/main_capsule.png
-install -Dm644 %{_sourcedir}/art/icon.png %{buildroot}/usr/share/applications/hhd-ui/icon.png
+mkdir -p %{buildroot}%{_datadir}/applications/hhd-ui/
+install -Dm644 %{_sourcedir}/art/library_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/library_capsule.png
+install -Dm644 %{_sourcedir}/art/library_hero.png %{buildroot}%{_datadir}/applications/hhd-ui/library_hero.png
+install -Dm644 %{_sourcedir}/art/library_logo.png %{buildroot}%{_datadir}/applications/hhd-ui/library_logo.png
+install -Dm644 %{_sourcedir}/art/main_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/main_capsule.png
+install -Dm644 %{_sourcedir}/art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
 
 %post
 
@@ -60,6 +60,12 @@ install -Dm644 %{_sourcedir}/art/icon.png %{buildroot}/usr/share/applications/hh
 %license %{_licensedir}/%{name}/LICENSE
 %{_bindir}/hhd-ui
 %{_datadir}/applications/hhd-ui.desktop
+
+%{_datadir}/applications/hhd-ui/library_capsule.png
+%{_datadir}/applications/hhd-ui/library_hero.png
+%{_datadir}/applications/hhd-ui/library_logo.png
+%{_datadir}/applications/hhd-ui/main_capsule.png
+%{_datadir}/applications/hhd-ui/icon.png
 
 %changelog
 * Wed Apr 3 2024 Matthew Schwartz <njtransit215@gmail.com> - 2.2.0-1
