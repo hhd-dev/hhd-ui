@@ -6,8 +6,6 @@ Release:        1%{?dist}
 Summary:        Configurator interface for Handheld Daemon.
 License:        GPL-3.0-or-later
 URL:            https://github.com/hhd-dev/hhd-ui
-Source0:        %{URL}/archive/master.tar.gz
-Source1:        hhd-ui.desktop
 
 BuildArch:      x86_64
 
@@ -24,12 +22,10 @@ Requires: fuse
 Configurator interface for Handheld Daemon.
 
 %prep
-mkdir -p %{name}-%{version}
-cd %{name}-%{version}
-tar -xzf %{_sourcedir}/master.tar.gz --strip-components=1
+git clone --single-branch --branch %{version} %{URL} hhd-ui
 
 %build
-cd %{name}-%{version}
+cd hhd-ui
 VERSION=$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)
 sed -i "s|\"version\": \"1.0.0\"|\"version\": \"$VERSION\"|" "electron/package.json"
 npm ci
@@ -41,16 +37,16 @@ chmod +x dist/hhd-ui.AppImage
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-cp -a %{name}-%{version}/electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
-install -Dm644 %{name}-%{version}/LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
-install -Dm644 %{_sourcedir}/pkg/hhd-ui.desktop %{buildroot}%{_datadir}/applications/hhd-ui.desktop
+cp -a hhd-ui/electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
+install -Dm644 hhd-ui/LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
+install -Dm644 hhd-ui/pkg/hhd-ui.desktop %{buildroot}%{_datadir}/applications/hhd-ui.desktop
 
 mkdir -p %{buildroot}%{_datadir}/applications/hhd-ui/
-install -Dm644 %{_sourcedir}/art/library_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/library_capsule.png
-install -Dm644 %{_sourcedir}/art/library_hero.png %{buildroot}%{_datadir}/applications/hhd-ui/library_hero.png
-install -Dm644 %{_sourcedir}/art/library_logo.png %{buildroot}%{_datadir}/applications/hhd-ui/library_logo.png
-install -Dm644 %{_sourcedir}/art/main_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/main_capsule.png
-install -Dm644 %{_sourcedir}/art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
+install -Dm644 hhd-ui/art/library_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/library_capsule.png
+install -Dm644 hhd-ui/art/library_hero.png %{buildroot}%{_datadir}/applications/hhd-ui/library_hero.png
+install -Dm644 hhd-ui/art/library_logo.png %{buildroot}%{_datadir}/applications/hhd-ui/library_logo.png
+install -Dm644 hhd-ui/art/main_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/main_capsule.png
+install -Dm644 hhd-ui/art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
 
 %post
 
