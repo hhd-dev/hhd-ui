@@ -1,0 +1,21 @@
+[Desktop Entry]
+Type=Application
+Name=Handheld Daemon
+Comment="Configurator interface for Handheld Daemon."
+GenericName=Controller Settings
+Exec=hhd-ui
+Categories=Gaming;
+
+# Regular icon/logo. Any size, 1:1.
+Icon=/usr/share/applications/hhd-ui/icon.png
+# 600x900px Capsule Art
+X-Steam-Library-Capsule=/usr/share/applications/hhd-ui/library_capsule.png
+# 3840x1240 Hero Art Background
+X-Steam-Library-Hero=/usr/share/applications/hhd-ui/library_hero.png
+# 1280x720 Logo
+X-Steam-Library-Logo=/usr/share/applications/hhd-ui/library_logo.png
+# 1280x720 Store Logo (Horizontal Capsule)
+X-Steam-Library-StoreCapsule=/usr/share/applications/hhd-ui/main_capsule.png
+
+# What controller preset to use.
+X-Steam-Controller-Template=Desktop
