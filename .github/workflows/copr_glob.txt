@@ -1,0 +1,4 @@
+**/*
+!.git
+!readme.md
+!hhd-ui.spec
