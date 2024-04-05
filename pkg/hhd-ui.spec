@@ -6,6 +6,7 @@ Release:        1%{?dist}
 Summary:        Configurator interface for Handheld Daemon.
 License:        GPL-3.0-or-later
 URL:            https://github.com/hhd-dev/hhd-ui
+Source0:        ${URL}/archive/v%{version}.tar.gz
 
 BuildArch:      x86_64
 
@@ -22,10 +23,10 @@ Requires: fuse
 Configurator interface for Handheld Daemon.
 
 %prep
-git clone --single-branch --branch %{version} %{URL} hhd-ui
+%setup -q -n %{name}-v%{version}
 
 %build
-cd hhd-ui
+cd %{name}-v%{version}
 VERSION=$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)
 sed -i "s|\"version\": \"1.0.0\"|\"version\": \"$VERSION\"|" "electron/package.json"
 npm ci
@@ -36,6 +37,7 @@ npm run build
 chmod +x dist/hhd-ui.AppImage
 
 %install
+cd %{name}-v%{version}
 mkdir -p %{buildroot}%{_bindir}
 cp -a hhd-ui/electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
 install -Dm644 hhd-ui/LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
