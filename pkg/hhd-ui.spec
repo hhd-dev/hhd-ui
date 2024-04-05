@@ -39,16 +39,16 @@ chmod +x dist/hhd-ui.AppImage
 %install
 cd %{name}-v%{version}
 mkdir -p %{buildroot}%{_bindir}
-cp -a hhd-ui/electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
-install -Dm644 hhd-ui/LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
-install -Dm644 hhd-ui/pkg/hhd-ui.desktop %{buildroot}%{_datadir}/applications/hhd-ui.desktop
+cp -a electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
+install -Dm644 LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
+install -Dm644 pkg/hhd-ui.desktop %{buildroot}%{_datadir}/applications/hhd-ui.desktop
 
 mkdir -p %{buildroot}%{_datadir}/applications/hhd-ui/
-install -Dm644 hhd-ui/art/library_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/library_capsule.png
-install -Dm644 hhd-ui/art/library_hero.png %{buildroot}%{_datadir}/applications/hhd-ui/library_hero.png
-install -Dm644 hhd-ui/art/library_logo.png %{buildroot}%{_datadir}/applications/hhd-ui/library_logo.png
-install -Dm644 hhd-ui/art/main_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/main_capsule.png
-install -Dm644 hhd-ui/art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
+install -Dm644 art/library_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/library_capsule.png
+install -Dm644 art/library_hero.png %{buildroot}%{_datadir}/applications/hhd-ui/library_hero.png
+install -Dm644 art/library_logo.png %{buildroot}%{_datadir}/applications/hhd-ui/library_logo.png
+install -Dm644 art/main_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/main_capsule.png
+install -Dm644 art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
 
 %post
 
