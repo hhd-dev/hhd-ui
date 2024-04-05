@@ -1,4 +1,5 @@
 %global __os_install_post %{_rpmconfigdir}/brp-compress %{_rpmconfigdir}/brp-strip-none %{_rpmconfigdir}/brp-strip-static-archive
+%global debug_package %{nil}
 
 Name:           hhd-ui
 Version:        REPLACE_VERSION
@@ -11,22 +12,17 @@ Source0:        %{URL}/archive/v%{version}.tar.gz
 BuildArch:      x86_64
 
 BuildRequires:  npm
-BuildRequires:  fuse-devel
 BuildRequires:  git
 BuildRequires:  desktop-file-utils
 BuildRequires:  systemd-rpm-macros
-
-Requires: hhd
-Requires: fuse
 
 %description
 Configurator interface for Handheld Daemon.
 
 %prep
-%setup -q -n %{name}-v%{version}
+%setup -q -n %{name}-%{version}
 
 %build
-cd %{name}-v%{version}
 VERSION=$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)
 sed -i "s|\"version\": \"1.0.0\"|\"version\": \"$VERSION\"|" "electron/package.json"
 npm ci
@@ -37,7 +33,6 @@ npm run build
 chmod +x dist/hhd-ui.AppImage
 
 %install
-cd %{name}-v%{version}
 mkdir -p %{buildroot}%{_bindir}
 cp -a electron/dist/hhd-ui.AppImage %{buildroot}%{_bindir}/hhd-ui
 install -Dm644 LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
