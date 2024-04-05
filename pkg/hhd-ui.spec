@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Configurator interface for Handheld Daemon.
 License:        GPL-3.0-or-later
 URL:            https://github.com/hhd-dev/hhd-ui
-Source0:        ${URL}/archive/v%{version}.tar.gz
+Source0:        %{URL}/archive/v%{version}.tar.gz
 
 BuildArch:      x86_64
 
