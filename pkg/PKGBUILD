@@ -24,7 +24,7 @@ prepare() {
   cd $_srcname
 	sed -i "s|@electronversion@|${ELECTRONVERSION}|" "./pkg/hhd-ui.sh"
   npm ci
-	sed -i "s|"version": "1.0.0"|"version": "${pkgver}"|" "electron/package.json"
+	sed -i "s|\"version\": \"1.0.0\"|\"version\": \"${pkgver}\"|" ./electron/package.json
   cd ./electron
   npm ci
 }
