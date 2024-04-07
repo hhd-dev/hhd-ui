@@ -72,7 +72,7 @@ const createMainWindow = async () => {
     show: false,
     ...(isOverlayUi && { transparent: true }),
     backgroundColor: "#1a202c",
-    icon: path.join(__dirname, "./icon/android-chrome-512x512.png"),
+    icon: path.join(__dirname, "./art/icon.png"),
     webPreferences: {
       nodeIntegration: false,
       webSecurity: false,
