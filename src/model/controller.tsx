@@ -204,8 +204,14 @@ export const setupGamepadEventListener = () => {
   function updateLoop() {
     const time = new Date().getTime();
     const sstate = store.getState();
-    if (!selectIsOpen(sstate)) return;
-    if (selectAppType(sstate) !== "overlay" && !focused) return;
+    if (!selectIsOpen(sstate)) {
+      state = {}; // Prevent freezing state
+      return;
+    }
+    if (selectAppType(sstate) !== "overlay" && !focused) {
+      state = {}; // Prevent freezing state
+      return;
+    }
 
     for (const [gidx, gp] of navigator.getGamepads().entries()) {
       if (!gp) continue;
