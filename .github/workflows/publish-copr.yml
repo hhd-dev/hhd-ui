@@ -16,16 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create spec file dir
-        run: mkdir -p ./pkg/
+        run: mkdir -p ./pkg-out/
       - name: Build spec file
         run: >-
-          sed -i "s/REPLACE_VERSION/$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)/" ./pkg/hhd-ui.spec
+          sed "s/REPLACE_VERSION/$(cat package.json | grep -E '"version": "[0-9\.]+"' -o | grep -E "[0-9\.]+" -o)/" ./pkg/hhd-ui.spec > ./pkg-out/hhd-ui.spec
       - name: Publish to COPR repo
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: git@github.com:hhd-dev/hhd-ui-copr.git
           BRANCH: main
-          FOLDER: pkg
+          FOLDER: ./pkg-out
           SSH_PRIVATE_KEY: ${{ secrets.COPR_SSH_PRIVATE_KEY }}
           MESSAGE: update to '${{ github.event.release.name }}'
           SKIP_EMPTY_COMMITS: true
