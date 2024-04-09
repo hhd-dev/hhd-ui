@@ -179,7 +179,12 @@ const slice = createSlice({
       if (state) store.state = state;
       updateNavigation(store);
     },
-
+    setSectionNames: (
+      store,
+      action: PayloadAction<{ [key: string]: string }>
+    ) => {
+      store.sectionNames = action.payload || {};
+    },
     goPrev: (store, action: PayloadAction<{ section: string } | undefined>) => {
       if (store.navigation.sel) {
         const { setting } = selectSelectedSetting({ hhd: store });

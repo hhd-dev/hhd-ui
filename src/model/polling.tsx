@@ -62,6 +62,16 @@ async function pollState(a: AbortController, reload: boolean) {
             signal: a.signal,
           })
         ).data;
+
+        // Refresh section names
+        const newSections = (
+          await fetchFn(url, token, "sections", {
+            signal: a.signal,
+          })
+        ).data;
+        if (newSections) {
+          store.dispatch(hhdSlice.actions.setSectionNames(newSections));
+        }
       }
 
       // Apply new state
