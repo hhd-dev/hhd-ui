@@ -601,7 +601,6 @@ export const selectDisabledTooltip = (state: RootState) => {
 
 export const selectCurrentTheme = (state: RootState) => {
   const theme = state.hhd.state?.hhd?.settings?.theme;
-  console.log(theme);
   if (theme && (theme as unknown as string) !== "default")
     return theme as unknown as string;
 
