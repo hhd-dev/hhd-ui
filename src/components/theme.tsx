@@ -65,6 +65,10 @@ const createTheme = (colors: any) => {
   return { theme, controllerTheme };
 };
 
+// Use the following to generate swatches
+// https://themera.vercel.app
+// https://smart-swatch.netlify.app
+
 export const { theme, controllerTheme } = createTheme({
   brand: {
     "50": "#E4BC1B",
@@ -95,6 +99,32 @@ export const { theme, controllerTheme } = createTheme({
 export default theme;
 
 export const distroThemes: Record<string, any> = {
+  vapor: createTheme({
+    brand: {
+      "50": "#E7F5FD",
+      "100": "#66c0f4",
+      "200": "#66c0f4",
+      "300": "#66c0f4",
+      "400": "#66c0f4",
+      "500": "#119DEE",
+      "600": "#0E7EBE",
+      "700": "#0A5E8F",
+      "800": "#073F5F",
+      "900": "#031F30",
+    },
+    gray: {
+      "50": "#F0F1F5",
+      "100": "#D5D9E2",
+      "200": "#BAC0CF",
+      "300": "#9FA8BC",
+      "400": "#2A2F3C",
+      "500": "#2A2F3C",
+      "600": "#171a21",
+      "700": "#171a21",
+      "800": "#171a21",
+      "900": "#171a21",
+    },
+  }),
   manjaro: createTheme({
     brand: {
       "50": "#35bf5c",
@@ -178,6 +208,9 @@ export const distroThemes: Record<string, any> = {
 export const getScrollbarStyle = (distro: string | null) => {
   let colors;
   switch (distro) {
+    case "vapor":
+      colors = "#66c0f4 #171a21";
+      break;
     case "manjaro":
       colors = "#438959 #19251d";
       break;
@@ -201,6 +234,19 @@ export const getScrollbarStyle = (distro: string | null) => {
 
 export const getBackground = (colorMode: string, theme: string | null) => {
   switch (theme) {
+    // Rotation is target color hue -50
+    case "vapor":
+      if (colorMode === "dark") {
+        return {
+          bgImage: BackgroundMonoDark,
+          filter: "sepia(1) saturate(0.7) hue-rotate(145deg)",
+        };
+      } else {
+        return {
+          bgImage: BackgroundMonoLight,
+          filter: "sepia(0.3) hue-rotate(145deg)",
+        };
+      }
     case "manjaro":
       if (colorMode === "dark") {
         return {
@@ -257,6 +303,15 @@ export const Logo = ({ height, width, qam }: any) => {
   const theme = useSelector(selectCurrentTheme);
 
   switch (theme) {
+    case "vapor":
+      return (
+        <Img
+          src={colorMode == "dark" ? MonoDark : MonoLight}
+          height={height}
+          filter="sepia(1) saturate(2.5) hue-rotate(145deg)"
+        />
+      );
+
     case "ocean":
       return (
         <Img
@@ -297,6 +352,10 @@ export const Logo = ({ height, width, qam }: any) => {
   }
 
   return (
-    <Img src={colorMode == "dark" ? LogoDark : LogoLight} height={height} width={width} />
+    <Img
+      src={colorMode == "dark" ? LogoDark : LogoLight}
+      height={height}
+      width={width}
+    />
   );
 };
