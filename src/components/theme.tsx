@@ -119,7 +119,7 @@ export const distroThemes: Record<string, any> = {
       "300": "#9FA8BC",
       "400": "#2A2F3C",
       "500": "#2A2F3C",
-      "600": "#171a21",
+      "600": "#2A2F3C",
       "700": "#171a21",
       "800": "#171a21",
       "900": "#171a21",
@@ -239,7 +239,7 @@ export const getBackground = (colorMode: string, theme: string | null) => {
       if (colorMode === "dark") {
         return {
           bgImage: BackgroundMonoDark,
-          filter: "sepia(1) saturate(0.7) hue-rotate(145deg)",
+          filter: "sepia(1) saturate(0.4) hue-rotate(155deg)",
         };
       } else {
         return {
