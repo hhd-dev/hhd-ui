@@ -18,7 +18,7 @@ import { FC } from "react";
 import { useDisabledTooltip, useSettingState } from "../../model/hooks";
 import { useElementNav } from "../../model/hooks";
 import { NumberSetting, SettingProps } from "../../model/common";
-import { getFocusStyle } from "./utils";
+import { getCssColor, getFocusStyle, getHsvStyle } from "./utils";
 
 const NumberComponent: FC<SettingProps> = ({
   settings: set,
@@ -37,6 +37,57 @@ const NumberComponent: FC<SettingProps> = ({
   );
   const { colorMode } = useColorMode();
   const isDisabled = useDisabledTooltip();
+  const { state: hsv } = useSettingState<{
+    hue: number;
+    saturation: number;
+    brightness: number;
+  }>(path.substring(0, path.lastIndexOf(".")));
+
+  let colorParams = {};
+  let hasFill = true;
+  let colorParamsFill = {};
+  console.log(hsv);
+  if (tags?.includes("rgb")) {
+    if (tags?.includes("hue")) {
+      hasFill = false;
+      colorParams = {
+        background: `linear-gradient(to right in hsl longer hue,${getCssColor({
+          hue: 0,
+          saturation: hsv?.saturation || 0,
+          brightness: hsv?.brightness || 0,
+        })} 0 0)`,
+      };
+    } else if (tags?.includes("saturation")) {
+      hasFill = false;
+      colorParams = {
+        background: `linear-gradient(to right,${getCssColor({
+          hue: hsv?.hue || 0,
+          saturation: 0,
+          brightness: hsv?.brightness || 0,
+        })} 0 0,${getCssColor({
+          hue: hsv?.hue || 0,
+          saturation: 100,
+          brightness: hsv?.brightness || 0,
+        })} 100% 100%)`,
+      };
+      console.log(colorParams);
+    } else if (tags?.includes("brightness") && hsv?.hue !== undefined) {
+      hasFill = false;
+      colorParams = {
+        background: `linear-gradient(to right,${getCssColor({
+          hue: hsv?.hue || 0,
+          saturation: hsv?.saturation !== undefined ? hsv?.saturation : 70,
+          brightness: 15,
+        })} 0 0,${getCssColor({
+          hue: hsv?.hue || 0,
+          saturation: hsv?.saturation || 0,
+          brightness: 100,
+        })} 100% 100%)`,
+      };
+    } else {
+      if (hsv) colorParamsFill = getHsvStyle(hsv);
+    }
+  }
 
   if (tags?.includes("dropdown")) {
     return (
@@ -92,9 +143,15 @@ const NumberComponent: FC<SettingProps> = ({
           value={state}
           focusThumbOnChange={false}
           ref={ref}
+          {...colorParams}
         >
-          <SliderTrack>
-            <SliderFilledTrack transition="all 0.2s ease" />
+          <SliderTrack {...colorParams}>
+            {hasFill && (
+              <SliderFilledTrack
+                transition="all 0.2s ease"
+                {...colorParamsFill}
+              />
+            )}
           </SliderTrack>
           <SliderThumb
             transition="all 0.2s ease"
@@ -136,8 +193,13 @@ const NumberComponent: FC<SettingProps> = ({
         ref={ref}
         onFocus={setFocus}
       >
-        <SliderTrack>
-          <SliderFilledTrack transition="all 0.2s ease" />
+        <SliderTrack {...colorParams}>
+          {hasFill && (
+            <SliderFilledTrack
+              transition="all 0.2s ease"
+              {...colorParamsFill}
+            />
+          )}
         </SliderTrack>
         <SliderThumb
           transition="all 0.2s ease"

@@ -24,7 +24,12 @@ import {
 } from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
-import { getFocusStyle } from "./utils";
+import {
+  getFocusStyle,
+  getHsvStyle,
+  getRainbowStyle,
+  getSpiralStyle,
+} from "./utils";
 
 const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { state, setState } = useSettingState<string>(`${path}.mode`);
@@ -36,6 +41,20 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
 
   const mode = state ? set.modes[state] : null;
 
+  let colorParams = {};
+  const childTags = state ? set.modes[state].tags : [];
+  const { state: hsv } = useSettingState<{
+    hue: number;
+    saturation: number;
+    brightness: number;
+  }>(`${path}.${state}`);
+  if (childTags.includes("rgb")) {
+    if (hsv) colorParams = getHsvStyle(hsv);
+  } else if (childTags.includes("rainbow")) {
+    colorParams = getRainbowStyle();
+  } else if (childTags.includes("spiral")) {
+    colorParams = getSpiralStyle();
+  }
   return (
     <>
       <Box {...getFocusStyle(focus, colorMode)}>
@@ -51,6 +70,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
               onFocus={setFocus}
               rightIcon={<ChevronDownIcon />}
               marginBottom="0.3rem"
+              {...colorParams}
             >
               {mode?.title}
             </MenuButton>
