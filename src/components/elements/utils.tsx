@@ -1,3 +1,5 @@
+import { background, getCss } from "@chakra-ui/react";
+
 export const getFocusStyle = (f: boolean, mode: string) =>
   f
     ? {
@@ -92,6 +94,77 @@ export const getHsvStyle = ({
     params.color = "black";
   } else {
     params.color = "white";
+    params.textShadow = "0 0 8px #111111";
+  }
+  return params;
+};
+
+export const getPulseGrad = (
+  {
+    hue,
+    saturation,
+    brightness,
+  }: {
+    hue: number;
+    saturation: number;
+    brightness: number;
+  },
+  disabled: boolean
+) => {
+  let con, coff;
+  if (disabled) {
+    con = getCssColor({
+      hue,
+      saturation: saturation + 15,
+      brightness: brightness - 20,
+    });
+    coff = getCssColor({ hue, saturation, brightness: 16 });
+  } else {
+    con = getCssColor({ hue, saturation, brightness });
+    coff = getCssColor({ hue, saturation, brightness: 25 });
+  }
+  return `linear-gradient(120deg, ${con} 10%, ${coff} 16% 26%, ${con} 32% 62%, ${coff} 68% 78%, ${con} 84% 100%)`;
+};
+
+export const getPulseStyle = ({
+  hue,
+  saturation,
+  brightness,
+}: {
+  hue: number;
+  saturation: number;
+  brightness: number;
+}) => {
+  if (hue >= 360) {
+    hue = 359;
+  }
+  const params: any = {
+    background: getPulseGrad({ hue, saturation, brightness }, false),
+    border: `4px solid ${getCssColor({ hue, saturation, brightness })}`,
+    _hover: {},
+    _active: {
+      background: getPulseGrad(
+        {
+          hue,
+          saturation,
+          brightness,
+        },
+        true
+      ),
+      transition: "all 0.5s ease",
+      border: `4px solid ${getCssColor({
+        hue,
+        saturation: saturation + 15,
+        brightness: brightness - 20,
+      })}`,
+    },
+    _focus: {},
+  };
+  if ((brightness > 70 && saturation < 30) || brightness > 50) {
+    params.color = "black";
+  } else {
+    params.color = "white";
+    params.textShadow = "0 0 8px #111111";
   }
   return params;
 };
@@ -119,5 +192,14 @@ export const getSpiralStyle = () => ({
   textShadow: "0 0 8px #111111",
   _hover: {},
   _active: { ...spinGrad(40), transition: "all 0.5s ease" },
+  _focus: {},
+});
+
+export const getDisabledStyle = () => ({
+  color: "#ffffff",
+  background: "#434343",
+  textShadow: "0 0 8px #111111",
+  _hover: {},
+  _active: { background: "#535353" },
   _focus: {},
 });

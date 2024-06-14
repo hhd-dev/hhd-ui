@@ -25,8 +25,10 @@ import {
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
 import {
+  getDisabledStyle,
   getFocusStyle,
   getHsvStyle,
+  getPulseStyle,
   getRainbowStyle,
   getSpiralStyle,
 } from "./utils";
@@ -49,7 +51,12 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
     brightness: number;
   }>(`${path}.${state}`);
   if (childTags.includes("rgb")) {
-    if (hsv) colorParams = getHsvStyle(hsv);
+    if (childTags.includes("disabled")) colorParams = getDisabledStyle();
+    else if (childTags.includes("pulse")) {
+      if (hsv) colorParams = getPulseStyle(hsv);
+    } else {
+      if (hsv) colorParams = getHsvStyle(hsv);
+    }
   } else if (childTags.includes("rainbow")) {
     colorParams = getRainbowStyle();
   } else if (childTags.includes("spiral")) {
