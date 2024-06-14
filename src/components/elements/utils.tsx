@@ -1,5 +1,3 @@
-import { background, getCss } from "@chakra-ui/react";
-
 export const getFocusStyle = (f: boolean, mode: string) =>
   f
     ? {
