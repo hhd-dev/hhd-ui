@@ -1,10 +1,11 @@
-import { useColorMode, Img } from "@chakra-ui/react";
+import { Img, useColorMode } from "@chakra-ui/react";
 
-import lb from "../assets/controller/xbox/xbox_lb.svg";
-import rb from "../assets/controller/xbox/xbox_rb.svg";
-import y from "../assets/controller/sd/steamdeck_button_y_outline.svg";
+import a from "../assets/controller/sd/steamdeck_button_a_outline.svg";
 import b from "../assets/controller/sd/steamdeck_button_b_outline.svg";
 import x from "../assets/controller/sd/steamdeck_button_x.svg";
+import y from "../assets/controller/sd/steamdeck_button_y_outline.svg";
+import lb from "../assets/controller/xbox/xbox_lb.svg";
+import rb from "../assets/controller/xbox/xbox_rb.svg";
 
 export const ControllerButton = ({ button, invert, ...props }: any) => {
   let logo = null;
@@ -23,6 +24,9 @@ export const ControllerButton = ({ button, invert, ...props }: any) => {
       break;
     case "b":
       logo = b;
+      break;
+    case "a":
+      logo = a;
       break;
     case "x":
       logo = x;

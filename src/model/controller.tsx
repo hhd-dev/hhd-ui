@@ -75,13 +75,20 @@ const goIn = (s: typeof store) => {
       );
       break;
     case "action":
-      s.dispatch(
-        updateSettingValue({
-          cred: { token, endpoint: url },
-          path,
-          value: true,
-        })
-      );
+      if (setting.tags?.includes("verify") && !isSel) {
+        console.log("selecting");
+        s.dispatch(hhdSlice.actions.select());
+      } else {
+        console.log("applying");
+        s.dispatch(hhdSlice.actions.unselect());
+        s.dispatch(
+          updateSettingValue({
+            cred: { token, endpoint: url },
+            path,
+            value: true,
+          })
+        );
+      }
       break;
     case "mode":
       if (isSel) {

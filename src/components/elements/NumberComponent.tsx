@@ -46,7 +46,6 @@ const NumberComponent: FC<SettingProps> = ({
   let colorParams = {};
   let hasFill = true;
   let colorParamsFill = {};
-  console.log(hsv);
   if (tags?.includes("rgb")) {
     if (tags?.includes("hue")) {
       hasFill = false;
@@ -70,7 +69,6 @@ const NumberComponent: FC<SettingProps> = ({
           brightness: hsv?.brightness || 0,
         })} 100% 100%)`,
       };
-      console.log(colorParams);
     } else if (tags?.includes("brightness") && hsv?.hue !== undefined) {
       hasFill = false;
       colorParams = {

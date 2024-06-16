@@ -41,12 +41,21 @@ export function EditModal() {
   >(path || "");
 
   if (!path || !setting) return <></>;
-  if (!["mode", "multiple", "discrete"].includes(setting.type)) return <></>;
+  if (!["mode", "multiple", "discrete", "action"].includes(setting.type))
+    return <></>;
+  const verify = setting.type === "action";
 
   const click = (val: string) => {
     if (val !== String(state)) {
       setState(setting.type === "discrete" ? Number(val) : val);
     }
+    dispatch(slice.actions.unselect());
+  };
+  const apply = () => {
+    setState(true);
+    dispatch(slice.actions.unselect());
+  };
+  const cancel = () => {
     dispatch(slice.actions.unselect());
   };
   let colorParams = {};
@@ -91,23 +100,60 @@ export function EditModal() {
         </ModalHeader>
 
         <ModalBody textAlign="justify">
-          <Flex direction="column" marginBottom="1rem">
-            {Object.entries(getSettingChoices(setting)).map(([val, name]) => (
+          {verify ? (
+            <Flex direction="row" marginBottom="1rem" justifyContent="center">
               <Button
-                key={val}
                 margin="0.6rem"
+                w="8rem"
                 padding="1.5rem 0"
-                colorScheme={val === sel ? "brand" : "gray"}
-                rightIcon={String(state) === val ? <CheckIcon /> : undefined}
+                colorScheme={"brand"}
                 transition="all 0.2s ease"
-                onClick={() => click(val)}
-                {...getButtonStyle(val)}
-                {...(val === sel ? { transform: "scale(1.06)" } : {})}
+                onClick={apply}
               >
-                {String(name)}
+                <CheckIcon />
+                <ControllerButton
+                  h="2rem"
+                  button="a"
+                  marginLeft="1rem"
+                  invert
+                />
               </Button>
-            ))}
-          </Flex>
+              <Button
+                margin="0.6rem"
+                w="8rem"
+                padding="1.5rem 0"
+                colorScheme={"brand"}
+                transition="all 0.2s ease"
+                onClick={cancel}
+              >
+                <CloseIcon />
+                <ControllerButton
+                  h="2rem"
+                  button="b"
+                  marginLeft="1rem"
+                  invert
+                />
+              </Button>
+            </Flex>
+          ) : (
+            <Flex direction="column" marginBottom="1rem">
+              {Object.entries(getSettingChoices(setting)).map(([val, name]) => (
+                <Button
+                  key={val}
+                  margin="0.6rem"
+                  padding="1.5rem 0"
+                  colorScheme={val === sel ? "brand" : "gray"}
+                  rightIcon={String(state) === val ? <CheckIcon /> : undefined}
+                  transition="all 0.2s ease"
+                  onClick={() => click(val)}
+                  {...getButtonStyle(val)}
+                  {...(val === sel ? { transform: "scale(1.06)" } : {})}
+                >
+                  {String(name)}
+                </Button>
+              ))}
+            </Flex>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>
