@@ -4,6 +4,7 @@ import hhdSlice, {
   selectAppType,
   selectFocusedPath,
   selectFocusedSetting,
+  selectHasSelection,
   selectIsOpen,
   selectIsSelected,
   selectSelectedChoice,
@@ -187,6 +188,10 @@ export const handleGamepadCommands = (evs: string[]) => {
         goIn(store);
         break;
       case "b":
+        if (!selectHasSelection(store.getState())) {
+          const updateStatus = window.electronUtilsRender?.updateStatus;
+          if (updateStatus) updateStatus("minimize");
+        }
         store.dispatch(hhdSlice.actions.unselect());
         break;
       case "y":

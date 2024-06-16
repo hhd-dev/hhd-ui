@@ -549,6 +549,10 @@ export const selectIsOpen = (state: RootState) => {
   );
 };
 
+export const selectHasSelection = (state: RootState) => {
+  return state.hhd.navigation.sel;
+};
+
 export const selectFocusedPath = (state: RootState) => {
   let section;
   if (state.hhd.uiType === "qam" && state.hhd.appType === "overlay") {

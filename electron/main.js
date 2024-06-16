@@ -141,11 +141,28 @@ const createMainWindow = async () => {
   mainWindow.show();
 
   // Handle Overlay Communication
-  if (!isOverlayUi) return;
-
+  // after this point. In case of no overlay, allow hiding and showing.
   const rl = readline.createInterface({
     input: process.stdin,
   });
+  if (!isOverlayUi) {
+    rl.on("line", (line) => {
+      if (!line.startsWith("cmd:toggle-visibility")) return;
+      if (mainWindow.isMinimized() || !mainWindow.isFocused()) {
+        mainWindow.restore();
+        mainWindow.focus();
+      } else {
+        console.error("Minimizing window.");
+        mainWindow.minimize();
+      }
+    });
+    ipcMain.on("update-status", (_, stat) => {
+      if (stat === "minimize") {
+        mainWindow.minimize();
+      }
+    });
+    return;
+  }
 
   let currentType = "closed";
   let qam_preopened = false;
