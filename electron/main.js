@@ -147,10 +147,12 @@ const createMainWindow = async () => {
     const rl = readline.createInterface({
       input: process.stdin,
     });
+    let maximizedTime = 0;
     rl.on("line", (line) => {
       if (!line.startsWith("cmd:toggle-visibility")) return;
       if (mainWindow.isMinimized()) {
         console.error("Restoring window.");
+        maximizedTime = Date.now();
         mainWindow.restore();
         mainWindow.focus();
       } else if (!mainWindow.isFocused()) {
@@ -163,6 +165,10 @@ const createMainWindow = async () => {
     });
     ipcMain.on("update-status", (_, stat) => {
       if (stat === "minimize") {
+        if (Date.now() - maximizedTime < 150) {
+          console.error("Ignoring spurious B minimize event.");
+          return;
+        }
         console.error("Minimizing window after B press.");
         mainWindow.minimize();
       }
