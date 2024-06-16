@@ -2,6 +2,8 @@ import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Center,
+  Divider,
   Flex,
   Modal,
   ModalBody,
@@ -101,39 +103,51 @@ export function EditModal() {
 
         <ModalBody textAlign="justify">
           {verify ? (
-            <Flex direction="row" marginBottom="1rem" justifyContent="center">
-              <Button
-                margin="0.6rem"
-                w="8rem"
-                padding="1.5rem 0"
-                colorScheme={"brand"}
-                transition="all 0.2s ease"
-                onClick={apply}
-              >
-                <CheckIcon />
-                <ControllerButton
-                  h="2rem"
-                  button="a"
-                  marginLeft="1rem"
-                  invert
-                />
-              </Button>
-              <Button
-                margin="0.6rem"
-                w="8rem"
-                padding="1.5rem 0"
-                colorScheme={"brand"}
-                transition="all 0.2s ease"
-                onClick={cancel}
-              >
-                <CloseIcon />
-                <ControllerButton
-                  h="2rem"
-                  button="b"
-                  marginLeft="1rem"
-                  invert
-                />
-              </Button>
+            <Flex direction="column">
+              <Flex direction="row" margin="1rem">
+                <Center>
+                  <Divider
+                    orientation="vertical"
+                    marginRight="0.75rem"
+                    alignSelf="stretch"
+                  ></Divider>
+                </Center>
+                <Box>{setting.hint}</Box>
+              </Flex>
+              <Flex direction="row" marginBottom="1rem" justifyContent="center">
+                <Button
+                  margin="0.6rem"
+                  w="8rem"
+                  padding="1.5rem 0"
+                  colorScheme={"brand"}
+                  transition="all 0.2s ease"
+                  onClick={apply}
+                >
+                  <CheckIcon />
+                  <ControllerButton
+                    h="2rem"
+                    button="a"
+                    marginLeft="1rem"
+                    invert
+                  />
+                </Button>
+                <Button
+                  margin="0.6rem"
+                  w="8rem"
+                  padding="1.5rem 0"
+                  colorScheme={"brand"}
+                  transition="all 0.2s ease"
+                  onClick={cancel}
+                >
+                  <CloseIcon />
+                  <ControllerButton
+                    h="2rem"
+                    button="b"
+                    marginLeft="1rem"
+                    invert
+                  />
+                </Button>
+              </Flex>
             </Flex>
           ) : (
             <Flex direction="column" marginBottom="1rem">
