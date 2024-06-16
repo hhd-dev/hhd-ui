@@ -76,10 +76,8 @@ const goIn = (s: typeof store) => {
       break;
     case "action":
       if (setting.tags?.includes("verify") && !isSel) {
-        console.log("selecting");
         s.dispatch(hhdSlice.actions.select());
       } else {
-        console.log("applying");
         s.dispatch(hhdSlice.actions.unselect());
         s.dispatch(
           updateSettingValue({
@@ -92,7 +90,6 @@ const goIn = (s: typeof store) => {
       break;
     case "mode":
       if (isSel) {
-        console.log(path);
         if (curr !== selChoice)
           s.dispatch(
             updateSettingValue({
@@ -109,7 +106,6 @@ const goIn = (s: typeof store) => {
     case "multiple":
     case "discrete":
       if (isSel) {
-        console.log(path);
         if (curr !== selChoice)
           s.dispatch(
             updateSettingValue({
@@ -205,7 +201,6 @@ export const handleGamepadCommands = (evs: string[]) => {
         store.dispatch(hhdSlice.actions.toggleUiType());
         break;
     }
-    console.log(ev);
   }
 };
 
