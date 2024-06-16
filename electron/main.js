@@ -9,6 +9,7 @@ const readline = require("readline");
 const calculateWindowZoom = () => {
   const isSteamUi = process.env.SteamGamepadUI;
   const isOverlayUi = process.env.STEAM_OVERLAY;
+  const isManagedUi = process.env.HHD_MANAGED;
   const useNativeRes = !process.env.HHDUI_SUBSAMPLE;
 
   // Get scale factor for steamui
@@ -53,11 +54,11 @@ const calculateWindowZoom = () => {
     scaleFactor = 1.0;
   }
 
-  return { width, height, scaleFactor, isSteamUi, isOverlayUi };
+  return { width, height, scaleFactor, isSteamUi, isOverlayUi, isManagedUi };
 };
 
 const createMainWindow = async () => {
-  let { width, height, scaleFactor, isSteamUi, isOverlayUi } =
+  let { width, height, scaleFactor, isSteamUi, isOverlayUi, isManagedUi } =
     calculateWindowZoom();
 
   let mainWindow = new BrowserWindow({
@@ -142,14 +143,14 @@ const createMainWindow = async () => {
 
   // Handle Overlay Communication
   // after this point. In case of no overlay, allow hiding and showing.
-  const rl = readline.createInterface({
-    input: process.stdin,
-  });
-  if (!isOverlayUi) {
+  if (isManagedUi) {
+    const rl = readline.createInterface({
+      input: process.stdin,
+    });
     rl.on("line", (line) => {
       if (!line.startsWith("cmd:toggle-visibility")) return;
-        console.error("Restoring window.");
       if (mainWindow.isMinimized()) {
+        console.error("Restoring window.");
         mainWindow.restore();
         mainWindow.focus();
       } else if (!mainWindow.isFocused()) {
@@ -162,9 +163,13 @@ const createMainWindow = async () => {
     });
     ipcMain.on("update-status", (_, stat) => {
       if (stat === "minimize") {
+        console.error("Minimizing window after B press.");
         mainWindow.minimize();
       }
     });
+    return;
+  }
+  if (!isOverlayUi) {
     return;
   }
 
@@ -177,6 +182,9 @@ const createMainWindow = async () => {
   };
 
   // Inform hhd of the new status
+  const rl = readline.createInterface({
+    input: process.stdin,
+  });
   ipcMain.on("update-status", (_, stat) => {
     currentType = stat;
     const should_grab = stat !== "closed";
