@@ -267,7 +267,6 @@ const createMainWindow = async () => {
   };
 
   const processAction = (action) => {
-    console.error(action);
     const cmd = `window.electronUtils.sendGamepadEvent("${encodeURI(
       action
     )}");`;
