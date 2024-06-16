@@ -148,8 +148,12 @@ const createMainWindow = async () => {
   if (!isOverlayUi) {
     rl.on("line", (line) => {
       if (!line.startsWith("cmd:toggle-visibility")) return;
-      if (mainWindow.isMinimized() || !mainWindow.isFocused()) {
+        console.error("Restoring window.");
+      if (mainWindow.isMinimized()) {
         mainWindow.restore();
+        mainWindow.focus();
+      } else if (!mainWindow.isFocused()) {
+        console.error("Focusing window.");
         mainWindow.focus();
       } else {
         console.error("Minimizing window.");
