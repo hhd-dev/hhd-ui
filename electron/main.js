@@ -275,7 +275,6 @@ const createMainWindow = async () => {
 
   // Receive open and close commands
   rl.on("line", (line) => {
-    console.error(line);
     if (line.startsWith("cmd:")) processCmd(line.trim().substring(4));
     else if (line.startsWith("action:"))
       processAction(line.trim().substring(7));
