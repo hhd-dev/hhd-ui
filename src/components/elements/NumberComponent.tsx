@@ -43,11 +43,25 @@ const NumberComponent: FC<SettingProps> = ({
     brightness: number;
   }>(path.substring(0, path.lastIndexOf(".")));
 
+  let thumbStyle = {};
+  if (sel) {
+    thumbStyle = {
+      bg:
+        getCssColor({
+          hue: hsv?.hue || 0,
+          saturation: 100,
+          brightness: Math.max(hsv?.brightness || 30, 30),
+        }) || "brand.300",
+    };
+  } else if (colorMode === "light") {
+    thumbStyle = { bg: "gray.100" };
+  }
+
   let colorParams = {};
   let hasFill = true;
   let colorParamsFill = {};
   if (tags?.includes("rgb")) {
-    if (tags?.includes("hue")) {
+    if (tags?.includes("hue") || tags?.includes("hue2")) {
       hasFill = false;
       colorParams = {
         background: `linear-gradient(to right in hsl longer hue,${getCssColor({
@@ -151,10 +165,7 @@ const NumberComponent: FC<SettingProps> = ({
               />
             )}
           </SliderTrack>
-          <SliderThumb
-            transition="all 0.2s ease"
-            {...(sel && { bg: "brand.300" })}
-          />
+          <SliderThumb transition="all 0.2s ease" {...thumbStyle} />
         </Slider>
         {state && (
           <FormLabel minW="2.7rem" textAlign="end" margin="0 0 0 0.3rem">
@@ -199,10 +210,7 @@ const NumberComponent: FC<SettingProps> = ({
             />
           )}
         </SliderTrack>
-        <SliderThumb
-          transition="all 0.2s ease"
-          {...(sel && { bg: "brand.300" })}
-        />
+        <SliderThumb transition="all 0.2s ease" {...thumbStyle} />
       </Slider>
     </Box>
   );

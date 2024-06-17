@@ -28,7 +28,7 @@ import {
   useSettingState,
 } from "../../model/hooks";
 import NumberComponent from "./NumberComponent";
-import { getFocusStyle } from "./utils";
+import { getButtonStyleNested, getFocusStyle } from "./utils";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   const { title, hint } = set as BoolSetting;
@@ -90,7 +90,7 @@ const DiscreteComponent: FC<SettingProps> = ({
         >
           {state}
         </MenuButton>
-        <MenuList>
+        <MenuList zIndex={100}>
           <MenuOptionGroup type="radio" value={String(state)}>
             {options.map((value) => {
               return (
@@ -123,6 +123,12 @@ const MultipleComponent: FC<SettingProps> = ({
   );
   const { colorMode } = useColorMode();
 
+  const { state: hsv } = useSettingState<{
+    hue: number;
+    saturation: number;
+    brightness: number;
+  }>(path.substring(0, path.lastIndexOf(".")));
+
   return (
     <Flex
       flexDirection="column"
@@ -137,10 +143,11 @@ const MultipleComponent: FC<SettingProps> = ({
           ref={ref}
           onFocus={setFocus}
           marginBottom="0.35rem"
+          {...getButtonStyleNested(set.tags, hsv)}
         >
           {state && options[state]}
         </MenuButton>
-        <MenuList>
+        <MenuList zIndex={100}>
           <MenuOptionGroup type="radio" value={state}>
             {Object.entries(options).map(([value, label]) => {
               return (

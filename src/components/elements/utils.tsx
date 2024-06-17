@@ -1,3 +1,4 @@
+
 export const getFocusStyle = (f: boolean, mode: string) =>
   f
     ? {
@@ -76,6 +77,7 @@ export const getHsvStyle = ({
     hue = 359;
   }
   const params: any = {
+    transition: "all 0.5s ease",
     backgroundColor: getCssColor({ hue, saturation, brightness }),
     _hover: {},
     _active: {
@@ -90,6 +92,59 @@ export const getHsvStyle = ({
   };
   if ((brightness > 70 && saturation < 30) || brightness > 50) {
     params.color = "black";
+    params.textShadow = "0 0 8px #aaaaaa";
+  } else {
+    params.color = "white";
+    params.textShadow = "0 0 8px #111111";
+  }
+  return params;
+};
+
+export const getDualStyle = ({
+  hue,
+  hue2,
+  saturation,
+  brightness,
+}: {
+  hue: number;
+  hue2: number | undefined;
+  saturation: number;
+  brightness: number;
+}) => {
+  if (hue >= 360) {
+    hue = 359;
+  }
+
+  const h2 = typeof hue2 !== "undefined" ? hue2 : hue;
+  const params: any = {
+    transition: "all 0.5s ease",
+    background: `linear-gradient(120deg, ${getCssColor({
+      hue,
+      saturation,
+      brightness,
+    })} 30%, ${getCssColor({
+      hue: h2,
+      saturation,
+      brightness,
+    })} 70% 100%)`,
+    _hover: {},
+    _active: {
+      background: `linear-gradient(120deg, ${getCssColor({
+        hue,
+        saturation: saturation + 15,
+        brightness: brightness - 20,
+      })} 32%, ${getCssColor({
+        hue: h2,
+        saturation: saturation + 15,
+        brightness: brightness - 20,
+      })} 68% 100%)`,
+      transition: "all 0.5s ease",
+    },
+    _focus: {},
+  };
+  if ((brightness > 70 && saturation < 30) || brightness > 50) {
+    params.color = "black";
+    params.textShadow = "0 0 8px #aaaaaa";
   } else {
     params.color = "white";
     params.textShadow = "0 0 8px #111111";
@@ -139,6 +194,7 @@ export const getPulseStyle = ({
   const params: any = {
     background: getPulseGrad({ hue, saturation, brightness }, false),
     border: `4px solid ${getCssColor({ hue, saturation, brightness })}`,
+    transition: "all 0.5s ease",
     _hover: {},
     _active: {
       background: getPulseGrad(
@@ -149,7 +205,6 @@ export const getPulseStyle = ({
         },
         true
       ),
-      transition: "all 0.5s ease",
       border: `4px solid ${getCssColor({
         hue,
         saturation: saturation + 15,
@@ -160,6 +215,7 @@ export const getPulseStyle = ({
   };
   if ((brightness > 70 && saturation < 30) || brightness > 50) {
     params.color = "black";
+    params.textShadow = "0 0 8px #aaaaaa";
   } else {
     params.color = "white";
     params.textShadow = "0 0 8px #111111";
@@ -175,8 +231,9 @@ export const getRainbowStyle = () => ({
   ...linGrad(45),
   color: "#ffffff",
   textShadow: "0 0 8px #111111",
+  transition: "all 0.5s ease",
   _hover: {},
-  _active: { ...linGrad(40), transition: "all 0.5s ease" },
+  _active: { ...linGrad(40) },
   _focus: {},
 });
 
@@ -188,8 +245,9 @@ export const getSpiralStyle = () => ({
   ...spinGrad(45),
   color: "#ffffff",
   textShadow: "0 0 8px #111111",
+  transition: "all 0.5s ease",
   _hover: {},
-  _active: { ...spinGrad(40), transition: "all 0.5s ease" },
+  _active: { ...spinGrad(40) },
   _focus: {},
 });
 
@@ -201,3 +259,26 @@ export const getDisabledStyle = () => ({
   _active: { background: "#535353" },
   _focus: {},
 });
+
+export const getButtonStyle = (childTags: any, hsv: any) => {
+  if (childTags.includes("rgb")) {
+    if (childTags.includes("disabled")) return getDisabledStyle();
+    else if (childTags.includes("pulse")) {
+      if (hsv) return getPulseStyle(hsv);
+    } else if (childTags.includes("duality")) {
+      if (hsv) return getDualStyle(hsv);
+    } else {
+      if (hsv) return getHsvStyle(hsv);
+    }
+  } else if (childTags.includes("rainbow")) {
+    return getRainbowStyle();
+  } else if (childTags.includes("spiral")) {
+    return getSpiralStyle();
+  }
+  return {};
+};
+
+export const getButtonStyleNested = (childTags: any, hsv: any) => {
+  if (hsv && childTags.includes("rgb")) return getHsvStyle(hsv);
+  return {};
+};

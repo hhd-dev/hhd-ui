@@ -15,7 +15,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { ModeProps } from "../../model/common";
+import { ModeProps, ModeSetting } from "../../model/common";
 import {
   useDisabledTooltip,
   useElementNav,
@@ -24,14 +24,7 @@ import {
 } from "../../model/hooks";
 import ErrorBoundary from "../ErrorBoundary";
 import SettingComponent from "./SettingComponent";
-import {
-  getDisabledStyle,
-  getFocusStyle,
-  getHsvStyle,
-  getPulseStyle,
-  getRainbowStyle,
-  getSpiralStyle,
-} from "./utils";
+import { getButtonStyle, getFocusStyle } from "./utils";
 
 const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { state, setState } = useSettingState<string>(`${path}.mode`);
@@ -40,28 +33,21 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
   const { ref, focus, setFocus } = useElementNav(section, path);
   const { colorMode } = useColorMode();
   const isDisabled = useDisabledTooltip();
+  // const dispatch = useDispatch();
 
   const mode = state ? set.modes[state] : null;
 
-  let colorParams = {};
-  const childTags = state ? set.modes[state].tags : [];
-  const { state: hsv } = useSettingState<{
-    hue: number;
-    saturation: number;
-    brightness: number;
-  }>(`${path}.${state}`);
-  if (childTags.includes("rgb")) {
-    if (childTags.includes("disabled")) colorParams = getDisabledStyle();
-    else if (childTags.includes("pulse")) {
-      if (hsv) colorParams = getPulseStyle(hsv);
-    } else {
-      if (hsv) colorParams = getHsvStyle(hsv);
-    }
-  } else if (childTags.includes("rainbow")) {
-    colorParams = getRainbowStyle();
-  } else if (childTags.includes("spiral")) {
-    colorParams = getSpiralStyle();
-  }
+  const { state: colorState } = useSettingState<
+    Record<
+      string,
+      {
+        hue: number;
+        hue2: number | undefined;
+        saturation: number;
+        brightness: number;
+      }
+    >
+  >(path || "");
   return (
     <>
       <Box {...getFocusStyle(focus, colorMode)}>
@@ -77,20 +63,48 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
               onFocus={setFocus}
               rightIcon={<ChevronDownIcon />}
               marginBottom="0.3rem"
-              {...colorParams}
+              // onClick={() => dispatch(dispatch(slice.actions.select()))}
+              {...getButtonStyle(
+                state ? (set as ModeSetting).modes[state]?.tags : undefined,
+                colorState && state ? colorState[state] : undefined
+              )}
             >
               {mode?.title}
             </MenuButton>
           </Tooltip>
-          <MenuList>
+          <MenuList zIndex={100}>
             <MenuOptionGroup type="radio" value={state}>
               {Object.entries(modes).map(
                 ([value, { title: label }], idx: number) => {
+                  const btnStyle = getButtonStyle(
+                    value ? (set as ModeSetting).modes[value]?.tags : undefined,
+                    colorState ? colorState[value] : undefined
+                  );
+                  let extraStyles = {};
+
+                  if (btnStyle)
+                    extraStyles = {
+                      // textAlign: "center",
+                      paddingLeft: "3.3rem",
+                      borderRadius: "8px",
+                      width: "calc(100% - 0.45rem - 4px)",
+                      margin: "0.45rem 0.25rem 0 0.35rem",
+                      marginBottom: "0",
+                    };
+                  if (idx == 0) {
+                    extraStyles = {
+                      ...extraStyles,
+                      marginTop: "0rem",
+                    };
+                  }
+
                   return (
                     <MenuItemOption
                       key={idx}
                       value={value}
                       onClick={() => setState(value)}
+                      {...btnStyle}
+                      {...extraStyles}
                     >
                       {label}
                     </MenuItemOption>

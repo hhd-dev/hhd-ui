@@ -16,13 +16,7 @@ import { ModeSetting, getSettingChoices } from "../../model/common";
 import { useSelectedSetting, useSettingState } from "../../model/hooks";
 import slice, { selectSelectedChoice } from "../../model/slice";
 import { ControllerButton } from "../Controller";
-import {
-  getDisabledStyle,
-  getHsvStyle,
-  getPulseStyle,
-  getRainbowStyle,
-  getSpiralStyle,
-} from "./utils";
+import { getButtonStyle } from "./utils";
 
 export function EditModal() {
   const { path, setting } = useSelectedSetting();
@@ -36,6 +30,7 @@ export function EditModal() {
       string,
       {
         hue: number;
+        hue2: number | undefined;
         saturation: number;
         brightness: number;
       }
@@ -60,27 +55,6 @@ export function EditModal() {
   const cancel = () => {
     dispatch(slice.actions.unselect());
   };
-  let colorParams = {};
-
-  const getButtonStyle = (val: string) => {
-    if (setting.type !== "mode" || !colorState) return {};
-    const childTags = (setting as ModeSetting).modes[val]?.tags || [];
-    const hsv = colorState[val];
-    if (childTags.includes("rgb")) {
-      if (childTags.includes("disabled")) colorParams = getDisabledStyle();
-      else if (childTags.includes("pulse")) {
-        if (hsv) return getPulseStyle(hsv);
-      } else {
-        if (hsv) return getHsvStyle(hsv);
-      }
-    } else if (childTags.includes("rainbow")) {
-      return getRainbowStyle();
-    } else if (childTags.includes("spiral")) {
-      return getSpiralStyle();
-    }
-    return {};
-  };
-
   return (
     <Modal
       isOpen={true}
@@ -96,8 +70,14 @@ export function EditModal() {
             <Box alignSelf="center" textAlign="center" flexGrow="1">
               {setting.title}
             </Box>
-            <CloseIcon h="2rem" w="1rem" marginRight=".5rem"></CloseIcon>
-            <ControllerButton h="2rem" button="b" marginRight="-0.5rem" />
+            <Button
+              aria-label="close modal"
+              variant="transparent"
+              onClick={() => dispatch(slice.actions.unselect())}
+            >
+              <CloseIcon h="2rem" w="1rem" marginRight=".5rem"></CloseIcon>
+              <ControllerButton h="2rem" button="b" marginRight="-0.5rem" />
+            </Button>
           </Flex>
         </ModalHeader>
 
@@ -160,7 +140,10 @@ export function EditModal() {
                   rightIcon={String(state) === val ? <CheckIcon /> : undefined}
                   transition="all 0.2s ease"
                   onClick={() => click(val)}
-                  {...getButtonStyle(val)}
+                  {...getButtonStyle(
+                    (setting as ModeSetting).modes[val]?.tags,
+                    colorState ? colorState[val] : undefined
+                  )}
                   {...(val === sel ? { transform: "scale(1.06)" } : {})}
                 >
                   {String(name)}
