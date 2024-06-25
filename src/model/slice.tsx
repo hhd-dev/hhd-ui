@@ -268,6 +268,11 @@ const slice = createSlice({
       store.navigation.sel = true;
       store.navigation.sel_choice = String(val);
     },
+    selectOption: (store, action: PayloadAction<string>) => {
+      const section = store.navigation.curr["tab"];
+      store.navigation.curr[section] = action.payload;
+      store.navigation.sel = true;
+    },
     unselect: (store) => {
       if (store.navigation.sel) {
         store.navigation.sel = false;

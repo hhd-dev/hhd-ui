@@ -16,6 +16,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { FC } from "react";
+import { useDispatch } from "react-redux";
 import {
   BoolSetting,
   DiscreteSetting,
@@ -27,6 +28,7 @@ import {
   useElementNav,
   useSettingState,
 } from "../../model/hooks";
+import slice from "../../model/slice";
 import NumberComponent from "./NumberComponent";
 import { getButtonStyleNested, getFocusStyle } from "./utils";
 
@@ -225,6 +227,15 @@ const ActionComponent: FC<SettingProps> = ({
     path
   );
   const { colorMode } = useColorMode();
+  const dispatch = useDispatch();
+
+  const onClick = () => {
+    if (set.tags?.includes("verify")) {
+      dispatch(slice.actions.selectOption(path));
+    } else {
+      setState(1);
+    }
+  };
 
   return (
     <Flex
@@ -233,7 +244,7 @@ const ActionComponent: FC<SettingProps> = ({
       alignItems="stretch"
     >
       <Button
-        onClick={() => setState(true)}
+        onClick={onClick}
         disabled={!state}
         ref={ref}
         onFocus={setFocus}
