@@ -14,7 +14,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { ModeSetting, getSettingChoices } from "../../model/common";
 import { useSelectedSetting, useSettingState } from "../../model/hooks";
-import slice, { selectSelectedChoice } from "../../model/slice";
+import slice, {
+  selectHasController,
+  selectSelectedChoice,
+} from "../../model/slice";
 import { ControllerButton } from "../Controller";
 import { getButtonStyle } from "./utils";
 
@@ -25,6 +28,7 @@ export function EditModal() {
     (path || "") + (setting && setting.type === "mode" ? ".mode" : "")
   );
   const sel = useSelector(selectSelectedChoice);
+  const controller = useSelector(selectHasController);
   const { state: colorState } = useSettingState<
     Record<
       string,
@@ -76,7 +80,9 @@ export function EditModal() {
               onClick={() => dispatch(slice.actions.unselect())}
             >
               <CloseIcon h="2rem" w="1rem" marginRight=".5rem"></CloseIcon>
-              <ControllerButton h="2rem" button="b" marginRight="-0.5rem" />
+              {controller && (
+                <ControllerButton h="2rem" button="b" marginRight="-0.5rem" />
+              )}
             </Button>
           </Flex>
         </ModalHeader>
@@ -104,12 +110,14 @@ export function EditModal() {
                   onClick={apply}
                 >
                   <CheckIcon />
-                  <ControllerButton
-                    h="2rem"
-                    button="a"
-                    marginLeft="1rem"
-                    invert
-                  />
+                  {controller && (
+                    <ControllerButton
+                      h="2rem"
+                      button="a"
+                      marginLeft="1rem"
+                      invert
+                    />
+                  )}
                 </Button>
                 <Button
                   margin="0.6rem"
@@ -120,12 +128,14 @@ export function EditModal() {
                   onClick={cancel}
                 >
                   <CloseIcon />
-                  <ControllerButton
-                    h="2rem"
-                    button="b"
-                    marginLeft="1rem"
-                    invert
-                  />
+                  {controller && (
+                    <ControllerButton
+                      h="2rem"
+                      button="b"
+                      marginLeft="1rem"
+                      invert
+                    />
+                  )}
                 </Button>
               </Flex>
             </Flex>
