@@ -69,7 +69,11 @@ const createMainWindow = async () => {
           fullscreen: isOverlayUi,
           resizable: false,
         }
-      : { width: 550, height: 750, maxWidth: 800 }),
+      : {
+          width: 550,
+          height: Math.min(screen.getPrimaryDisplay().workAreaSize.height - 50, 750),
+          maxWidth: 800,
+        }),
     show: false,
     ...(isOverlayUi && { transparent: true }),
     backgroundColor: "#1a202c",
