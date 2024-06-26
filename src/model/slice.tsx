@@ -304,7 +304,7 @@ const slice = createSlice({
     builder.addCase(fetchSettings.fulfilled, (state, action) => {
       if (action.payload.data) state.settings = action.payload.data;
       if (action.payload.error)
-        state.error = "Could not fetch data. Is Handheld Daemon running?";
+        state.error = "Could not connect. Is Handheld Daemon running?";
       updateNavigation(state);
       state.loading.settings = false;
     });
@@ -314,7 +314,7 @@ const slice = createSlice({
     builder.addCase(fetchState.fulfilled, (state, action) => {
       if (action.payload.data) state.state = action.payload.data;
       if (action.payload.error)
-        state.error = "Could not fetch data. Is Handheld Daemon running?";
+        state.error = "Could not connect. Is Handheld Daemon running?";
       updateNavigation(state);
       state.loading.state = false;
     });
@@ -325,7 +325,7 @@ const slice = createSlice({
     builder.addCase(updateSettingValue.fulfilled, (state, action) => {
       if (action.payload.data) state.state = action.payload.data;
       if (action.payload.error)
-        state.error = "Could not fetch data. Is Handheld Daemon running?";
+        state.error = "Could not connect. Is Handheld Daemon running?";
       updateNavigation(state);
       state.loading.update = false;
     });

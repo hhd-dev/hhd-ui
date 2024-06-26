@@ -261,6 +261,7 @@ export const getDisabledStyle = () => ({
 });
 
 export const getButtonStyle = (childTags: any, hsv: any) => {
+  if (!childTags) return {};
   if (childTags.includes("rgb")) {
     if (childTags.includes("disabled")) return getDisabledStyle();
     else if (childTags.includes("pulse")) {

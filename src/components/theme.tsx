@@ -205,29 +205,33 @@ export const distroThemes: Record<string, any> = {
   }),
 };
 
-export const getScrollbarStyle = (distro: string | null) => {
+export const getScrollbarStyle = (distro: string | null, colorMode: string) => {
   let colors;
   switch (distro) {
     case "vapor":
-      colors = "#66c0f4 #171a21";
+      colors = ["#66c0f4", "#171a2130"];
       break;
     case "manjaro":
-      colors = "#438959 #19251d";
+      colors = ["#438959", "#19251d30"];
       break;
     case "bazzite":
-      colors = "#6d49b6 #0e0b3c";
+      colors = ["#6d49b6", "#0e0b3c30"];
       break;
     case "ocean":
-      colors = "#E4BC1B #183C81";
+      colors = ["#E4BC1B", "#183C8130"];
       break;
     default:
-      colors = "#B69616 #1d1916";
+      colors = ["#B69616", "#1d191630"];
       break;
+  }
+
+  if (colorMode === "light") {
+    colors[1] = "#dddddd60";
   }
 
   return {
     css: {
-      scrollbarColor: colors,
+      scrollbarColor: `${colors[0]} ${colors[1]}`,
     },
   };
 };

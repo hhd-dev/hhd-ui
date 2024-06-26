@@ -31,22 +31,23 @@ export default function FrontPage() {
     <Flex minH="100%" alignItems="center" justifyContent="center">
       <Card maxW="md" margin="1rem 0" height="fit-content">
         <CardHeader>
-          <Flex width="100%" margin="1rem 0 0.25rem 0" justifyContent="center">
-            <Logo width="75%" />
+          <Flex width="100%" margin="1rem 0 0 0" justifyContent="center">
+            <Logo width="70%" />
           </Flex>
         </CardHeader>
         <CardBody>
-          <Stack divider={<StackDivider />} spacing="4">
+          <Stack divider={<StackDivider />} spacing="3">
             <Text textAlign="center">
-              Welcome to the Handheld Daemon Configurator!
+              Welcome to the Handheld Daemon configurator!
             </Text>
 
             <Text>
               This is a {isWeb ? "static website" : "app"} you can use to
-              configure your device (everything is done locally and there is no
-              server). With the default security settings, you need to visit
-              this webpage from your device and enter a security token. This
-              token can be found below. Have fun!
+              configure your device
+              {isWeb && "(everything is done locally and there is no server)"}.
+              With default settings, you need to
+              {isWeb && "visit this webpage from your device and"} enter a
+              security token. This token can be found below. Have fun!
             </Text>
 
             <Code textAlign="center" padding="1rem" lang="bash">

@@ -1,7 +1,6 @@
 import { InfoIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Card,
   Flex,
   Tab,
   TabList,
@@ -26,7 +25,6 @@ import {
 import { ControllerButton } from "./Controller";
 import ErrorBoundary from "./ErrorBoundary";
 import ContainerComponent from "./elements/ContainerComponent";
-import { CONTENT_WIDTH } from "./theme";
 
 const TabbedSection = ({
   section,
@@ -78,72 +76,66 @@ const TabbedState = () => {
   const { curr, setCurr } = useSectionNav("tab");
 
   return (
-    <Card width={CONTENT_WIDTH}>
-      <Tabs
-        onChange={(e) => setCurr(keys[e])}
-        size="md"
-        orientation="vertical"
-        index={keys.indexOf(curr)}
-        isLazy
-      >
-        <TabList padding="1rem 0">
-          {controller && (
+    <Tabs
+      onChange={(e) => setCurr(keys[e])}
+      size="md"
+      orientation="vertical"
+      index={keys.indexOf(curr)}
+      isLazy
+    >
+      <TabList padding="1rem 0">
+        {controller && (
+          <ControllerButton
+            alignSelf="end"
+            button="lb"
+            w="2.5rem"
+            margin="-0.6rem 0.5rem -0.1rem 0"
+          />
+        )}
+        {Object.keys(settings).map((name, idx) => {
+          let label = name.split("_").map(capitalize).join("\u00a0");
+          if (sectionNames && sectionNames[name]) {
+            label = sectionNames[name];
+          }
+
+          return (
+            <Tab justifyContent="end" key={`tablist-tab-${idx}`}>
+              {label}
+            </Tab>
+          );
+        })}
+        {controller && (
+          <>
             <ControllerButton
               alignSelf="end"
-              button="lb"
+              button="rb"
               w="2.5rem"
-              margin="-0.6rem 0.5rem -0.1rem 0"
+              margin="-0.4rem 0.5rem 0.3rem 0"
             />
-          )}
-          {Object.keys(settings).map((name, idx) => {
-            let label = name.split("_").map(capitalize).join("\u00a0");
-            if (sectionNames && sectionNames[name]) {
-              label = sectionNames[name];
-            }
-
-            return (
-              <Tab justifyContent="end" key={`tablist-tab-${idx}`}>
-                {label}
-              </Tab>
-            );
-          })}
-          {controller && (
-            <>
-              <ControllerButton
+            {showHint && (
+              <Flex
+                direction={"row"}
+                alignItems="center"
                 alignSelf="end"
-                button="rb"
-                w="2.5rem"
-                margin="-0.4rem 0.5rem 0.3rem 0"
-              />
-              {showHint && (
-                <Flex
-                  direction={"row"}
-                  alignItems="center"
-                  alignSelf="end"
-                  marginRight="0.4rem"
-                >
-                  <InfoIcon h="1.5rem" w="1.3rem" marginRight="0.3rem" />
-                  <ControllerButton
-                    button="x"
-                    margin="0 0.3rem 0 0"
-                    h="1.7rem"
-                  />
-                </Flex>
-              )}
-            </>
-          )}
-        </TabList>
-        <TabPanels padding="0.5rem 0">
-          {Object.entries(settings).map(([section, containers]) => (
-            <TabbedSection
-              key={section}
-              section={section}
-              containers={containers}
-            />
-          ))}
-        </TabPanels>
-      </Tabs>
-    </Card>
+                marginRight="0.4rem"
+              >
+                <InfoIcon h="1.5rem" w="1.3rem" marginRight="0.3rem" />
+                <ControllerButton button="x" margin="0 0.3rem 0 0" h="1.7rem" />
+              </Flex>
+            )}
+          </>
+        )}
+      </TabList>
+      <TabPanels padding="0.5rem 0">
+        {Object.entries(settings).map(([section, containers]) => (
+          <TabbedSection
+            key={section}
+            section={section}
+            containers={containers}
+          />
+        ))}
+      </TabPanels>
+    </Tabs>
   );
 };
 

@@ -10,6 +10,7 @@ import {
 import {
   Box,
   Button,
+  Card,
   Flex,
   Heading,
   IconButton,
@@ -95,10 +96,9 @@ const ExpandedUi = () => {
         },
       },
     };
-  } else if (colorMode === "dark") {
-    scrollCss = getScrollbarStyle(distro);
+  } else {
+    scrollCss = getScrollbarStyle(distro, colorMode);
   }
-  scrollCss = { ...scrollCss };
 
   return (
     <Flex
@@ -177,7 +177,9 @@ const ExpandedUi = () => {
         justifyContent="center"
       >
         <HintModal />
-        <HhdTabbedState />
+        <Card width={CONTENT_WIDTH}>
+          <HhdTabbedState />
+        </Card>
       </Flex>
     </Flex>
   );
