@@ -9,8 +9,8 @@
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {
-    "electron": "^28.1.0",
-    "electron-builder": "^24.9.1",
+    "electron": "^31.1.0",
+    "electron-builder": "^24.13.3",
     "electron-packager": "^17.1.2"
   },
   "scripts": {
