@@ -37,6 +37,7 @@ import hhdSlice, {
   selectUiType,
 } from "./model/slice.tsx";
 import { persistor, store } from "./model/store.tsx";
+import AppUi from "./components/AppUi.tsx";
 
 declare global {
   interface Window {
@@ -93,13 +94,22 @@ function App() {
     );
     // TODO: Implement spinner
   } else if (loggedIn) {
-    body = (
-      <>
-        <EditModal />
-        <QamState />
-        <ExpandedUi />
-      </>
-    );
+    if (appType === "app") {
+      body = (
+        <>
+          <EditModal />
+          <AppUi />
+        </>
+      );
+    } else {
+      body = (
+        <>
+          <EditModal />
+          <QamState />
+          <ExpandedUi />
+        </>
+      );
+    }
   } else {
     frontPage = true;
     body = <FrontPage />;
@@ -128,7 +138,10 @@ function App() {
       <Box
         h="100vh"
         w="100vw"
-        {...(frontPage && { ...getScrollbarStyle(distro), overflowY: "auto" })}
+        {...(frontPage && {
+          ...getScrollbarStyle(distro, colorMode),
+          overflowY: "auto",
+        })}
         onClick={(e) => {
           if (e.currentTarget != e.target) return;
           dispatch(hhdSlice.actions.setUiType("closed"));

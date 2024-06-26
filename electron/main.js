@@ -69,7 +69,7 @@ const createMainWindow = async () => {
           fullscreen: isOverlayUi,
           resizable: false,
         }
-      : { width: 1280, height: 800 }),
+      : { width: 550, height: 750, maxWidth: 800 }),
     show: false,
     ...(isOverlayUi && { transparent: true }),
     backgroundColor: "#1a202c",
@@ -141,15 +141,38 @@ const createMainWindow = async () => {
   mainWindow.webContents.zoomFactor = scaleFactor;
   mainWindow.show();
 
+  const writeSync = (cmd) => {
+    console.log(cmd);
+  };
+  const processAction = (action) => {
+    const cmd = `window.electronUtils.sendGamepadEvent("${encodeURI(
+      action
+    )}");`;
+    mainWindow.webContents.executeJavaScript(cmd);
+  };
+
   // Handle Overlay Communication
   // after this point. In case of no overlay, allow hiding and showing.
+  let preOpened = false;
   if (isManagedUi) {
+    let grabInterval = null;
     const rl = readline.createInterface({
       input: process.stdin,
     });
     let maximizedTime = 0;
     rl.on("line", (line) => {
-      if (!line.startsWith("cmd:toggle-visibility")) return;
+      if (line.startsWith("action:")) {
+        processAction(line.trim().substring(7));
+        return;
+      } else if (!line.startsWith("cmd:open_")) return;
+
+      if (line.includes("open_qam_if_closed")) {
+        preOpened = true;
+      } else if (preOpened) {
+        preOpened = false;
+        return;
+      }
+
       if (mainWindow.isMinimized()) {
         console.error("Restoring window.");
         maximizedTime = Date.now();
@@ -162,6 +185,24 @@ const createMainWindow = async () => {
         console.error("Minimizing window.");
         mainWindow.minimize();
       }
+    });
+    // Send grab events while enabled
+    mainWindow.on("focus", () => {
+      if (grabInterval) {
+        clearInterval(grabInterval);
+        grabInterval = null;
+      }
+      writeSync("grab:enable");
+      grabInterval = setInterval(() => {
+        writeSync("grab:enable");
+      }, 2000);
+    });
+    mainWindow.on("blur", () => {
+      if (grabInterval) {
+        clearInterval(grabInterval);
+        grabInterval = null;
+      }
+      writeSync("grab:disable");
     });
     ipcMain.on("update-status", (_, stat) => {
       if (stat === "minimize") {
@@ -182,10 +223,6 @@ const createMainWindow = async () => {
   let currentType = "closed";
   let qam_preopened = false;
   let grab_interval = null;
-
-  const writeSync = (cmd) => {
-    console.log(cmd);
-  };
 
   // Inform hhd of the new status
   const rl = readline.createInterface({
@@ -264,13 +301,6 @@ const createMainWindow = async () => {
         `window.electronUtils.setUiType("${uiType}");`
       );
     }
-  };
-
-  const processAction = (action) => {
-    const cmd = `window.electronUtils.sendGamepadEvent("${encodeURI(
-      action
-    )}");`;
-    mainWindow.webContents.executeJavaScript(cmd);
   };
 
   // Receive open and close commands

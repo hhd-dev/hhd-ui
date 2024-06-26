@@ -25,5 +25,6 @@ export const setAppType = (appType: AppType) => {
 };
 
 export const sendGamepadEvent = (ev: string) => {
+  store.dispatch(hhdSlice.actions.setController(true));
   handleGamepadCommands([ev]);
 };
