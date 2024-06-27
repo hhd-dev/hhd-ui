@@ -16,57 +16,40 @@ the Web.
 
 # Usage
 
-There are two ways of accessing the app:
+There are three ways of accessing the app:
 
 1. Go to https://hhd.dev to use the latest version via your browser.
 2. Install the app locally to your device via a provided AppImage.
-3. Use the version bundled with your distribution (coming soon)
+3. Use the version bundled for your distribution, see main Handheld Daemon README.
 
-# hhd.dev Website
+# From another device
+While it is not a popular feature, Handheld Daemon can control your device remotely
+if you change some settings.
 
-Go to https://hhd.dev from your device and enter the token you can find under
-`~/.config/hhd/token`.
-You can now configure your device.
-This app runs locally (no server) and it is hosted here on github pages
-(https://hhd-dev.github.io/hhd-ui/).
+You can connect to your device to configure it over the network if you know its
+IP, by downloading the AppImage from releases.
+First, you need to enable the port to be accessible from the network.
+This is done by clicking the eye icon on the overlay, which will reveal
+the API settings and allowing access from network.
 
-No one can access your device from outside of it and not within it
-without using the token.
-The decky plugin uses the token as well, by reading it with your user priviledges.
-Both of these precautions can be disabled, so you can configure your device
-from outside of it by opening port 5335 and finding its ip (`ip addr`).
-
-You can not use configure your device from outside of it
-using https://hhd.dev due to a security policy called Mixed Content Serving.
+The website https://hhd.dev can only be used from the device due to a security 
+policy called Mixed Content Serving.
 Essentially, https websites can not access http APIs, with the exception being
 http://localhost.
-This will be fixed in the future by making the calls using TLS over Javascript.
+This will be fixed in the future by making the calls using TLS over JavaScript.
 
 For now, you can port forward port 5335 to your main computer over ssh if you
 want to use it remotely with [hhd.dev](https://hhd.dev) or use the AppImage.
-
 ```bash
 ssh <your-machine> -L 5335:localhost:5335
 ```
 
-# Local Install
-
-Download the latest AppImage release from the releases github page.
-
-Make it executable via `chmod +x`, or in your file manager by enabling via:
-
-```
-Right-click > Properties > Permissions > Is Executable
-```
-
-Double click the AppImage file for the app to run.
-
-Note, to have the app show up as a regular app, it's recommended to use an AppImage manager.
-
-Examples of AppImage manager apps:
-
-- Gear Lever - https://flathub.org/apps/it.mijorus.gearlever
-- AppImageLauncher - https://github.com/TheAssassin/AppImageLauncher
+> [!IMPORTANT]  
+> By default, the port the Handheld Daemon API uses is only accessible from your
+> device and a security token is used.
+>
+> Handheld Daemon is a root-level daemon, be mindful of enabling network access
+> to the API port!
 
 # Dev Setup
 
