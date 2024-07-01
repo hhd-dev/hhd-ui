@@ -150,10 +150,11 @@ export function EditModal() {
                   rightIcon={String(state) === val ? <CheckIcon /> : undefined}
                   transition="all 0.2s ease"
                   onClick={() => click(val)}
-                  {...getButtonStyle(
-                    (setting as ModeSetting).modes[val]?.tags,
-                    colorState ? colorState[val] : undefined
-                  )}
+                  {...((setting as ModeSetting).modes &&
+                    getButtonStyle(
+                      (setting as ModeSetting).modes[val]?.tags,
+                      colorState ? colorState[val] : undefined
+                    ))}
                   {...(val === sel ? { transform: "scale(1.06)" } : {})}
                 >
                   {String(name)}
