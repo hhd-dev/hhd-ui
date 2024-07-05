@@ -131,11 +131,19 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
               .map(([childName, childSet], idx) => {
                 return (
                   <ErrorBoundary title={title} key={idx}>
-                    <SettingComponent
-                      path={`${path}.${state}.${childName}`}
-                      settings={childSet}
-                      section={section}
-                    />
+                    {childSet.type == "mode" ? (
+                      <ModeComponent
+                        path={`${path}.${state}.${childName}`}
+                        settings={childSet as ModeSetting}
+                        section={section}
+                      ></ModeComponent>
+                    ) : (
+                      <SettingComponent
+                        path={`${path}.${state}.${childName}`}
+                        settings={childSet}
+                        section={section}
+                      />
+                    )}
                   </ErrorBoundary>
                 );
               })}
