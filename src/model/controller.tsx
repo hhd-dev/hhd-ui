@@ -1,4 +1,4 @@
-import { NumberSetting } from "./common";
+import { DiscreteSetting, MultipleSetting, NumberSetting } from "./common";
 import local from "./local";
 import hhdSlice, {
   selectAppType,
@@ -104,15 +104,14 @@ const goIn = (s: typeof store) => {
       }
       break;
     case "multiple":
-    case "discrete":
+      // case "discrete":
       if (isSel) {
         if (curr !== selChoice)
           s.dispatch(
             updateSettingValue({
               cred: { token, endpoint: url },
               path,
-              value:
-                setting.type === "discrete" ? Number(selChoice) : selChoice,
+              value: selChoice,
             })
           );
         s.dispatch(hhdSlice.actions.unselect());
@@ -128,32 +127,64 @@ const goIn = (s: typeof store) => {
 const goSideways = (s: typeof store, left: boolean) => {
   const state = s.getState();
   const { setting, path } = selectSelectedSetting(state);
-  if (!setting || !path || !["float", "int"].includes(setting.type)) return;
-  const numSet = setting as NumberSetting<number, "float" | "int">;
+  if (!setting || !path) return;
 
   const url = local.selectors.selectUrl(state);
   const token = local.selectors.selectToken(state);
+  if (["float", "int"].includes(setting.type)) {
+    const numSet = setting as NumberSetting<number, "float" | "int">;
 
-  if (!setting || !path || !url || !token) {
-    s.dispatch(hhdSlice.actions.select());
-    return;
+    if (!setting || !path || !url || !token) {
+      s.dispatch(hhdSlice.actions.select());
+      return;
+    }
+    const val = selectSettingState(path)(state) as unknown as number;
+
+    let newVal = val;
+    if (left) {
+      newVal -= numSet.step || 1;
+    } else {
+      newVal += numSet.step || 1;
+    }
+
+    s.dispatch(
+      updateSettingValue({
+        cred: { token, endpoint: url },
+        path,
+        value: newVal,
+      })
+    );
+  } else if (
+    setting.type === "discrete" ||
+    (setting.type === "multiple" && setting.tags?.includes("ordinal"))
+  ) {
+    const selChoice = selectSettingState(path)(state) as unknown as number;
+    if (!selChoice) return;
+    let options: any[];
+    if (setting.type === "discrete") {
+      options = (setting as DiscreteSetting).options;
+    } else {
+      options = Object.keys((setting as MultipleSetting).options);
+    }
+
+    const idx = options.indexOf(selChoice);
+    if (idx === -1) return;
+
+    let newIdx = idx;
+    if (left && idx > 0) {
+      newIdx = idx - 1;
+    } else if (!left && idx < options.length - 1) {
+      newIdx = idx + 1;
+    }
+
+    s.dispatch(
+      updateSettingValue({
+        cred: { token, endpoint: url },
+        path,
+        value: options[newIdx],
+      })
+    );
   }
-  const val = selectSettingState(path)(state) as unknown as number;
-
-  let newVal = val;
-  if (left) {
-    newVal -= numSet.step || 1;
-  } else {
-    newVal += numSet.step || 1;
-  }
-
-  s.dispatch(
-    updateSettingValue({
-      cred: { token, endpoint: url },
-      path,
-      value: newVal,
-    })
-  );
 };
 
 export const handleGamepadCommands = (evs: string[]) => {

@@ -42,8 +42,8 @@ export function EditModal() {
   >(path || "");
 
   if (!path || !setting) return <></>;
-  if (!["mode", "multiple", "discrete", "action"].includes(setting.type))
-    return <></>;
+  if (!["mode", "multiple", "action"].includes(setting.type)) return <></>;
+  if (setting.tags?.includes("ordinal")) return <></>;
   const verify = setting.type === "action";
 
   const click = (val: string) => {

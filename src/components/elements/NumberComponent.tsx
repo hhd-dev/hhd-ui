@@ -47,11 +47,13 @@ const NumberComponent: FC<SettingProps> = ({
   if (sel) {
     thumbStyle = {
       bg:
-        getCssColor({
-          hue: hsv?.hue || 0,
-          saturation: 100,
-          brightness: Math.max(hsv?.brightness || 30, 30),
-        }) || "brand.300",
+        (hsv?.hue !== undefined &&
+          getCssColor({
+            hue: hsv?.hue || 0,
+            saturation: 100,
+            brightness: Math.max(hsv?.brightness || 30, 30),
+          })) ||
+        "brand.300",
     };
   } else if (colorMode === "light") {
     thumbStyle = { bg: "gray.100" };

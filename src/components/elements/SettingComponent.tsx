@@ -1,5 +1,6 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Checkbox,
   Code,
@@ -11,6 +12,11 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
+  Slider,
+  SliderFilledTrack,
+  SliderMark,
+  SliderThumb,
+  SliderTrack,
   Text,
   Tooltip,
   useColorMode,
@@ -69,45 +75,81 @@ const DiscreteComponent: FC<SettingProps> = ({
   path,
   section,
 }) => {
-  const { title, options } = set as DiscreteSetting;
-  const { state, setState } = useSettingState<number>(path);
-  const { ref, focus, setFocus } = useElementNav(section, path);
+  let title, options: any[], labels;
+  if (set.type === "discrete") {
+    ({ title, options } = set as DiscreteSetting);
+    labels = options;
+  } else {
+    let optionDict;
+    ({ title, options: optionDict } = set as MultipleSetting);
+    options = Object.keys(optionDict);
+    labels = Object.values(optionDict);
+  }
+  const { state, setState } = useSettingState<any>(path);
+  const { ref, sel, focus, setFocus } = useElementNav<HTMLInputElement>(
+    section,
+    path
+  );
   const { colorMode } = useColorMode();
+  let thumbStyle = {};
+  if (sel) {
+    thumbStyle = {
+      bg: "brand.300",
+    };
+  } else if (colorMode === "light") {
+    thumbStyle = { bg: "gray.100" };
+  }
 
   return (
     <Flex
       flexDirection="column"
       {...getFocusStyle(focus, colorMode)}
       marginTop="0.2rem"
+      paddingTop="0.4rem"
       marginBottom="0.2rem"
     >
-      <FormLabel htmlFor={path}>{title}</FormLabel>
-      <Menu>
-        <MenuButton
-          as={Button}
-          rightIcon={<ChevronDownIcon />}
+      <FormLabel htmlFor={path} paddingLeft={"0.5rem"}>
+        {title}
+      </FormLabel>
+      <Box padding={"0 2rem"}>
+        <Slider
+          min={0}
+          max={options.length - 1}
+          step={1}
+          value={state ? options.indexOf(state) : 0}
+          marginTop="0.4rem"
+          marginBottom="2.4rem"
           ref={ref}
+          focusThumbOnChange={false}
           onFocus={setFocus}
-          marginBottom="0.35rem"
+          onChange={(value) =>
+            value >= 0 && value < options.length && setState(options[value])
+          }
         >
-          {state}
-        </MenuButton>
-        <MenuList zIndex={100}>
-          <MenuOptionGroup type="radio" value={String(state)}>
-            {options.map((value) => {
-              return (
-                <MenuItemOption
-                  key={value}
-                  value={String(value)}
-                  onClick={() => setState(value)}
-                >
-                  {value}
-                </MenuItemOption>
-              );
-            })}
-          </MenuOptionGroup>
-        </MenuList>
-      </Menu>
+          {options.map((val, index) => (
+            <SliderMark
+              key={index}
+              value={index}
+              marginTop="1.2rem"
+              textAlign="center"
+              transform="translate(-50%, 0%)"
+              padding={"0rem 0.5rem"}
+              {...(state === val && {
+                background: "brand.300",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                color: colorMode === "dark" ? "gray.800" : "white",
+              })}
+            >
+              {labels[index]}
+            </SliderMark>
+          ))}
+          <SliderTrack>
+            <SliderFilledTrack />
+          </SliderTrack>
+          <SliderThumb {...thumbStyle}></SliderThumb>
+        </Slider>
+      </Box>
     </Flex>
   );
 };
@@ -268,6 +310,9 @@ const SettingComponent: FC<SettingProps> = (props) => {
     case "discrete":
       return <DiscreteComponent {...props} />;
     case "multiple":
+      if (props.settings.tags?.includes("ordinal")) {
+        return <DiscreteComponent {...props} />;
+      }
       return <MultipleComponent {...props} />;
     case "display":
       return <DisplayComponent {...props} />;
