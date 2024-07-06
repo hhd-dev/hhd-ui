@@ -8,8 +8,8 @@ import local from "./local";
 let abort: AbortController | undefined;
 
 const LEGACY_DELAY = 100;
-const MIN_WAITTIME_NEW = 250;
-const MIN_WAITTIME_OLD = 1000;
+const MIN_WAITTIME_NEW = 75;
+const MIN_WAITTIME_OLD = 250;
 const ERROR_WAITTIME = 3000;
 const LOAD_DELAY = 100;
 
