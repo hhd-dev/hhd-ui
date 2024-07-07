@@ -107,11 +107,12 @@ const DiscreteComponent: FC<SettingProps> = ({
       marginTop="0.2rem"
       paddingTop="0.4rem"
       marginBottom="0.2rem"
+      ref={ref}
     >
       <FormLabel htmlFor={path} paddingLeft={"0.5rem"}>
         {title}
       </FormLabel>
-      <Box padding={"0 2rem"}>
+      <Box padding={"0 2.5rem"}>
         <Slider
           min={0}
           max={options.length - 1}
@@ -119,7 +120,6 @@ const DiscreteComponent: FC<SettingProps> = ({
           value={state ? options.indexOf(state) : 0}
           marginTop="0.4rem"
           marginBottom="2.4rem"
-          ref={ref}
           focusThumbOnChange={false}
           onFocus={setFocus}
           onChange={(value) =>
