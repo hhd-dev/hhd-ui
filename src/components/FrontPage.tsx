@@ -42,7 +42,7 @@ export default function FrontPage() {
             </Text>
 
             <Text>
-              This is a {isWeb ? "static website" : "app"} you can use to
+              This is {isWeb ? "a static website" : "an app"} you can use to
               configure your device
               {isWeb && "(everything is done locally and there is no server)"}.
               With default settings, you need to
