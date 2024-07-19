@@ -71,7 +71,10 @@ const createMainWindow = async () => {
         }
       : {
           width: 550,
-          height: Math.min(screen.getPrimaryDisplay().workAreaSize.height - 50, 750),
+          height: Math.min(
+            screen.getPrimaryDisplay().workAreaSize.height - 50,
+            750
+          ),
           maxWidth: 800,
         }),
     show: false,
@@ -164,6 +167,7 @@ const createMainWindow = async () => {
       input: process.stdin,
     });
     let maximizedTime = 0;
+    let blurTime = 0;
     rl.on("line", (line) => {
       if (line.startsWith("action:")) {
         processAction(line.trim().substring(7));
@@ -182,7 +186,12 @@ const createMainWindow = async () => {
         maximizedTime = Date.now();
         mainWindow.restore();
         mainWindow.focus();
-      } else if (!mainWindow.isFocused()) {
+      } else if (
+        !mainWindow.isFocused() &&
+        // Touch gestures right will unfocus the window for now.
+        // Ignore the blur event if it happened less than 1s ago
+        (!blurTime || Date.now() - blurTime > 500)
+      ) {
         console.error("Focusing window.");
         mainWindow.focus();
       } else {
@@ -200,12 +209,14 @@ const createMainWindow = async () => {
       grabInterval = setInterval(() => {
         writeSync("grab:enable");
       }, 2000);
+      blurTime = 0;
     });
     mainWindow.on("blur", () => {
       if (grabInterval) {
         clearInterval(grabInterval);
         grabInterval = null;
       }
+      blurTime = Date.now();
       writeSync("grab:disable");
     });
     ipcMain.on("update-status", (_, stat) => {
