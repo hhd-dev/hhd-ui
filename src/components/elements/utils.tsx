@@ -11,7 +11,7 @@ export const getFocusStyle = (f: boolean, mode: string) =>
         margin: "0 0.15rem",
         bg: mode === "dark" ? "gray.600" : "gray.100",
         transition: "all 0.1s ease-in-out",
-        zIndex: "dropdown",
+        zIndex: "10",
       }
     : {
         border: "2px",
