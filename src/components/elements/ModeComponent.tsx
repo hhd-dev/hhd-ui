@@ -69,7 +69,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                 colorState && state ? colorState[state] : undefined
               )}
             >
-              {mode?.title}{mode?.unit ? ` (${mode.unit})` : ""}
+              {`${mode?.title}${mode?.unit ? ` (${mode.unit})` : ""}`}
             </MenuButton>
           </Tooltip>
           <MenuList zIndex={100}>
@@ -82,7 +82,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                   );
                   let extraStyles = {};
 
-                  if (btnStyle)
+                  if (Object.keys(btnStyle).length > 0)
                     extraStyles = {
                       // textAlign: "center",
                       paddingLeft: "3.3rem",
@@ -91,6 +91,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                       margin: "0.45rem 0.25rem 0 0.35rem",
                       marginBottom: "0",
                     };
+
                   if (idx == 0) {
                     extraStyles = {
                       ...extraStyles,
@@ -107,9 +108,8 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                       onClick={() => setState(value)}
                       {...btnStyle}
                       {...extraStyles}
-                      paddingLeft="0.3rem"
                     >
-                      {label}{suffix}
+                      {`${label}${suffix}`}
                     </MenuItemOption>
                   );
                 }
