@@ -33,6 +33,7 @@ export interface NumberSetting<A, T extends string> extends Setting {
 
 export interface ContainerSetting extends Setting {
   type: "container";
+  unit: string | undefined;
   children: Record<string, Setting>;
 }
 
@@ -50,7 +51,7 @@ export interface SettingProps {
 
 export interface ContainerProps extends SettingProps {
   settings: ContainerSetting;
-  indent: number
+  indent: number;
 }
 
 export interface ModeProps extends SettingProps {
@@ -116,7 +117,7 @@ export const getSettingChoices = (setting: Setting) => {
       return Object.fromEntries(
         Object.entries((setting as ModeSetting).modes).map(([n, v]) => [
           n,
-          v.title,
+          `${v.title}${v.unit ? ` (${v.unit})` : ""}`,
         ])
       );
     case "multiple":

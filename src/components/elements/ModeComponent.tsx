@@ -69,13 +69,13 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                 colorState && state ? colorState[state] : undefined
               )}
             >
-              {mode?.title}
+              {mode?.title}{mode?.unit ? ` (${mode.unit})` : ""}
             </MenuButton>
           </Tooltip>
           <MenuList zIndex={100}>
             <MenuOptionGroup type="radio" value={state}>
               {Object.entries(modes).map(
-                ([value, { title: label }], idx: number) => {
+                ([value, { title: label, unit }], idx: number) => {
                   const btnStyle = getButtonStyle(
                     value ? (set as ModeSetting).modes[value]?.tags : undefined,
                     colorState ? colorState[value] : undefined
@@ -98,6 +98,8 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                     };
                   }
 
+                  let suffix = unit ? ` (${unit})` : "";
+
                   return (
                     <MenuItemOption
                       key={idx}
@@ -105,8 +107,9 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                       onClick={() => setState(value)}
                       {...btnStyle}
                       {...extraStyles}
+                      paddingLeft="0.3rem"
                     >
-                      {label}
+                      {label}{suffix}
                     </MenuItemOption>
                   );
                 }
