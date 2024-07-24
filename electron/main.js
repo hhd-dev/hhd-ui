@@ -281,11 +281,13 @@ const createMainWindow = async () => {
         mainWindow.webContents.executeJavaScript(
           `window.electronUtils.setControllerApi(false);`
         );
+        break;
       case "unmute":
         console.error(`Enabling built-in controller support.`);
         mainWindow.webContents.executeJavaScript(
           `window.electronUtils.setControllerApi(true);`
         );
+        break;
       case "open_qam_if_closed":
         // Preopen qam when the qam button is pressed a second
         // time to minimize delay
