@@ -28,3 +28,7 @@ export const sendGamepadEvent = (ev: string) => {
   store.dispatch(hhdSlice.actions.setController(true));
   handleGamepadCommands([ev]);
 };
+
+export const setControllerApi = (enabled: boolean) => {
+  store.dispatch(hhdSlice.actions.setControllerApi(enabled));
+};

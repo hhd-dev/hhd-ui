@@ -172,6 +172,18 @@ const createMainWindow = async () => {
       if (line.startsWith("action:")) {
         processAction(line.trim().substring(7));
         return;
+      } else if (line.includes("cmd:mute")) {
+        console.error(`Disabling built-in controller support.`);
+        mainWindow.webContents.executeJavaScript(
+          `window.electronUtils.setControllerApi(false);`
+        );
+        return;
+      } else if (line.includes("cmd:unmute")) {
+        console.error(`Enabling built-in controller support.`);
+        mainWindow.webContents.executeJavaScript(
+          `window.electronUtils.setControllerApi(true);`
+        );
+        return;
       } else if (!line.startsWith("cmd:open_")) return;
 
       if (line.includes("open_qam_if_closed")) {
@@ -264,6 +276,16 @@ const createMainWindow = async () => {
   const processCmd = (cmd) => {
     let uiType = null;
     switch (cmd) {
+      case "mute":
+        console.error(`Disabling built-in controller support.`);
+        mainWindow.webContents.executeJavaScript(
+          `window.electronUtils.setControllerApi(false);`
+        );
+      case "unmute":
+        console.error(`Enabling built-in controller support.`);
+        mainWindow.webContents.executeJavaScript(
+          `window.electronUtils.setControllerApi(true);`
+        );
       case "open_qam_if_closed":
         // Preopen qam when the qam button is pressed a second
         // time to minimize delay

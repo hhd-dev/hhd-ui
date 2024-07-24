@@ -71,6 +71,7 @@ interface AppState {
   prevUiType: PrevUiType;
   appType: AppType;
   controller: boolean;
+  controllersApi: boolean;
   visible: boolean;
   login: boolean;
   state: State;
@@ -92,6 +93,7 @@ const initialState = {
   prevUiType: "init",
   appType: "web",
   controller: false,
+  controllersApi: true,
   visible: true,
   login: true,
   state: {},
@@ -153,6 +155,9 @@ const slice = createSlice({
       } else if (store.uiType === "expanded") {
         store.uiType = "qam";
       }
+    },
+    setControllerApi: (store, action: PayloadAction<boolean>) => {
+      store.controllersApi = action.payload;
     },
     setAppType: (store, action: PayloadAction<AppType>) => {
       store.appType = action.payload;
@@ -504,6 +509,10 @@ export const selectSettings = (state: RootState) => {
 
 export const selectState = (state: RootState) => {
   return state.hhd.state;
+};
+
+export const selectControllersApi = (state: RootState) => {
+  return state.hhd.controllersApi;
 };
 
 export const selectSettingState = (path: string) => {

@@ -2,6 +2,7 @@ import { DiscreteSetting, MultipleSetting, NumberSetting } from "./common";
 import local from "./local";
 import hhdSlice, {
   selectAppType,
+  selectControllersApi,
   selectFocusedPath,
   selectFocusedSetting,
   selectHasSelection,
@@ -248,6 +249,10 @@ export const setupGamepadEventListener = () => {
     }
     if (selectAppType(sstate) !== "overlay" && !focused) {
       state = {}; // Prevent freezing state
+      return;
+    }
+    if (!selectControllersApi(sstate)) {
+      state = {};
       return;
     }
 
