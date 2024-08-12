@@ -63,15 +63,13 @@ const goIn = (s: typeof store) => {
     return;
   }
 
-  const val = selectSettingState(path)(state) as any;
-
   switch (setting.type) {
     case "bool":
       s.dispatch(
         updateSettingValue({
           cred: { token, endpoint: url },
           path,
-          value: !val,
+          value: !curr,
         })
       );
       break;
@@ -107,14 +105,6 @@ const goIn = (s: typeof store) => {
     case "multiple":
       // case "discrete":
       if (isSel) {
-        if (curr !== selChoice)
-          s.dispatch(
-            updateSettingValue({
-              cred: { token, endpoint: url },
-              path,
-              value: selChoice,
-            })
-          );
         s.dispatch(hhdSlice.actions.unselect());
       } else {
         s.dispatch(hhdSlice.actions.select());
