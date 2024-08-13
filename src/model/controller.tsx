@@ -105,6 +105,14 @@ const goIn = (s: typeof store) => {
     case "multiple":
       // case "discrete":
       if (isSel) {
+        if (!setting.tags?.includes("ordinal") && curr !== selChoice)
+          s.dispatch(
+            updateSettingValue({
+              cred: { token, endpoint: url },
+              path,
+              value: selChoice,
+            })
+          );
         s.dispatch(hhdSlice.actions.unselect());
       } else {
         s.dispatch(hhdSlice.actions.select());
