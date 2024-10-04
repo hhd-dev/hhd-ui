@@ -68,8 +68,8 @@ const NumberComponent: FC<SettingProps> = ({
       colorParams = {
         background: `linear-gradient(to right in hsl longer hue,${getCssColor({
           hue: 0,
-          saturation: hsv?.saturation || 0,
-          brightness: hsv?.brightness || 0,
+          saturation: hsv?.saturation || 100,
+          brightness: hsv?.brightness || 100,
         })} 0 0)`,
       };
     } else if (tags?.includes("saturation")) {
@@ -78,11 +78,11 @@ const NumberComponent: FC<SettingProps> = ({
         background: `linear-gradient(to right,${getCssColor({
           hue: hsv?.hue || 0,
           saturation: 0,
-          brightness: hsv?.brightness || 0,
+          brightness: hsv?.brightness || 100,
         })} 0 0,${getCssColor({
           hue: hsv?.hue || 0,
           saturation: 100,
-          brightness: hsv?.brightness || 0,
+          brightness: hsv?.brightness || 100,
         })} 100% 100%)`,
       };
     } else if (tags?.includes("brightness") && hsv?.hue !== undefined) {
@@ -94,7 +94,7 @@ const NumberComponent: FC<SettingProps> = ({
           brightness: 15,
         })} 0 0,${getCssColor({
           hue: hsv?.hue || 0,
-          saturation: hsv?.saturation || 0,
+          saturation: hsv?.saturation || 100,
           brightness: 100,
         })} 100% 100%)`,
       };
