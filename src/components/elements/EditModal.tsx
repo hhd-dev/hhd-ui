@@ -12,7 +12,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { ModeSetting, getSettingChoices } from "../../model/common";
+import { ModeSetting, Setting, getSettingChoices } from "../../model/common";
 import { useSelectedSetting, useSettingState } from "../../model/hooks";
 import slice, {
   selectHasController,
@@ -20,6 +20,65 @@ import slice, {
 } from "../../model/slice";
 import { ControllerButton } from "../Controller";
 import { getButtonStyle } from "./utils";
+import { useEffect, useRef } from "react";
+
+function ModalButton({
+  val,
+  name,
+  sel,
+  state,
+  setting,
+  colorState,
+  click,
+}: {
+  val: string;
+  name: string;
+  sel: string;
+  state: any;
+  setting: Setting;
+  colorState:
+    | Record<
+        string,
+        {
+          hue: number;
+          hue2: number | undefined;
+          saturation: number;
+          brightness: number;
+        }
+      >
+    | undefined;
+  click: (val: string) => void;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (sel === val && ref.current) {
+      ref.current.focus();
+      ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [sel, val]);
+
+  return (
+    <Button
+      key={val}
+      ref={ref}
+      margin="0.6rem"
+      padding="1.5rem 0"
+      colorScheme={val === sel ? "brand" : "gray"}
+      rightIcon={String(state) === val ? <CheckIcon /> : undefined}
+      transition="all 0.2s ease"
+      onClick={() => click(val)}
+      {...((setting as ModeSetting).modes &&
+        getButtonStyle(
+          (setting as ModeSetting).modes[val]?.tags,
+          colorState ? colorState[val] : undefined
+        ))}
+      {...(val === sel ? { transform: "scale(1.06)" } : {})}
+    >
+      {String(name)}
+    </Button>
+  );
+}
 
 export function EditModal() {
   const { path, setting } = useSelectedSetting();
@@ -142,23 +201,16 @@ export function EditModal() {
           ) : (
             <Flex direction="column" marginBottom="1rem">
               {Object.entries(getSettingChoices(setting)).map(([val, name]) => (
-                <Button
+                <ModalButton
                   key={val}
-                  margin="0.6rem"
-                  padding="1.5rem 0"
-                  colorScheme={val === sel ? "brand" : "gray"}
-                  rightIcon={String(state) === val ? <CheckIcon /> : undefined}
-                  transition="all 0.2s ease"
-                  onClick={() => click(val)}
-                  {...((setting as ModeSetting).modes &&
-                    getButtonStyle(
-                      (setting as ModeSetting).modes[val]?.tags,
-                      colorState ? colorState[val] : undefined
-                    ))}
-                  {...(val === sel ? { transform: "scale(1.06)" } : {})}
-                >
-                  {String(name)}
-                </Button>
+                  val={val}
+                  name={name}
+                  sel={sel}
+                  state={state}
+                  setting={setting}
+                  colorState={colorState}
+                  click={click}
+                />
               ))}
             </Flex>
           )}
