@@ -122,8 +122,8 @@ const createMainWindow = async () => {
   let cmd;
   if (isOverlayUi) {
     cmd =
-      `window.electronUtils.setUiType("closed");` +
-      `window.electronUtils.setAppType("overlay");`;
+    `window.electronUtils.setAppType("overlay");` +
+    `window.electronUtils.setUiType("closed");`;
   } else {
     cmd = `window.electronUtils.setAppType("app");`;
   }
