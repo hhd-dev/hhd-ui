@@ -9,8 +9,6 @@ License:        GPL-3.0-or-later
 URL:            https://github.com/hhd-dev/hhd-ui
 Source0:        %{URL}/archive/v%{version}.tar.gz
 
-BuildArch:      x86_64
-
 BuildRequires:  npm
 BuildRequires:  git
 BuildRequires:  desktop-file-utils
@@ -59,7 +57,3 @@ install -Dm644 art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
 %{_datadir}/applications/hhd-ui/library_logo.png
 %{_datadir}/applications/hhd-ui/main_capsule.png
 %{_datadir}/applications/hhd-ui/icon.png
-
-%changelog
-* Wed Apr 3 2024 Matthew Schwartz <njtransit215@gmail.com> - 2.2.0-1
-- Initial package creation
