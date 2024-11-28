@@ -31,6 +31,23 @@ export interface NumberSetting<A, T extends string> extends Setting {
   default: A | undefined;
 }
 
+export interface CustomSetting<C, F> extends Setting {
+  type: "custom";
+  options: Record<string, string>;
+  config: C;
+  default: F | undefined;
+}
+
+export interface ProgressProps {
+  value: number | undefined;
+  max: number | undefined;
+  unit: string | undefined;
+  text: string | undefined;
+}
+
+export interface ProgressSetting
+  extends CustomSetting<undefined, ProgressProps> {}
+
 export interface ContainerSetting extends Setting {
   type: "container";
   unit: string | undefined;

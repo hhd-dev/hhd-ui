@@ -37,6 +37,7 @@ import {
 import slice from "../../model/slice";
 import NumberComponent from "./NumberComponent";
 import { getButtonStyleNested, getFocusStyle } from "./utils";
+import CustomComponent from "./CustomComponent";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   const { title, hint } = set as BoolSetting;
@@ -209,14 +210,6 @@ const MultipleComponent: FC<SettingProps> = ({
       </Menu>
     </Flex>
   );
-};
-
-const CustomComponent: FC<SettingProps> = () => {
-  // if (props.settings.tags?.includes("theme-selector")) {
-  //   return <ThemeSelector {...props} />;
-  // }
-
-  return <></>;
 };
 
 const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
