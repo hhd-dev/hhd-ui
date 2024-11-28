@@ -1,18 +1,7 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Progress,
-  Text,
-  useColorMode,
-} from "@chakra-ui/react";
+import { Box, Center, Flex, Progress, Text } from "@chakra-ui/react";
 import { FC } from "react";
+import { ProgressProps, SettingProps } from "../../model/common";
 import { useSettingState } from "../../model/hooks";
-import {
-  ProgressSetting,
-  ProgressProps,
-  SettingProps,
-} from "../../model/common";
 
 const ProgressComponent: FC<SettingProps> = ({ path, settings }) => {
   let { tags } = settings;
@@ -51,11 +40,7 @@ const ProgressComponent: FC<SettingProps> = ({ path, settings }) => {
           width="100%"
         />
         {slim && (state.text || state.unit) && (
-          <Text
-            fontSize="sm"
-            marginLeft="0.5rem"
-            marginTop="-0.22rem"
-          >
+          <Text fontSize="sm" marginLeft="0.5rem" marginTop="-0.22rem">
             {state.text}
             {state.unit}
           </Text>
