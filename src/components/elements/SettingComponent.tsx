@@ -221,11 +221,16 @@ const CustomComponent: FC<SettingProps> = () => {
 
 const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const { title, tags } = set;
-  const { state } = useSettingState<number>(path);
+  let { state } = useSettingState<any>(path);
   const error = tags?.includes("error");
   const slim = tags?.includes("hhd-version-display") || tags?.includes("slim");
+  const bold = tags?.includes("bold");
 
   if (!state) return <></>;
+
+  if (bold) {
+    state = <b>{state}</b>;
+  }
 
   if (slim) {
     return (
