@@ -221,8 +221,18 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
 
   if (!state) return <></>;
 
-  if (bold) {
-    state = <b>{state}</b>;
+  if (typeof state === "string") {
+    const lines = state.split("\n");
+    state = lines.map((line, index) => (
+      <Text key={index}>
+        {bold ? <b>{line}</b> : line}
+      </Text>
+    ));
+  } else {
+    if (bold) {
+      state = <b>{state}</b>;
+    }
+    state = <Text>{state}</Text>;
   }
 
   if (slim) {
