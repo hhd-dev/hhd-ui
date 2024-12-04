@@ -1,7 +1,23 @@
-import { Box, Center, Flex, Progress, Text } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  FormLabel,
+  Menu,
+  MenuButton,
+  MenuItemOption,
+  MenuList,
+  MenuOptionGroup,
+  Progress,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
 import { FC } from "react";
-import { ProgressProps, SettingProps } from "../../model/common";
-import { useSettingState } from "../../model/hooks";
+import { CustomSetting, ProgressProps, SettingProps } from "../../model/common";
+import { useElementNav, useSettingState } from "../../model/hooks";
+import { getButtonStyleNested, getFocusStyle } from "./utils";
 
 const ProgressComponent: FC<SettingProps> = ({ path, settings }) => {
   let { tags } = settings;
@@ -26,13 +42,13 @@ const ProgressComponent: FC<SettingProps> = ({ path, settings }) => {
     <Box margin="0.5rem 0.7rem">
       {!slim && (state.text || state.unit) && (
         <Center>
-          <Text fontSize="sm" marginBottom="0.5rem">
+          <Text fontSize="sm" marginBottom="0.5rem" marginTop="0.7rem">
             {state.text}
             {state.unit}
           </Text>
         </Center>
       )}
-      <Flex>
+      <Flex marginBottom="0.8rem">
         <Progress
           {...props}
           borderRadius="4px"
@@ -50,6 +66,72 @@ const ProgressComponent: FC<SettingProps> = ({ path, settings }) => {
   );
 };
 
+const DropdownComponent: FC<SettingProps> = ({
+  settings: set,
+  path,
+  section,
+}) => {
+  const { title } = set as CustomSetting<undefined, undefined>;
+  const { state, setState } = useSettingState<
+    { options: Record<string, string>; value: string } | undefined
+  >(path);
+  const { ref, focus, setFocus } = useElementNav<HTMLButtonElement>(
+    section,
+    path
+  );
+  const { colorMode } = useColorMode();
+
+  const { state: hsv } = useSettingState<{
+    hue: number;
+    saturation: number;
+    brightness: number;
+  }>(path.substring(0, path.lastIndexOf(".")));
+
+  if (!state) {
+    return <></>;
+  }
+
+  const { options, value: svalue } = state;
+  console.log(options);
+
+  return (
+    <Flex
+      flexDirection="column"
+      {...getFocusStyle(focus, colorMode)}
+      margin="0.2rem 0"
+    >
+      <FormLabel htmlFor={path}>{title}</FormLabel>
+      <Menu>
+        <MenuButton
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+          ref={ref}
+          onFocus={setFocus}
+          marginBottom="0.35rem"
+          {...getButtonStyleNested(set.tags, hsv)}
+        >
+          {svalue && options[svalue]}
+        </MenuButton>
+        <MenuList zIndex={100}>
+          <MenuOptionGroup type="radio" value={svalue}>
+            {Object.entries(options).map(([value, label]) => {
+              return (
+                <MenuItemOption
+                  key={value}
+                  value={value}
+                  onClick={() => setState({ options: state.options, value })}
+                >
+                  {label}
+                </MenuItemOption>
+              );
+            })}
+          </MenuOptionGroup>
+        </MenuList>
+      </Menu>
+    </Flex>
+  );
+};
+
 const CustomComponent: FC<SettingProps> = ({
   settings: set,
   path,
@@ -61,6 +143,9 @@ const CustomComponent: FC<SettingProps> = ({
     return <ProgressComponent settings={set} path={path} section={section} />;
   }
 
+  if (tags?.includes("dropdown")) {
+    return <DropdownComponent settings={set} path={path} section={section} />;
+  }
   return <> </>;
 };
 

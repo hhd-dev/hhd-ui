@@ -433,7 +433,12 @@ function getFocusElements(
       }
       return out;
     case "mode":
-      out = [path];
+      out = [];
+
+      if (!set.tags?.includes("no_dropdown")) {
+        out.push(path);
+      }
+
       const mode = state["mode"] as unknown as string;
       const data = (set as ModeSetting).modes[mode];
       if (data) {

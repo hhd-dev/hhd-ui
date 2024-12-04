@@ -77,7 +77,6 @@ const goIn = (s: typeof store) => {
       if (setting.tags?.includes("verify") && !isSel) {
         s.dispatch(hhdSlice.actions.select());
       } else {
-        s.dispatch(hhdSlice.actions.unselect());
         s.dispatch(
           updateSettingValue({
             cred: { token, endpoint: url },
