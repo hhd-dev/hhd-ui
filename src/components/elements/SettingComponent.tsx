@@ -224,13 +224,15 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   if (typeof state === "string") {
     const lines = state.split("\n");
     state = lines.map((line, index) => (
-      <Text key={index}>
-        {bold ? <b>{line}</b> : line}
-      </Text>
+      <Text key={index}>{bold ? <b>{line}</b> : line}</Text>
     ));
   } else {
     if (bold) {
-      state = <b>{state}</b>;
+      state = (
+        <Text>
+          <b>{state}</b>
+        </Text>
+      );
     }
     state = <Text>{state}</Text>;
   }
@@ -243,7 +245,7 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
           {...(error && { colorScheme: "red" })}
         >
           <Text as="b">{title}:</Text>
-          <Text>{state}</Text>
+          {state}
         </Flex>
       </Code>
     );
