@@ -92,7 +92,6 @@ const DropdownComponent: FC<SettingProps> = ({
   }
 
   const { options, value: svalue } = state;
-  console.log(options);
 
   return (
     <Flex

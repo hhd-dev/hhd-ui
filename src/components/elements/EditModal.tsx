@@ -83,7 +83,7 @@ function ModalButton({
 export function EditModal() {
   const { path, setting } = useSelectedSetting();
   const dispatch = useDispatch();
-  const { state, setState } = useSettingState(
+  const { state, setState } = useSettingState<any>(
     (path || "") + (setting && setting.type === "mode" ? ".mode" : "")
   );
   const sel = useSelector(selectSelectedChoice);
@@ -101,7 +101,13 @@ export function EditModal() {
   >(path || "");
 
   if (!path || !setting) return <></>;
-  if (!["mode", "multiple", "action"].includes(setting.type)) return <></>;
+  const is_custom_dropdown =
+    setting.type == "custom" && setting.tags?.includes("dropdown");
+  if (
+    !["mode", "multiple", "action"].includes(setting.type) &&
+    !is_custom_dropdown
+  )
+    return <></>;
   if (setting.tags?.includes("ordinal")) return <></>;
   const verify = setting.type === "action";
 
@@ -200,11 +206,11 @@ export function EditModal() {
             </Flex>
           ) : (
             <Flex direction="column" marginBottom="1rem">
-              {Object.entries(getSettingChoices(setting)).map(([val, name]) => (
+              {Object.entries(getSettingChoices(setting, state)).map(([val, name]) => (
                 <ModalButton
                   key={val}
                   val={val}
-                  name={name}
+                  name={name as string}
                   sel={sel}
                   state={state}
                   setting={setting}

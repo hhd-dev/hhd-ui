@@ -101,6 +101,22 @@ const goIn = (s: typeof store) => {
         s.dispatch(hhdSlice.actions.select());
       }
       break;
+    case "custom":
+      if (!setting.tags?.includes("dropdown")) break;
+      if (isSel) {
+        if (curr !== selChoice.value)
+          s.dispatch(
+            updateSettingValue({
+              cred: { token, endpoint: url },
+              path: path + ".value",
+              value: selChoice,
+            })
+          );
+        s.dispatch(hhdSlice.actions.unselect());
+      } else {
+        s.dispatch(hhdSlice.actions.select());
+      }
+      break;
     case "multiple":
       // case "discrete":
       if (isSel) {

@@ -193,8 +193,11 @@ const slice = createSlice({
     goPrev: (store, action: PayloadAction<{ section: string } | undefined>) => {
       if (store.navigation.sel) {
         const { setting } = selectSelectedSetting({ hhd: store });
+        const state = selectSettingState(selectFocusedPath({ hhd: store }))({
+          hhd: store,
+        });
         if (!setting) return;
-        const choices = Object.keys(getSettingChoices(setting));
+        const choices = Object.keys(getSettingChoices(setting, state));
         if (choices.length) {
           const idx = choices.indexOf(store.navigation.sel_choice);
           if (idx === -1 || idx <= 0) return;
@@ -226,7 +229,10 @@ const slice = createSlice({
       if (store.navigation.sel) {
         const { setting } = selectSelectedSetting({ hhd: store });
         if (!setting) return;
-        const choices = Object.keys(getSettingChoices(setting));
+        const state = selectSettingState(selectFocusedPath({ hhd: store }))({
+          hhd: store,
+        });
+        const choices = Object.keys(getSettingChoices(setting, state));
         if (choices.length) {
           const idx = choices.indexOf(String(store.navigation.sel_choice));
           if (idx === -1 || idx >= choices.length - 1) return;
@@ -271,7 +277,8 @@ const slice = createSlice({
         path + (setting.type === "mode" ? ".mode" : "")
       )({ hhd: store });
       store.navigation.sel = true;
-      store.navigation.sel_choice = String(val);
+      store.navigation.sel_choice =
+        (val as unknown as { value: string }).value || String(val);
     },
     selectOption: (store, action: PayloadAction<string>) => {
       const section = store.navigation.curr["tab"];
@@ -430,6 +437,11 @@ function getFocusElements(
         out.push(
           ...getFocusElements(v, state[k], `${path}.${k}`, shouldRender)
         );
+      }
+      return out;
+    case "custom":
+      if (set.tags?.includes("dropdown")) {
+        out.push(path);
       }
       return out;
     case "mode":

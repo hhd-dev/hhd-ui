@@ -128,7 +128,7 @@ function traverseSetting(
   ];
 }
 
-export const getSettingChoices = (setting: Setting) => {
+export const getSettingChoices = (setting: Setting, state: any) => {
   switch (setting.type) {
     case "mode":
       return Object.fromEntries(
@@ -143,6 +143,11 @@ export const getSettingChoices = (setting: Setting) => {
       return Object.fromEntries(
         (setting as DiscreteSetting).options.map((v) => [String(v), String(v)])
       );
+    case "custom":
+      if (setting.tags?.includes("dropdown")) {
+        return state.options;
+      }
+      return {};
   }
   return {};
 };
