@@ -7,6 +7,7 @@ import {
   Flex,
   FormLabel,
   Heading,
+  Link,
   Menu,
   MenuButton,
   MenuItemOption,
@@ -21,7 +22,7 @@ import {
   Tooltip,
   useColorMode,
 } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import {
   BoolSetting,
@@ -38,6 +39,7 @@ import slice from "../../model/slice";
 import NumberComponent from "./NumberComponent";
 import { getButtonStyleNested, getFocusStyle } from "./utils";
 import CustomComponent from "./CustomComponent";
+import qrcode from "qrcode";
 
 const BoolComponent: FC<SettingProps> = ({ settings: set, path, section }) => {
   const { title, hint } = set as BoolSetting;
@@ -218,8 +220,39 @@ const DisplayComponent: FC<SettingProps> = ({ settings: set, path }) => {
   const error = tags?.includes("error");
   const slim = tags?.includes("hhd-version-display") || tags?.includes("slim");
   const bold = tags?.includes("bold");
+  const qr = useRef(null);
+
+  useEffect(() => {
+    if (!tags?.includes("qr") || !qr || !qr.current || !state) return;
+    console.log(state);
+    qrcode.toCanvas(qr.current, state, (error) => {
+      if (error) console.error(error);
+    });
+  }, [state, qr, tags]);
 
   if (!state) return <></>;
+
+  if (tags?.includes("qr")) {
+    return (
+      <Flex
+        flexDirection="column"
+        alignItems="center"
+        margin="0.5rem 0.7rem"
+        padding="1rem"
+        borderRadius="6px"
+        textAlign="center"
+        {...(error && { colorScheme: "red" })}
+      >
+        <Heading size="md" textAlign="center" paddingBottom="0.5rem">
+          {title}
+        </Heading>
+        <Link marginBottom="0.7rem" href={state} isExternal>
+          {state}
+        </Link>
+        <canvas ref={qr} />
+      </Flex>
+    );
+  }
 
   if (typeof state === "string") {
     const lines = state.split("\n");
