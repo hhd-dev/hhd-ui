@@ -471,7 +471,7 @@ export const Logo = ({ height, width, qam }: any) => {
               }
             />
           )}
-          {!qam && theme?.includes("_ba") && (
+          {(!qam || !theme?.includes("_ba")) && (
             <Img
               src={colorMode == "dark" ? MonoDark : MonoLight}
               marginLeft="0.8rem"
@@ -499,7 +499,7 @@ export const Logo = ({ height, width, qam }: any) => {
               }
             />
           )}
-          {!qam && theme?.includes("_ba") && (
+          {(!qam || !theme?.includes("_ba")) && (
             <Img
               src={colorMode == "dark" ? MonoDark : MonoLight}
               marginLeft="0.8rem"
