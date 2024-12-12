@@ -151,6 +151,58 @@ export const distroThemes: Record<string, any> = {
       "900": "#112216",
     },
   }),
+  blood_orange: createTheme({
+    brand: {
+      "50": "#FDECE7",
+      "100": "#f06429",
+      "200": "#f06429",
+      "300": "#f06429",
+      "400": "#f06429",
+      "500": "#f06429",
+      "600": "#8F270A",
+      "700": "#8F270A",
+      "800": "#5F1A07",
+      "900": "#300D03",
+    },
+    gray: {
+      "50": "#fde8de",
+      "100": "#fde8de",
+      "200": "#f06226",
+      "300": "#ef5514",
+      "400": "#e14d0f",
+      "500": "#742807",
+      "600": "#4f1b05",
+      "700": "#030100",
+      "800": "#030100",
+      "900": "#030100",
+    },
+  }),
+  red_gold: createTheme({
+    brand: {
+      "50": "#FDECE7",
+      "100": "#FDAA31",
+      "200": "#FDAA31",
+      "300": "#FDAA31",
+      "400": "#FDAA31",
+      "500": "#FDAA31",
+      "600": "#f19002",
+      "700": "#f19002",
+      "800": "#905601",
+      "900": "#905601",
+    },
+    gray: {
+      "50": "#fce0dd",
+      "100": "#fce0dd",
+      "200": "#f38c84",
+      "300": "#f38c84",
+      "400": "#c72013",
+      "500": "#b51d11",
+      "600": "#a31a10",
+      "700": "#7f140c",
+      "800": "#080100",
+      "900": "#080100",
+    },
+  }),
   bazzite: createTheme({
     brand: {
       "50": "#EBE8FD",
@@ -205,8 +257,27 @@ export const distroThemes: Record<string, any> = {
   }),
 };
 
+export const cleanDistroName = (distro: string | null) => {
+  return distro ? distro.replace("_ba", "") : null;
+};
+
+export const getDistroTheme = (distro: string | null) => {
+  let main = theme;
+  let controller = controllerTheme;
+  distro = cleanDistroName(distro);
+
+  if (distro && distroThemes[distro]) {
+    main = distroThemes[distro].theme;
+    controller = distroThemes[distro].controllerTheme;
+  }
+
+  return { theme: main, controllerTheme: controller };
+};
+
 export const getScrollbarStyle = (distro: string | null, colorMode: string) => {
   let colors;
+  distro = cleanDistroName(distro);
+
   switch (distro) {
     case "vapor":
       colors = ["#66c0f4", "#171a2130"];
@@ -219,6 +290,12 @@ export const getScrollbarStyle = (distro: string | null, colorMode: string) => {
       break;
     case "ocean":
       colors = ["#E4BC1B", "#183C8130"];
+      break;
+    case "blood_orange":
+      colors = ["#f06429", "#1d191630"];
+      break;
+    case "red_gold":
+      colors = ["#FDAA31", "#1d191630"];
       break;
     default:
       colors = ["#B69616", "#1d191630"];
@@ -237,6 +314,8 @@ export const getScrollbarStyle = (distro: string | null, colorMode: string) => {
 };
 
 export const getBackground = (colorMode: string, theme: string | null) => {
+  theme = cleanDistroName(theme);
+
   switch (theme) {
     // Rotation is target color hue -50
     case "vapor":
@@ -261,6 +340,30 @@ export const getBackground = (colorMode: string, theme: string | null) => {
         return {
           bgImage: BackgroundMonoLight,
           filter: "sepia(0.3) hue-rotate(85deg)",
+        };
+      }
+    case "red_gold":
+      if (colorMode === "dark") {
+        return {
+          bgImage: BackgroundMonoDark,
+          filter: "sepia(1) saturate(3) hue-rotate(315deg)",
+        };
+      } else {
+        return {
+          bgImage: BackgroundMonoLight,
+          filter: "sepia(0.5) saturate(0.2) hue-rotate(315deg)",
+        };
+      }
+    case "blood_orange":
+      if (colorMode === "dark") {
+        return {
+          bgImage: BackgroundMonoDark,
+          filter: "sepia(1) saturate(0.4) hue-rotate(320deg)",
+        };
+      } else {
+        return {
+          bgImage: BackgroundMonoLight,
+          filter: "sepia(0.5) saturate(0.2) hue-rotate(320deg)",
         };
       }
     case "bazzite":
@@ -305,8 +408,9 @@ export const getBackground = (colorMode: string, theme: string | null) => {
 export const Logo = ({ height, width, qam }: any) => {
   const { colorMode } = useColorMode();
   const theme = useSelector(selectCurrentTheme);
+  const clean = cleanDistroName(theme);
 
-  switch (theme) {
+  switch (clean) {
     case "vapor":
       return (
         <Img
@@ -349,6 +453,62 @@ export const Logo = ({ height, width, qam }: any) => {
               marginLeft="0.8rem"
               height={height}
               filter="sepia(1) saturate(2.5) hue-rotate(210deg)"
+            />
+          )}
+        </Flex>
+      );
+    case "blood_orange":
+      return (
+        <Flex direction="row" alignItems="center">
+          {theme?.includes("_ba") && (
+            <Img
+              src={Bazzite}
+              height={height}
+              filter={
+                colorMode == "dark"
+                  ? "sepia(1) saturate(4.5) hue-rotate(320deg)"
+                  : "sepia(1) saturate(4) hue-rotate(320deg)"
+              }
+            />
+          )}
+          {!qam && theme?.includes("_ba") && (
+            <Img
+              src={colorMode == "dark" ? MonoDark : MonoLight}
+              marginLeft="0.8rem"
+              height={height}
+              filter={
+                colorMode == "dark"
+                  ? "sepia(0.8) saturate(4) hue-rotate(338deg)"
+                  : "sepia(1) saturate(2) hue-rotate(320deg)"
+              }
+            />
+          )}
+        </Flex>
+      );
+    case "red_gold":
+      return (
+        <Flex direction="row" alignItems="center">
+          {theme?.includes("_ba") && (
+            <Img
+              src={Bazzite}
+              height={height}
+              filter={
+                colorMode == "dark"
+                  ? "sepia(1) saturate(5) hue-rotate(350deg)"
+                  : "sepia(1) saturate(4) hue-rotate(330deg)"
+              }
+            />
+          )}
+          {!qam && theme?.includes("_ba") && (
+            <Img
+              src={colorMode == "dark" ? MonoDark : MonoLight}
+              marginLeft="0.8rem"
+              height={height}
+              filter={
+                colorMode == "dark"
+                  ? "sepia(0.8) saturate(6) hue-rotate(360deg)"
+                  : "sepia(1) saturate(2) hue-rotate(360deg)"
+              }
             />
           )}
         </Flex>

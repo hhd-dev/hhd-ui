@@ -13,6 +13,7 @@ import defaultTheme, {
   controllerTheme as defaultControllerTheme,
   distroThemes,
   getBackground,
+  getDistroTheme,
   getScrollbarStyle,
 } from "./components/theme.tsx";
 
@@ -158,13 +159,7 @@ function App() {
 function ThemeSet() {
   const controller = useSelector(selectHasController);
   const distro = useSelector(selectCurrentTheme);
-  let theme = defaultTheme;
-  let controllerTheme = defaultControllerTheme;
-
-  if (distro && distroThemes[distro]) {
-    theme = distroThemes[distro].theme;
-    controllerTheme = distroThemes[distro].controllerTheme;
-  }
+  let {theme, controllerTheme} = getDistroTheme(distro);
 
   return (
     <ChakraProvider theme={controller ? controllerTheme : theme}>
