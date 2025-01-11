@@ -3,6 +3,7 @@ Type=Application
 Name=Handheld Daemon
 Comment="Configurator interface for Handheld Daemon."
 GenericName=Controller Settings
+Keywords=hhd;
 Exec=hhd-ui
 Categories=Gaming;
 
