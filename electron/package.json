@@ -28,6 +28,11 @@
       "target": "AppImage",
       "icon": "art/icon.png",
       "category": "game"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "hhd-dev",
+      "repo": "hhd-ui"
     }
   },
   "files": [
