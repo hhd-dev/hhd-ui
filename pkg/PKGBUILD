@@ -31,7 +31,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  export npm_config_target=$(tail /usr/lib/electron/version)
+  export npm_config_target=$(tail /usr/lib/electron$_electronversion/version)
   export npm_config_arch=x64
   export npm_config_target_arch=x64
   export npm_config_runtime=electron
