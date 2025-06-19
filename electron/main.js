@@ -361,9 +361,6 @@ function fileProtocolRedirect() {
         path: path.normalize(`${__dirname}/static/build/${url}`.split("#")[0]),
       });
     },
-    (err) => {
-      if (err) console.error("Failed to register protocol");
-    }
   );
 }
 

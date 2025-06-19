@@ -1,6 +1,6 @@
 # Maintainer: Antheas Kapenekakis (aur at antheas.dev)
 # Maintainer: MrDuartePT <gonegrier.duarte@gmail.com>
-_electronversion=31
+_electronversion=""
 _pkgname=hhd-ui
 pkgname=$_pkgname
 pkgver=VERSION

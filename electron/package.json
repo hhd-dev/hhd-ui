@@ -1,7 +1,7 @@
 {
   "name": "dev.hhd.hhd-ui",
   "author": {
-    "name": "Aarron L"
+    "name": "Antheas Kapenekakis <pypi@antheas.dev>"
   },
   "homepage": "https://github.com/hhd-dev/hhd-ui",
   "description": "Handhend Daemon UI",
@@ -9,8 +9,8 @@
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {
-    "electron": "^31.1.0",
-    "electron-builder": "^24.13.3",
+    "electron": "^36.5.0",
+    "electron-builder": "^26.0.12",
     "electron-packager": "^17.1.2"
   },
   "scripts": {
