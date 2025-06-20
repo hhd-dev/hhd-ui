@@ -330,7 +330,7 @@ const ActionComponent: FC<SettingProps> = ({
     >
       <Button
         onClick={onClick}
-        disabled={!state}
+        disabled={!!state}
         ref={ref}
         onFocus={setFocus}
         margin="0.3rem 0.1rem"
