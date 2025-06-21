@@ -70,7 +70,11 @@ const NumberComponent: FC<SettingProps> = ({
           hue: 0,
           saturation: hsv?.saturation || 100,
           brightness: hsv?.brightness || 100,
-        })} 0 0)`,
+        })},${getCssColor({
+          hue: 360,
+          saturation: hsv?.saturation || 100,
+          brightness: hsv?.brightness || 100,
+        })})`,
       };
     } else if (tags?.includes("saturation")) {
       hasFill = false;
