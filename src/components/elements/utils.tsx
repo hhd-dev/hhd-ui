@@ -1,3 +1,4 @@
+const BRIGHTNESS_DEFAULT = 50;
 
 export const getFocusStyle = (f: boolean, mode: string) =>
   f
@@ -71,11 +72,13 @@ export const getHsvStyle = ({
 }: {
   hue: number;
   saturation: number;
-  brightness: number;
+  brightness: number | undefined;
 }) => {
   if (hue >= 360) {
     hue = 359;
   }
+  if (brightness === undefined) brightness = BRIGHTNESS_DEFAULT;
+
   const params: any = {
     transition: "all 0.5s ease",
     backgroundColor: getCssColor({ hue, saturation, brightness }),
@@ -109,11 +112,12 @@ export const getDualStyle = ({
   hue: number;
   hue2: number | undefined;
   saturation: number;
-  brightness: number;
+  brightness: number | undefined;
 }) => {
   if (hue >= 360) {
     hue = 359;
   }
+  if (brightness === undefined) brightness = BRIGHTNESS_DEFAULT;
 
   const h2 = typeof hue2 !== "undefined" ? hue2 : hue;
   const params: any = {
@@ -160,11 +164,13 @@ export const getPulseGrad = (
   }: {
     hue: number;
     saturation: number;
-    brightness: number;
+    brightness: number | undefined;
   },
   disabled: boolean
 ) => {
   let con, coff;
+  if (brightness === undefined) brightness = BRIGHTNESS_DEFAULT;
+
   if (disabled) {
     con = getCssColor({
       hue,
@@ -186,11 +192,13 @@ export const getPulseStyle = ({
 }: {
   hue: number;
   saturation: number;
-  brightness: number;
+  brightness: number | undefined;
 }) => {
   if (hue >= 360) {
     hue = 359;
   }
+  if (brightness === undefined) brightness = BRIGHTNESS_DEFAULT;
+
   const params: any = {
     background: getPulseGrad({ hue, saturation, brightness }, false),
     border: `4px solid ${getCssColor({ hue, saturation, brightness })}`,
