@@ -375,6 +375,9 @@ function fileProtocolRedirect() {
     }
   }
 
+  // Fixes gnome with electron 36
+  app.commandLine.appendSwitch("gtk-version", "3");
+
   app.whenReady().then(() => createMainWindow());
 
   app.on("window-all-closed", () => {
