@@ -144,8 +144,10 @@ const createMainWindow = async () => {
       }
     }
 
-    const cmd = `window.electronUtils.login("${encodeURI(token) || ""}");`;
-    await mainWindow.webContents.executeJavaScript(cmd);
+    if (token) {
+      const cmd = `window.electronUtils.login("${encodeURI(token)}");`;
+      await mainWindow.webContents.executeJavaScript(cmd);
+    }
   } catch (err) {
     console.error("Token file not found, skipping autologin.");
   }
