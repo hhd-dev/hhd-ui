@@ -122,8 +122,8 @@ const createMainWindow = async () => {
   let cmd;
   if (isOverlayUi) {
     cmd =
-    `window.electronUtils.setAppType("overlay");` +
-    `window.electronUtils.setUiType("closed");`;
+      `window.electronUtils.setAppType("overlay");` +
+      `window.electronUtils.setUiType("closed");`;
   } else {
     cmd = `window.electronUtils.setAppType("app");`;
   }
@@ -131,13 +131,20 @@ const createMainWindow = async () => {
 
   // Attempt to autologin with user token
   try {
-    console.error(`Checking dir '${homeDir}' for the user token.`);
-    const token = fs.readFileSync(`${homeDir}/.config/hhd/token`, {
-      encoding: "utf8",
-      flag: "r",
-    });
+    let token = null;
 
-    const cmd = `window.electronUtils.login("${encodeURI(token)}");`;
+    for (const file of [`/etc/hhd/token`, `${homeDir}/.config/hhd/token`]) {
+      if (fs.existsSync(file)) {
+        console.error(`Checking dir '${file}' for the user token.`);
+        token = fs.readFileSync(file, {
+          encoding: "utf8",
+          flag: "r",
+        });
+        break;
+      }
+    }
+
+    const cmd = `window.electronUtils.login("${encodeURI(token) || ""}");`;
     await mainWindow.webContents.executeJavaScript(cmd);
   } catch (err) {
     console.error("Token file not found, skipping autologin.");
@@ -353,15 +360,12 @@ const createMainWindow = async () => {
 function fileProtocolRedirect() {
   // Redirect local files to proper path
   // TODO: Fix this. Probably insecure.
-  protocol.interceptFileProtocol(
-    "file",
-    (request, callback) => {
-      const url = request.url.substr(7); /* all urls start with 'file://' */
-      callback({
-        path: path.normalize(`${__dirname}/static/build/${url}`.split("#")[0]),
-      });
-    },
-  );
+  protocol.interceptFileProtocol("file", (request, callback) => {
+    const url = request.url.substr(7); /* all urls start with 'file://' */
+    callback({
+      path: path.normalize(`${__dirname}/static/build/${url}`.split("#")[0]),
+    });
+  });
 }
 
 (() => {
