@@ -133,7 +133,11 @@ const createMainWindow = async () => {
   try {
     let token = null;
 
-    for (const file of [`/etc/hhd/token`, `${homeDir}/.config/hhd/token`]) {
+    for (const file of [
+      `/tmp/hhd/token`,
+      `/etc/hhd/token`,
+      `${homeDir}/.config/hhd/token`,
+    ]) {
       if (fs.existsSync(file)) {
         console.error(`Checking dir '${file}' for the user token.`);
         token = fs.readFileSync(file, {
