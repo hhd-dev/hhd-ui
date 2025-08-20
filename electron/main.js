@@ -308,7 +308,7 @@ const createMainWindow = async () => {
         break;
       case "open_qam":
         // If the user presses QAM again close
-        if (currentType === "qam" && !qam_preopened) {
+        if ((currentType === "expanded" || currentType === "qam") && !qam_preopened) {
           console.error("QAM is currently open, closing.");
           uiType = "closed";
         } else {
