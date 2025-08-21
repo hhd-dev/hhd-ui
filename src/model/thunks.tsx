@@ -21,7 +21,11 @@ export const fetchFn = async (
   options.headers = { ...options?.headers, ...authHeaders };
 
   try {
-    const resp = await fetch(`${endpoint}/api/v1/${url}`, options);
+    let uri = `${endpoint}/api/v1/${url}`;
+    if (navigator.language) {
+      uri += (url.includes("?") ? `&` : '?') + `i18n=${navigator.language}`;
+    }
+    const resp = await fetch(uri, options);
     if (resp.ok) {
       return { data: await resp.json(), error: null };
     } else {
