@@ -14,6 +14,7 @@ import MonoDark from "../assets/mono_dark.svg";
 import MonoLight from "../assets/mono_light.svg";
 import Manjaro from "../assets/distro/manjaro.svg";
 import Bazzite from "../assets/distro/bazzite.svg";
+import Yaguarete from "../assets/distro/yaguarete.svg";
 import { useColorMode, Img, Flex } from "@chakra-ui/react";
 import { selectCurrentTheme } from "../model/slice";
 import { useSelector } from "react-redux";
@@ -255,6 +256,32 @@ export const distroThemes: Record<string, any> = {
       "900": "#08142B",
     },
   }),
+  yaguarete: createTheme({
+    brand: {
+      "50": "#FFE6DC",
+      "100": "#FFB59A",
+      "200": "#FF9573",
+      "300": "#FF7A4F",
+      "400": "#FF652E",
+      "500": "#FF4500",
+      "600": "#CC3700",
+      "700": "#992900",
+      "800": "#661B00",
+      "900": "#330E00",
+    },
+    gray: {
+      "50": "#E8E8E8",
+      "100": "#C8C8C8",
+      "200": "#A8A8A8",
+      "300": "#888888",
+      "400": "#686868",
+      "500": "#484848",
+      "600": "#2C2C2C",
+      "700": "#1A1A1A",
+      "800": "#0F0F0F",
+      "900": "#050505",
+    },
+  }),
 };
 
 export const cleanDistroName = (distro: string | null) => {
@@ -296,6 +323,9 @@ export const getScrollbarStyle = (distro: string | null, colorMode: string) => {
       break;
     case "red_gold":
       colors = ["#FDAA31", "#1d191630"];
+      break;
+    case "yaguarete":
+      colors = ["#FF4500", "#0F0F0F30"];
       break;
     default:
       colors = ["#B69616", "#1d191630"];
@@ -453,6 +483,20 @@ export const Logo = ({ height, width, qam }: any) => {
               marginLeft="0.8rem"
               height={height}
               filter="sepia(1) saturate(2.5) hue-rotate(210deg)"
+            />
+          )}
+        </Flex>
+      );
+    case "yaguarete":
+      return (
+        <Flex direction="row" alignItems="center">
+          <Img src={Yaguarete} height={height} />
+          {!qam && (
+            <Img
+              src={colorMode == "dark" ? MonoDark : MonoLight}
+              marginLeft="0.8rem"
+              height={height}
+              filter="sepia(1) saturate(4) hue-rotate(340deg)"
             />
           )}
         </Flex>
