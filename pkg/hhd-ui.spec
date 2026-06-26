@@ -14,6 +14,9 @@ BuildRequires:  git
 BuildRequires:  desktop-file-utils
 BuildRequires:  systemd-rpm-macros
 
+Requires:       fuse
+Requires:       fuse-devel
+
 %description
 Configurator interface for Handheld Daemon.
 
