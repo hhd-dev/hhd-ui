@@ -43,10 +43,7 @@ const AppUi = () => {
         w="100%"
         h="100%"
         zIndex="-1"
-        bgGradient={`linear(95deg, ${
-          colorMode == "dark" ? "gray.800" : "white"
-        } 65%, #00000000 95% 100%)`}
-        opacity={colorMode == "dark" ? "0.6" : "0.8"}
+        bg={colorMode == "dark" ? "gray.800" : "white"}
       ></Box>
       <Flex
         padding="1rem 1.5rem 1rem 1.4rem"

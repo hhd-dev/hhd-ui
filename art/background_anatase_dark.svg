@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1600" viewBox="0 0 2560 1600" preserveAspectRatio="xMidYMid slice" role="img">
+  <title>Anatase UI Crystal — Dark</title>
+  <desc>A subdued faceted mineral background using the Anatase Chromium neutral palette.</desc>
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e0e0f"/>
+      <stop offset="0.52" stop-color="#161818"/>
+      <stop offset="1" stop-color="#1f1f1f"/>
+    </linearGradient>
+    <linearGradient id="left-facet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#303030"/>
+      <stop offset="1" stop-color="#1f1f1f"/>
+    </linearGradient>
+    <linearGradient id="right-facet" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#474747"/>
+      <stop offset="1" stop-color="#282828"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="2560" height="1600" fill="url(#base)"/>
+
+  <!-- Left crystal cluster. Its strongest planes stay outside the content column. -->
+  <path d="M0 240 L420 80 L760 520 L510 1010 L0 1180 Z" fill="#1f1f1f" opacity="0.88"/>
+  <path d="M0 240 L420 80 L330 610 L0 760 Z" fill="#303030" opacity="0.72"/>
+  <path d="M420 80 L760 520 L330 610 Z" fill="url(#left-facet)" opacity="0.82"/>
+  <path d="M330 610 L760 520 L510 1010 Z" fill="#282828" opacity="0.82"/>
+  <path d="M0 760 L330 610 L510 1010 L0 1180 Z" fill="#161818" opacity="0.92"/>
+  <path d="M0 1180 L510 1010 L720 1600 L0 1600 Z" fill="#282828" opacity="0.58"/>
+
+  <!-- Right crystal cluster mirrors the weight without becoming a repeated pattern. -->
+  <path d="M2560 0 L2560 810 L2200 950 L1830 570 L2070 130 Z" fill="#1f1f1f" opacity="0.9"/>
+  <path d="M2070 130 L2560 0 L2390 420 L2200 950 L1830 570 Z" fill="url(#right-facet)" opacity="0.62"/>
+  <path d="M2390 420 L2560 0 L2560 810 L2200 950 Z" fill="#303030" opacity="0.78"/>
+  <path d="M2200 950 L2560 810 L2560 1600 L2040 1600 L1880 1250 Z" fill="#161818" opacity="0.94"/>
+  <path d="M1880 1250 L2200 950 L2040 1600 L1690 1600 Z" fill="#282828" opacity="0.48"/>
+
+  <!-- Sparse mineral seams provide the Anatase accent without competing with controls. -->
+  <path d="M0 760 L330 610 L420 80 L760 520" fill="none" stroke="#c4aa36" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.18"/>
+  <path d="M1830 570 L2070 130 L2390 420 L2560 350" fill="none" stroke="#c4aa36" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.16"/>
+  <path d="M1880 1250 L2200 950 L2560 810" fill="none" stroke="#5e5e5e" stroke-width="3" opacity="0.22"/>
+</svg>

@@ -5,6 +5,8 @@ import {
 } from "@chakra-ui/react";
 import BackgroundMonoDark from "../assets/background_dark_mono.jpg";
 import BackgroundMonoLight from "../assets/background_light_mono.jpg";
+import BackgroundAnataseDark from "../assets/background_anatase_dark.png";
+import BackgroundAnataseLight from "../assets/background_anatase_light.png";
 export const CONTENT_WIDTH = "500px";
 export const QAM_WIDTH = "300px";
 
@@ -12,10 +14,10 @@ import LogoLight from "../assets/logo_light.svg";
 import LogoDark from "../assets/logo_dark.svg";
 import MonoDark from "../assets/mono_dark.svg";
 import MonoLight from "../assets/mono_light.svg";
-import Manjaro from "../assets/distro/manjaro.svg";
-import Bazzite from "../assets/distro/bazzite.svg";
-import { useColorMode, Img, Flex } from "@chakra-ui/react";
-import { selectCurrentTheme } from "../model/slice";
+import AnataseDark from "../assets/distro/anatase_dark.svg";
+import AnataseLight from "../assets/distro/anatase_light.svg";
+import { useColorMode, Img } from "@chakra-ui/react";
+import { selectCurrentDistro, selectCurrentTheme } from "../model/slice";
 import { useSelector } from "react-redux";
 
 const config: ThemeConfig = {
@@ -125,30 +127,30 @@ export const distroThemes: Record<string, any> = {
       "900": "#171a21",
     },
   }),
-  manjaro: createTheme({
+  anatase: createTheme({
     brand: {
-      "50": "#35bf5c",
-      "100": "#35bf5c",
-      "200": "#35bf5c",
-      "300": "#35bf5c",
-      "400": "#35bf5c",
-      "500": "#35bf5c",
-      "600": "#31b055",
-      "700": "#289146",
-      "800": "#24823e",
-      "900": "#0f3519",
+      "50": "#f4e451",
+      "100": "#ead94b",
+      "200": "#dfcd40",
+      "300": "#d5c137",
+      "400": "#cfb831",
+      "500": "#cfb831",
+      "600": "#bea628",
+      "700": "#9e8a30",
+      "800": "#605320",
+      "900": "#322b12",
     },
     gray: {
-      "50": "#EEF7F1",
-      "100": "#CFE8D7",
-      "200": "#B0D9BD",
-      "300": "#91CAA3",
-      "400": "#72BB8A",
-      "500": "#54AB70",
-      "600": "#438959",
-      "700": "#19251d",
-      "800": "#19251d",
-      "900": "#112216",
+      "50": "#f2f2f2",
+      "100": "#e3e3e3",
+      "200": "#c7c7c7",
+      "300": "#ababab",
+      "400": "#5e5e5e",
+      "500": "#474747",
+      "600": "#303030",
+      "700": "#1f1f1f",
+      "800": "#161818",
+      "900": "#0e0e0f",
     },
   }),
   blood_orange: createTheme({
@@ -203,32 +205,6 @@ export const distroThemes: Record<string, any> = {
       "900": "#080100",
     },
   }),
-  bazzite: createTheme({
-    brand: {
-      "50": "#EBE8FD",
-      "100": "#816BF0",
-      "200": "#816BF0",
-      "300": "#816BF0",
-      "400": "#5E42EB",
-      "500": "#3A18E7",
-      "600": "#2F13B9",
-      "700": "#6d49b6",
-      "800": "#170A5C",
-      "900": "#0C052E",
-    },
-    gray: {
-      "50": "#ECE6FE",
-      "100": "#C9BAFC",
-      "200": "#A68EFB",
-      "300": "#8362F9",
-      "400": "#4a25cf",
-      "500": "#4a25cf",
-      "600": "#3e1fad",
-      "700": "#0e0b3c",
-      "800": "#0e0b3c",
-      "900": "#0e0b3c",
-    },
-  }),
   ocean: createTheme({
     brand: {
       "50": "#E4BC1B",
@@ -258,7 +234,7 @@ export const distroThemes: Record<string, any> = {
 };
 
 export const cleanDistroName = (distro: string | null) => {
-  return distro ? distro.replace("_ba", "") : null;
+  return distro?.endsWith("_an") ? distro.slice(0, -3) : distro;
 };
 
 export const getDistroTheme = (distro: string | null) => {
@@ -282,11 +258,8 @@ export const getScrollbarStyle = (distro: string | null, colorMode: string) => {
     case "vapor":
       colors = ["#66c0f4", "#171a2130"];
       break;
-    case "manjaro":
-      colors = ["#438959", "#19251d30"];
-      break;
-    case "bazzite":
-      colors = ["#6d49b6", "#0e0b3c30"];
+    case "anatase":
+      colors = ["#f8dd0b", "#22232330"];
       break;
     case "ocean":
       colors = ["#E4BC1B", "#183C8130"];
@@ -313,7 +286,7 @@ export const getScrollbarStyle = (distro: string | null, colorMode: string) => {
   };
 };
 
-export const getBackground = (colorMode: string, theme: string | null) => {
+const getThemeBackground = (colorMode: string, theme: string | null) => {
   theme = cleanDistroName(theme);
 
   switch (theme) {
@@ -330,18 +303,13 @@ export const getBackground = (colorMode: string, theme: string | null) => {
           filter: "sepia(0.3) hue-rotate(145deg)",
         };
       }
-    case "manjaro":
-      if (colorMode === "dark") {
-        return {
-          bgImage: BackgroundMonoDark,
-          filter: "sepia(1) saturate(0.7) hue-rotate(85deg)",
-        };
-      } else {
-        return {
-          bgImage: BackgroundMonoLight,
-          filter: "sepia(0.3) hue-rotate(85deg)",
-        };
-      }
+    case "anatase":
+      return {
+        bgImage:
+          colorMode === "dark"
+            ? BackgroundAnataseDark
+            : BackgroundAnataseLight,
+      };
     case "red_gold":
       if (colorMode === "dark") {
         return {
@@ -364,18 +332,6 @@ export const getBackground = (colorMode: string, theme: string | null) => {
         return {
           bgImage: BackgroundMonoLight,
           filter: "sepia(0.5) saturate(0.2) hue-rotate(320deg)",
-        };
-      }
-    case "bazzite":
-      if (colorMode === "dark") {
-        return {
-          bgImage: BackgroundMonoDark,
-          filter: "sepia(1) saturate(4) hue-rotate(200deg)",
-        };
-      } else {
-        return {
-          bgImage: BackgroundMonoLight,
-          filter: "sepia(0.5) saturate(1) hue-rotate(202deg)",
         };
       }
     case "ocean":
@@ -405,10 +361,63 @@ export const getBackground = (colorMode: string, theme: string | null) => {
   }
 };
 
-export const Logo = ({ height, width, qam }: any) => {
+export const getBackground = (
+  colorMode: string,
+  theme: string | null,
+  distro: string | null = theme
+) => {
+  const selected = getThemeBackground(colorMode, theme);
+  const anatase = distro === "anatase" || distro?.endsWith("_an");
+
+  if (!anatase || cleanDistroName(theme) === "anatase") return selected;
+
+  const branded = getThemeBackground(colorMode, "anatase");
+  return "filter" in selected
+    ? { ...branded, filter: selected.filter }
+    : branded;
+};
+
+const getLogoFilter = (theme: string | null, colorMode: string) => {
+  switch (cleanDistroName(theme)) {
+    case "vapor":
+      return "sepia(1) saturate(2.5) hue-rotate(145deg)";
+    case "ocean":
+      return "sepia(1) saturate(2.5) hue-rotate(10deg)";
+    case "blood_orange":
+      return colorMode === "dark"
+        ? "sepia(0.8) saturate(4) hue-rotate(338deg)"
+        : "sepia(1) saturate(2) hue-rotate(320deg)";
+    case "red_gold":
+      return colorMode === "dark"
+        ? "sepia(0.8) saturate(6) hue-rotate(360deg)"
+        : "sepia(1) saturate(2) hue-rotate(360deg)";
+    default:
+      return colorMode === "dark"
+        ? "sepia(0.8) saturate(2.5) hue-rotate(335deg)"
+        : "sepia(0.6) saturate(1.5) hue-rotate(335deg)";
+  }
+};
+
+export const Logo = ({ height, width }: any) => {
   const { colorMode } = useColorMode();
   const theme = useSelector(selectCurrentTheme);
+  const distro = useSelector(selectCurrentDistro);
   const clean = cleanDistroName(theme);
+  const anatase =
+    distro === "anatase" ||
+    distro?.endsWith("_an") ||
+    theme === "anatase" ||
+    theme?.endsWith("_an");
+  const anataseLogo = colorMode === "dark" ? AnataseDark : AnataseLight;
+
+  if (anatase)
+    return (
+      <Img
+        src={anataseLogo}
+        height={height}
+        filter={clean === "anatase" ? undefined : getLogoFilter(theme, colorMode)}
+      />
+    );
 
   switch (clean) {
     case "vapor":
@@ -416,7 +425,7 @@ export const Logo = ({ height, width, qam }: any) => {
         <Img
           src={colorMode == "dark" ? MonoDark : MonoLight}
           height={height}
-          filter="sepia(1) saturate(2.5) hue-rotate(145deg)"
+          filter={getLogoFilter(theme, colorMode)}
         />
       );
 
@@ -425,93 +434,25 @@ export const Logo = ({ height, width, qam }: any) => {
         <Img
           src={colorMode == "dark" ? MonoDark : MonoLight}
           height={height}
-          filter="sepia(1) saturate(2.5) hue-rotate(10deg)"
+          filter={getLogoFilter(theme, colorMode)}
         />
       );
 
-    case "manjaro":
-      return (
-        <Flex direction="row" alignItems="center">
-          <Img src={Manjaro} height={height} />
-          {!qam && (
-            <Img
-              src={colorMode == "dark" ? MonoDark : MonoLight}
-              marginLeft="0.8rem"
-              height={height}
-              filter="sepia(1) saturate(2.5) hue-rotate(85deg)"
-            />
-          )}
-        </Flex>
-      );
-    case "bazzite":
-      return (
-        <Flex direction="row" alignItems="center">
-          <Img src={Bazzite} height={height} />
-          {!qam && (
-            <Img
-              src={colorMode == "dark" ? MonoDark : MonoLight}
-              marginLeft="0.8rem"
-              height={height}
-              filter="sepia(1) saturate(2.5) hue-rotate(210deg)"
-            />
-          )}
-        </Flex>
-      );
     case "blood_orange":
       return (
-        <Flex direction="row" alignItems="center">
-          {theme?.includes("_ba") && (
-            <Img
-              src={Bazzite}
-              height={height}
-              filter={
-                colorMode == "dark"
-                  ? "sepia(1) saturate(4.5) hue-rotate(320deg)"
-                  : "sepia(1) saturate(4) hue-rotate(320deg)"
-              }
-            />
-          )}
-          {(!qam || !theme?.includes("_ba")) && (
-            <Img
-              src={colorMode == "dark" ? MonoDark : MonoLight}
-              marginLeft="0.8rem"
-              height={height}
-              filter={
-                colorMode == "dark"
-                  ? "sepia(0.8) saturate(4) hue-rotate(338deg)"
-                  : "sepia(1) saturate(2) hue-rotate(320deg)"
-              }
-            />
-          )}
-        </Flex>
+        <Img
+          src={colorMode == "dark" ? MonoDark : MonoLight}
+          height={height}
+          filter={getLogoFilter(theme, colorMode)}
+        />
       );
     case "red_gold":
       return (
-        <Flex direction="row" alignItems="center">
-          {theme?.includes("_ba") && (
-            <Img
-              src={Bazzite}
-              height={height}
-              filter={
-                colorMode == "dark"
-                  ? "sepia(1) saturate(5) hue-rotate(350deg)"
-                  : "sepia(1) saturate(4) hue-rotate(330deg)"
-              }
-            />
-          )}
-          {(!qam || !theme?.includes("_ba")) && (
-            <Img
-              src={colorMode == "dark" ? MonoDark : MonoLight}
-              marginLeft="0.8rem"
-              height={height}
-              filter={
-                colorMode == "dark"
-                  ? "sepia(0.8) saturate(6) hue-rotate(360deg)"
-                  : "sepia(1) saturate(2) hue-rotate(360deg)"
-              }
-            />
-          )}
-        </Flex>
+        <Img
+          src={colorMode == "dark" ? MonoDark : MonoLight}
+          height={height}
+          filter={getLogoFilter(theme, colorMode)}
+        />
       );
   }
 

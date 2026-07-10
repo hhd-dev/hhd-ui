@@ -28,6 +28,7 @@ import {
 } from "./model/hooks.tsx";
 import hhdSlice, {
   selectAppType,
+  selectCurrentDistro,
   selectCurrentTheme,
   selectHasController,
   selectIsLoading,
@@ -53,7 +54,8 @@ setupGamepadEventListener();
 
 function App() {
   const { colorMode } = useColorMode();
-  const distro = useSelector(selectCurrentTheme);
+  const theme = useSelector(selectCurrentTheme);
+  const distro = useSelector(selectCurrentDistro);
   const uiType = useSelector(selectUiType);
   const appType = useSelector(selectAppType);
   const dispatch = useDispatch();
@@ -123,7 +125,7 @@ function App() {
       <Box
         h="100vh"
         w="100vw"
-        {...getBackground(colorMode, distro)}
+        {...getBackground(colorMode, theme, distro)}
         backgroundAttachment="fixed"
         backgroundPosition="center"
         backgroundRepeat="no-repeat"
@@ -138,7 +140,7 @@ function App() {
         h="100vh"
         w="100vw"
         {...(frontPage && {
-          ...getScrollbarStyle(distro, colorMode),
+          ...getScrollbarStyle(theme, colorMode),
           overflowY: "auto",
         })}
         onClick={(e) => {
