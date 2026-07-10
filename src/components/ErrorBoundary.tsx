@@ -1,9 +1,8 @@
-//@ts-nocheck
-import { Component } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
 import { Alert, AlertIcon } from "@chakra-ui/react";
 
 type PropsType = {
-  children: any;
+  children: ReactNode;
   title?: string;
 };
 type StateType = {
@@ -12,17 +11,17 @@ type StateType = {
 };
 
 class ErrorBoundary extends Component<PropsType, StateType> {
-  constructor(props) {
+  constructor(props: PropsType) {
     super(props);
     this.state = { hasError: false, title: props?.title };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: unknown) {
     console.log(error);
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.log(error, errorInfo);
   }
   render() {

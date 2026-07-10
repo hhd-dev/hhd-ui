@@ -9,9 +9,8 @@
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {
-    "electron": "^36.5.0",
-    "electron-builder": "^26.0.12",
-    "electron-packager": "^17.1.2"
+    "electron": "^43.1.0",
+    "electron-builder": "^26.15.3"
   },
   "scripts": {
     "postinstall": "npx electron-builder install-app-deps",

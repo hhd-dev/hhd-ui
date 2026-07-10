@@ -20,8 +20,8 @@ import { useElementNav, useSettingState } from "../../model/hooks";
 import { getButtonStyleNested, getFocusStyle } from "./utils";
 
 const ProgressComponent: FC<SettingProps> = ({ path, settings }) => {
-  let { tags } = settings;
-  let { state } = useSettingState<ProgressProps | undefined>(path);
+  const { tags } = settings;
+  const { state } = useSettingState<ProgressProps | undefined>(path);
   let props = {};
   if (!state) {
     return <></>;

@@ -50,7 +50,7 @@ const ExpandedUi = () => {
   const [oldOpen, setOldOpen] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
   useEffect(() => {
-    let timeoutId: number | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     timeoutId = setTimeout(
       () => {
         setOldOpen(isOpen);
@@ -58,7 +58,7 @@ const ExpandedUi = () => {
       isOpen ? 3 : 200
     );
 
-    let timeoutScroll = setTimeout(
+    const timeoutScroll = setTimeout(
       () => {
         setShowScroll(isOpen);
       },

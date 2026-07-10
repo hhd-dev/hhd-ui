@@ -395,7 +395,7 @@ function getSectionElements(
   state: State,
   shouldRender: (s: Setting) => boolean
 ) {
-  let out = [];
+  const out = [];
   for (const [section, cs] of Object.entries(set)) {
     for (const [name, v] of Object.entries(cs).filter(
       (c) => c[1].type === "container"
@@ -444,7 +444,7 @@ function getFocusElements(
         out.push(path);
       }
       return out;
-    case "mode":
+    case "mode": {
       out = [];
 
       if (!set.tags?.includes("no_dropdown")) {
@@ -464,6 +464,7 @@ function getFocusElements(
         );
       }
       return out;
+    }
   }
 
   return [];

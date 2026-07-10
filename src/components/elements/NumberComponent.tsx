@@ -25,11 +25,17 @@ const NumberComponent: FC<SettingProps> = ({
   path,
   section,
 }) => {
-  let { tags, title, min, max, unit, step, hint, type } = set as NumberSetting<
-    number,
-    "float" | "int"
-  >;
-  if (type === "int" && !step) step = 1;
+  const {
+    tags,
+    title,
+    min,
+    max,
+    unit,
+    step: configuredStep,
+    hint,
+    type,
+  } = set as NumberSetting<number, "float" | "int">;
+  const step = type === "int" && !configuredStep ? 1 : configuredStep;
   const { state, setState } = useSettingState<number>(path);
   const { ref, sel, focus, setFocus } = useElementNav<HTMLInputElement>(
     section,

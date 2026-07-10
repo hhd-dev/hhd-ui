@@ -9,9 +9,7 @@ import React, { Fragment } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import FrontPage from "./components/FrontPage.tsx";
-import defaultTheme, {
-  controllerTheme as defaultControllerTheme,
-  distroThemes,
+import {
   getBackground,
   getDistroTheme,
   getScrollbarStyle,
@@ -159,7 +157,7 @@ function App() {
 function ThemeSet() {
   const controller = useSelector(selectHasController);
   const distro = useSelector(selectCurrentTheme);
-  let {theme, controllerTheme} = getDistroTheme(distro);
+  const { theme, controllerTheme } = getDistroTheme(distro);
 
   return (
     <ChakraProvider theme={controller ? controllerTheme : theme}>

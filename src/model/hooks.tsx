@@ -56,7 +56,7 @@ export function useElementNav<T extends HTMLElement>(
         ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
       // ref.current.focus({ preventScroll: true });
     }
-  }, [focus, ref.current, smooth]);
+  }, [focus, smooth]);
 
   return { ref, focus, sel, setFocus };
 }
@@ -92,7 +92,7 @@ export const useRelayEffect = () => {
     let delay = 0;
     if (uiType === "closed" && prevUiType !== "init") delay = CLOSE_DELAY;
 
-    let interval: number | null = setInterval(() => {
+    let interval: ReturnType<typeof setInterval> | null = setInterval(() => {
       const updateStatus = window.electronUtilsRender?.updateStatus;
       if (updateStatus) updateStatus(uiType);
       if (interval) {
@@ -108,6 +108,8 @@ export const useRelayEffect = () => {
         interval = null;
       }
     };
+    // This effect intentionally reacts to current UI state changes only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uiType, appType, loggedIn]);
 };
 
@@ -205,7 +207,7 @@ export function useUpdateFilter() {
   const filter = useSelector(local.selectors.selectFilter);
   useEffect(() => {
     dispatch(hhdSlice.actions.setFilter(filter));
-  }, [filter]);
+  }, [dispatch, filter]);
 }
 
 export function useUrl() {
@@ -235,6 +237,8 @@ export function useInitialLogin() {
 
   useEffect(() => {
     if (canLogIn) login();
+    // The daemon load counter is the intentional relogin trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadCounter]);
 }
 

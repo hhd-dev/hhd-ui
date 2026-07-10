@@ -115,7 +115,9 @@ async function pollState(a: AbortController, reload: boolean) {
         await p;
       }
     }
-  } catch (e) {}
+  } catch {
+    // Polling is expected to stop when its AbortController is cancelled.
+  }
 }
 
 export const enablePolling = (reload: boolean) => {

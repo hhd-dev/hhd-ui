@@ -103,7 +103,7 @@ const ModeComponent: FC<ModeProps> = ({ settings: set, path, section }) => {
                       };
                     }
 
-                    let suffix = unit ? ` (${unit})` : "";
+                    const suffix = unit ? ` (${unit})` : "";
 
                     return (
                       <MenuItemOption

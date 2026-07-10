@@ -44,7 +44,7 @@ const QamState = () => {
 
   const [oldOpen, setOldOpen] = useState(false);
   useEffect(() => {
-    let timeoutId: number | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     timeoutId = setTimeout(
       () => {
         setOldOpen(isOpen);

@@ -358,7 +358,7 @@ export const setupGamepadEventListener = () => {
 
     updateLoop();
     if (!window.controllerInterval)
-      window.controllerInterval = setInterval(updateLoop, 75);
+      window.controllerInterval = window.setInterval(updateLoop, 75);
     // if (!animationFrameId) animationFrameId = requestAnimationFrame(updateLoop);
   });
 

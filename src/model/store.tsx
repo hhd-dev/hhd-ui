@@ -27,7 +27,7 @@ export const { store, persistor } = (() => {
 
   const localReducer = persistReducer(persistConfig, local.reducer);
 
-  let store = configureStore({
+  const store = configureStore({
     reducer: {
       hhd: hhdSlice.reducer,
       local: localReducer,
@@ -40,7 +40,7 @@ export const { store, persistor } = (() => {
         },
       }),
   });
-  let persistor = persistStore(store);
+  const persistor = persistStore(store);
 
   window.store = store;
   return { store, persistor };
