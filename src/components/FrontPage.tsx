@@ -51,7 +51,7 @@ export default function FrontPage() {
             </Text>
 
             <Code textAlign="center" padding="1rem" lang="bash">
-              cat $HOME/.config/hhd/token
+              cat /tmp/hhd/token
             </Code>
 
             <Text>
