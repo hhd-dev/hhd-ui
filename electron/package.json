@@ -5,7 +5,7 @@
   },
   "homepage": "https://github.com/hhd-dev/hhd-ui",
   "description": "Handhend Daemon UI",
-  "license": "",
+  "license": "LGPL-2.1-or-later",
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {

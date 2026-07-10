@@ -68,5 +68,5 @@ npm run dev
 ```
 
 # License
-The Handheld Daemon UI is licensed under THE GNU GPLv3+. See LICENSE for details.
+The Handheld Daemon UI is licensed under the GNU Lesser General Public License v2.1 or later (LGPL-2.1-or-later). See LICENSE for details.
 Versions prior to and excluding 2.0.0 are licensed using MIT.

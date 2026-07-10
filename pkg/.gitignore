@@ -1,6 +1,7 @@
 *
 !hhd-ui.desktop
 !hhd-ui.spec
+!hhd-ui-git.spec
 !hhd-ui.sh
 !PKGBUILD
 !.gitignore
