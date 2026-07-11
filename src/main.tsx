@@ -67,7 +67,7 @@ function App() {
   if (appType === "web" || appType === "app") {
     background = "100%";
   } else if (uiType === "expanded") {
-    background = "90%";
+    background = "70%";
   } else {
     background = "0%";
   }
