@@ -16,6 +16,8 @@ import MonoDark from "../assets/mono_dark.svg";
 import MonoLight from "../assets/mono_light.svg";
 import AnataseDark from "../assets/distro/anatase_dark.svg";
 import AnataseLight from "../assets/distro/anatase_light.svg";
+import AnataseDarkFav from "../assets/distro/anatase_dark_fav.svg";
+import AnataseLightFav from "../assets/distro/anatase_light_fav.svg";
 import { useColorMode, Img } from "@chakra-ui/react";
 import { selectCurrentDistro, selectCurrentTheme } from "../model/slice";
 import { useSelector } from "react-redux";
@@ -398,7 +400,7 @@ const getLogoFilter = (theme: string | null, colorMode: string) => {
   }
 };
 
-export const Logo = ({ height, width }: any) => {
+export const Logo = ({ height, width, qam }: any) => {
   const { colorMode } = useColorMode();
   const theme = useSelector(selectCurrentTheme);
   const distro = useSelector(selectCurrentDistro);
@@ -408,7 +410,13 @@ export const Logo = ({ height, width }: any) => {
     distro?.endsWith("_an") ||
     theme === "anatase" ||
     theme?.endsWith("_an");
-  const anataseLogo = colorMode === "dark" ? AnataseDark : AnataseLight;
+  const anataseLogo = qam
+    ? colorMode === "dark"
+      ? AnataseDarkFav
+      : AnataseLightFav
+    : colorMode === "dark"
+      ? AnataseDark
+      : AnataseLight;
 
   if (anatase)
     return (
