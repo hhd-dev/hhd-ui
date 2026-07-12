@@ -75,7 +75,7 @@ const createMainWindow = async () => {
             screen.getPrimaryDisplay().workAreaSize.height - 50,
             750
           ),
-          maxWidth: 800,
+          maxWidth: 650,
         }),
     show: false,
     ...(isOverlayUi && { transparent: true }),

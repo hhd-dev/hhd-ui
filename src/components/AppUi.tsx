@@ -37,14 +37,15 @@ const AppUi = () => {
   };
 
   return (
-    <Flex h="100vh" w="100vw" transition="0.07s ease-in" flexDirection="column">
-      <Box
-        position="absolute"
-        w="100%"
-        h="100%"
-        zIndex="-1"
-        bg={colorMode == "dark" ? "gray.800" : "white"}
-      ></Box>
+    <Flex
+      h="100vh"
+      w="100%"
+      maxW="650px"
+      mx="auto"
+      bg={colorMode == "dark" ? "gray.800" : "white"}
+      transition="0.07s ease-in"
+      flexDirection="column"
+    >
       <Flex
         padding="1rem 1.5rem 1rem 1.4rem"
         flexDirection="row"
