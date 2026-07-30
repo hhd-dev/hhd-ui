@@ -48,22 +48,13 @@ install -Dm644 LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
 install -Dm644 pkg/hhd-ui.desktop %{buildroot}%{_datadir}/applications/hhd-ui.desktop
 
 mkdir -p %{buildroot}%{_datadir}/applications/hhd-ui/
-install -Dm644 art/library_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/library_capsule.png
-install -Dm644 art/library_hero.png %{buildroot}%{_datadir}/applications/hhd-ui/library_hero.png
-install -Dm644 art/library_logo.png %{buildroot}%{_datadir}/applications/hhd-ui/library_logo.png
-install -Dm644 art/main_capsule.png %{buildroot}%{_datadir}/applications/hhd-ui/main_capsule.png
 install -Dm644 art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
 
 %files
 %license %{_licensedir}/%{name}/LICENSE
 %{_bindir}/hhd-ui
 %{_datadir}/applications/hhd-ui.desktop
-
-%{_datadir}/applications/hhd-ui/library_capsule.png
-%{_datadir}/applications/hhd-ui/library_hero.png
-%{_datadir}/applications/hhd-ui/library_logo.png
-%{_datadir}/applications/hhd-ui/main_capsule.png
-%{_datadir}/applications/hhd-ui/icon.png
+%{_datadir}/applications/hhd-ui.png
 
 %changelog
 * Wed Apr 3 2024 Matthew Schwartz <njtransit215@gmail.com> - 2.2.0-1
