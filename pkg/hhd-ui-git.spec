@@ -48,7 +48,7 @@ install -Dm644 LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
 install -Dm644 pkg/hhd-ui.desktop %{buildroot}%{_datadir}/applications/hhd-ui.desktop
 
 mkdir -p %{buildroot}%{_datadir}/applications/hhd-ui/
-install -Dm644 art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui/icon.png
+install -Dm644 art/icon.png %{buildroot}%{_datadir}/applications/hhd-ui.png
 
 %files
 %license %{_licensedir}/%{name}/LICENSE
