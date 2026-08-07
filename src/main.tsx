@@ -139,6 +139,11 @@ function App() {
       <Box
         h="100vh"
         w="100vw"
+        {...(appType === "overlay" && {
+          position: "fixed",
+          inset: "0",
+          overflow: "clip",
+        })}
         {...(frontPage && {
           ...getScrollbarStyle(theme, colorMode),
           overflowY: "auto",
