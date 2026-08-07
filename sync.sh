@@ -20,7 +20,15 @@ fi
 npm run build --prefix electron
 chmod +x electron/dist/hhd-ui.AppImage
 
-ssh "$HOST" 'mkdir -p "$HOME/.local/bin"'
-rsync -vp electron/dist/hhd-ui.AppImage "$HOST:.local/bin/hhd-ui"
+rsync -vp electron/dist/hhd-ui.AppImage "$HOST:hhd-ui.AppImage"
 
-ssh -t "$HOST" 'sudo systemctl restart hhd'
+ssh -t "$HOST" '
+    set -e
+
+    if rpm-ostree status --json | grep -q "\"unlocked\" *: *\"none\""; then
+        sudo rpm-ostree usroverlay
+    fi
+    sudo install -m 755 -Z "$HOME/hhd-ui.AppImage" /usr/bin/hhd-ui
+    rm -f "$HOME/hhd-ui.AppImage"
+    sudo systemctl restart hhd
+'
