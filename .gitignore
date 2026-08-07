@@ -36,3 +36,5 @@ electron/*
 !electron/art*
 !electron/art/*
 !electron/preload.js
+!electron/scripts/
+!electron/scripts/after-pack.js

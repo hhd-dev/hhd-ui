@@ -375,16 +375,6 @@ function fileProtocolRedirect() {
 }
 
 (() => {
-  const argv = process.argv;
-  if (argv && argv.length) {
-    const last = argv[argv.length - 1];
-    if (last === "--version") {
-      console.log(app.getVersion());
-      app.quit();
-      return;
-    }
-  }
-
   // Fixes gnome with electron 36
   app.commandLine.appendSwitch("gtk-version", "3");
 

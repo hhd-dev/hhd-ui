@@ -23,6 +23,7 @@
     "executableName": "hhd-ui",
     "productName": "Handheld Daemon",
     "artifactName": "hhd-ui.${ext}",
+    "afterPack": "scripts/after-pack.js",
     "linux": {
       "target": "AppImage",
       "icon": "art/icon.png",
