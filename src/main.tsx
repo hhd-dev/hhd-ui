@@ -19,7 +19,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import ExpandedUi from "./components/ExpandedUi.tsx";
 import QamState from "./components/QamState.tsx";
 import { EditModal } from "./components/elements/EditModal.tsx";
-import { setupGamepadEventListener } from "./model/controller.tsx";
+import {
+  setupGamepadEventListener,
+  setupKeyboardEventListener,
+} from "./model/controller.tsx";
 import * as electronUtils from "./model/electron.tsx";
 import {
   useInitialLogin,
@@ -49,8 +52,9 @@ declare global {
 // Inject electron utils
 window.electronUtils = electronUtils;
 
-// Setup gamepad listener
+// Setup input listeners
 setupGamepadEventListener();
+setupKeyboardEventListener();
 
 function App() {
   const { colorMode } = useColorMode();

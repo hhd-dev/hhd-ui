@@ -41,6 +41,15 @@ const AXIS_MAP: [string, number, boolean][] = [
   ["down", 1, false],
 ];
 
+const KEYBOARD_MAP: Record<string, string> = {
+  ArrowUp: "dpad_up",
+  ArrowDown: "dpad_down",
+  ArrowLeft: "dpad_left",
+  ArrowRight: "dpad_right",
+  Enter: "a",
+  Escape: "b",
+};
+
 declare global {
   interface Window {
     controllerInterval: number | undefined;
@@ -256,6 +265,34 @@ export const handleGamepadCommands = (evs: string[]) => {
         break;
     }
   }
+};
+
+export const setupKeyboardEventListener = () => {
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      const command = KEYBOARD_MAP[event.key];
+      if (!command || event.altKey || event.ctrlKey || event.metaKey) return;
+
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          ["INPUT", "SELECT", "TEXTAREA"].includes(target.tagName))
+      )
+        return;
+
+      if (!selectIsOpen(store.getState())) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (event.repeat && (command === "a" || command === "b")) return;
+      store.dispatch(hhdSlice.actions.setController(true));
+      handleGamepadCommands([command]);
+    },
+    { capture: true }
+  );
 };
 
 export const setupGamepadEventListener = () => {
