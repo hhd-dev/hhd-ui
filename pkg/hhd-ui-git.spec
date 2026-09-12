@@ -22,9 +22,6 @@ BuildRequires:  git
 BuildRequires:  desktop-file-utils
 BuildRequires:  systemd-rpm-macros
 
-Requires:       fuse
-Requires:       fuse-devel
-
 %description
 Configurator interface for Handheld Daemon.
 
@@ -34,6 +31,9 @@ Configurator interface for Handheld Daemon.
 %build
 npm pkg set version="%{version}"
 npm pkg set version="%{version}" --prefix electron
+# Avoid the legacy AArch64 AppImage runtime, which links against libz.so
+# instead of the versioned ABI soname provided by distributions.
+npm pkg set toolsets.appimage=1.0.3 --prefix electron
 npm ci
 npm run electron-build
 cd electron
