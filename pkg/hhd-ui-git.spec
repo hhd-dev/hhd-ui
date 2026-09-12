@@ -15,7 +15,7 @@ License:        LGPL-2.1-or-later
 URL:            https://github.com/hhd-dev/hhd-ui
 Source0:        %{URL}/archive/%{commit}/%{name}-%{commit}.tar.gz
 
-BuildArch:      x86_64
+ExclusiveArch:  x86_64 aarch64
 
 BuildRequires:  npm
 BuildRequires:  git
