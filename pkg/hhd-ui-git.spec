@@ -22,6 +22,9 @@ BuildRequires:  git
 BuildRequires:  desktop-file-utils
 BuildRequires:  systemd-rpm-macros
 
+# The static AppImage runtime still needs the host's fusermount helper.
+Requires:       fuse
+
 %description
 Configurator interface for Handheld Daemon.
 
